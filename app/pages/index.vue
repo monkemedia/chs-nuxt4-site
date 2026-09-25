@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { benefits } from "~/data/benefits";
-import { sectors } from "~/data/sectors";
-import { services } from "~/data/services";
+import { benefits } from "~/data/benefits"
+import { sectors } from "~/data/sectors"
+import { services } from "~/data/services"
 
-const { business } = useAppConfig();
+const { business } = useAppConfig()
 
 usePageSeo({
   title: "Hydraulic Repairs Llanelli & Carmarthenshire | CHS",
   description:
     "Hydraulic hose replacement, ram repairs, fault finding and mobile call-outs from Cross Hands, covering Llanelli, Carmarthenshire and South Wales.",
   path: "/",
-});
+})
 
 const trust = [
   { icon: "i-lucide-zap", label: ["Fast", "turnaround"] },
   { icon: "i-lucide-wrench", label: ["On-site", "support"] },
   { icon: "i-lucide-shield-check", label: ["Quality", "you can trust"] },
-];
+]
 
 const onsite = [
   "Emergency call-outs",
@@ -24,8 +24,7 @@ const onsite = [
   "Hydraulic system diagnostics",
   "Plant, agricultural & commercial",
   "Flexible, reliable scheduling",
-];
-
+]
 </script>
 
 <template>
@@ -197,9 +196,7 @@ const onsite = [
             Why choose CHS
           </UButton>
         </div>
-        <ul
-          class="mt-12 grid gap-y-8 sm:grid-cols-2 sm:gap-y-9 lg:grid-cols-4"
-        >
+        <ul class="mt-12 grid gap-y-8 sm:grid-cols-2 sm:gap-y-9 lg:grid-cols-4">
           <li
             v-for="(item, i) in benefits"
             :key="item.title.join(' ')"

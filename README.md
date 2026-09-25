@@ -31,6 +31,28 @@ NUXT_PUBLIC_CONTACT_FORM_ENDPOINT=https://formspree.io/f/yourFormId npm run gene
 
 Without it, the form shows an error asking visitors to call. The form includes a `_gotcha` honeypot field and a `_subject` line (Formspree conventions).
 
+## Analytics
+
+[Plausible](https://plausible.io) (cookie-free, so no consent banner needed), wired up in `app/plugins/analytics.client.ts`. It only runs when the domain is set at build time:
+
+```bash
+NUXT_PUBLIC_PLAUSIBLE_DOMAIN=www.chshydraulics.co.uk npm run generate
+```
+
+Pageviews are tracked automatically. Custom events: add each as a goal in Plausible (Site settings → Goals → Custom event) to see it on the dashboard:
+
+| Goal           | Fires when                            | Properties           |
+| -------------- | ------------------------------------- | -------------------- |
+| `Phone Call`   | any `tel:` link is clicked            | `page`               |
+| `Email Click`  | any `mailto:` link is clicked         | `page`               |
+| `Enquiry Sent` | the contact form is sent successfully | `service`, `urgency` |
+
+Add `page`, `service` and `urgency` under Site settings → Custom properties to break goals down by them. Outbound link clicks are tracked too (enable the "Outbound Link: Click" goal). To exclude your own visits, run `localStorage.plausible_ignore = 'true'` in the browser console on the live site.
+
+## Troubleshooting
+
+`Cannot find native binding` on build or dev: an npm bug with optional dependencies (npm/cli#4828) that can hit after `npm install <package>`. Fix with `rm -rf node_modules package-lock.json && npm install`.
+
 ## Before launch
 
 Replace the placeholder business details (phone, email, location, opening hours, service area) in `app/app.config.ts`, and the canonical domain in `nuxt.config.ts`, the page SEO blocks and `public/robots.txt`. Replace the cropped concept imagery in `public/images/` with final licensed/original photography. The current images are design-development assets derived from the approved concept board.

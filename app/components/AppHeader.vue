@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { business } = useAppConfig();
-const route = useRoute();
+const { business } = useAppConfig()
+const route = useRoute()
 
 const links = [
   { label: "Home", to: "/" },
@@ -9,47 +9,47 @@ const links = [
   { label: "Sectors", to: "/sectors" },
   { label: "Why CHS", to: "/why-chs" },
   { label: "Contact", to: "/contact" },
-];
+]
 
 function isCurrent(to: string) {
-  if (to === "/") return route.path === "/";
-  return route.path === to || route.path.startsWith(`${to}/`);
+  if (to === "/") return route.path === "/"
+  return route.path === to || route.path.startsWith(`${to}/`)
 }
 
 // Desktop nav indicator: one red bar that sits under the current page's link and glides to
 // whichever link is hovered or focused, returning when the pointer leaves the menu.
-const items = ref<HTMLLIElement[]>([]);
-const hovered = ref<number | null>(null);
+const items = ref<HTMLLIElement[]>([])
+const hovered = ref<number | null>(null)
 const activeIndex = computed(() =>
   links.findIndex((link) => isCurrent(link.to)),
-);
-const target = computed(() => hovered.value ?? activeIndex.value);
-const bar = ref({ left: 0, width: 0 });
+)
+const target = computed(() => hovered.value ?? activeIndex.value)
+const bar = ref({ left: 0, width: 0 })
 // Until the links are measured (server render, first paint) the current link draws its own
 // underline; transitions switch on only after the bar is placed, so it doesn't slide in on load.
-const measured = ref(false);
-const animate = ref(false);
+const measured = ref(false)
+const animate = ref(false)
 
 function placeBar() {
-  const el = items.value[target.value];
-  if (el) bar.value = { left: el.offsetLeft, width: el.offsetWidth };
+  const el = items.value[target.value]
+  if (el) bar.value = { left: el.offsetLeft, width: el.offsetWidth }
 }
 
-watch(target, () => nextTick(placeBar));
+watch(target, () => nextTick(placeBar))
 
 // Re-measure whenever a link changes size: the nav appearing at the desktop breakpoint,
 // window resizes, text reflow.
-let resizeObserver: ResizeObserver | undefined;
+let resizeObserver: ResizeObserver | undefined
 onMounted(() => {
-  placeBar();
-  measured.value = true;
+  placeBar()
+  measured.value = true
   requestAnimationFrame(() => {
-    animate.value = true;
-  });
-  resizeObserver = new ResizeObserver(placeBar);
-  items.value.forEach((el) => resizeObserver!.observe(el));
-});
-onBeforeUnmount(() => resizeObserver?.disconnect());
+    animate.value = true
+  })
+  resizeObserver = new ResizeObserver(placeBar)
+  items.value.forEach((el) => resizeObserver!.observe(el))
+})
+onBeforeUnmount(() => resizeObserver?.disconnect())
 </script>
 
 <template>

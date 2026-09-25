@@ -1,27 +1,29 @@
 <script setup lang="ts">
-import * as z from "zod";
-import type { FormSubmitEvent } from "@nuxt/ui";
-import { services } from "~/data/services";
+import * as z from "zod"
+import type { FormSubmitEvent } from "@nuxt/ui"
+import { services } from "~/data/services"
 
-const { business } = useAppConfig();
-const endpoint = useRuntimeConfig().public.contactFormEndpoint as string;
+const { business } = useAppConfig()
+const runtimeConfig = useRuntimeConfig()
+const endpoint = runtimeConfig.public.contactFormEndpoint as string
+const { $track } = useNuxtApp()
 
 usePageSeo({
   title: "Contact CHS Hydraulics | Cross Hands, Llanelli",
   description:
     "Contact Crosshands Hydraulic Services for hose replacement, ram repairs, fault finding and on-site call-outs across Llanelli and Carmarthenshire.",
   path: "/contact",
-});
+})
 
 const serviceOptions = [
   ...services.map((s) => ({ value: s.slug, label: s.h1 })),
   { value: "other", label: "Something else" },
-];
+]
 const urgencies = [
   "Emergency – machine is down",
   "Within the next few days",
   "Just after a quote",
-];
+]
 
 const schema = z.object({
   name: z.string().trim().min(1, "Please enter your name"),
@@ -39,8 +41,8 @@ const schema = z.object({
     .string({ error: "Please tell us how urgent it is" })
     .min(1, "Please tell us how urgent it is"),
   message: z.string().trim().min(10, "Please give us a few more details"),
-});
-type Schema = z.output<typeof schema>;
+})
+type Schema = z.output<typeof schema>
 
 const initialState = (): Partial<Schema> => ({
   name: "",
@@ -51,57 +53,63 @@ const initialState = (): Partial<Schema> => ({
   location: "",
   urgency: urgencies[1],
   message: "",
-});
-const state = reactive(initialState());
+})
+const state = reactive(initialState())
 // Honeypot: hidden from people, filled in by spam bots. Kept out of the schema.
-const gotcha = ref("");
-const status = ref<"idle" | "sending" | "sent" | "error">("idle");
-const result = ref<HTMLElement | null>(null);
+const gotcha = ref("")
+const status = ref<"idle" | "sending" | "sent" | "error">("idle")
+const result = ref<HTMLElement | null>(null)
 
 // Service links elsewhere on the site point here with ?service=<slug>. This page is
 // prerendered at /contact, so on a direct load the router briefly reports no query while
 // hydrating; watch the live route so the value is picked up once it's restored.
-const router = useRouter();
+const router = useRouter()
 function preselect(requested: unknown) {
   if (
     typeof requested === "string" &&
     serviceOptions.some((s) => s.value === requested)
   )
-    state.service = requested;
+    state.service = requested
 }
 onMounted(() => {
-  preselect(router.currentRoute.value.query.service);
-  watch(() => router.currentRoute.value.query.service, preselect);
-});
+  preselect(router.currentRoute.value.query.service)
+  watch(() => router.currentRoute.value.query.service, preselect)
+})
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  if (status.value === "sending") return;
+  if (status.value === "sending") return
   if (!endpoint) {
     console.error(
       "Contact form endpoint missing: set NUXT_PUBLIC_CONTACT_FORM_ENDPOINT.",
-    );
-    status.value = "error";
+    )
+    status.value = "error"
   } else {
-    status.value = "sending";
-    const body = new FormData();
+    status.value = "sending"
+    const body = new FormData()
     for (const [key, value] of Object.entries(event.data))
-      if (value) body.append(key, value);
-    body.append("_subject", "New website enquiry – CHS Hydraulic Services");
-    body.append("_gotcha", gotcha.value);
+      if (value) body.append(key, value)
+    body.append("_subject", "New website enquiry – CHS Hydraulic Services")
+    body.append("_gotcha", gotcha.value)
     try {
       const response = await fetch(endpoint, {
         method: "POST",
         body,
         headers: { Accept: "application/json" },
-      });
-      status.value = response.ok ? "sent" : "error";
+      })
+      status.value = response.ok ? "sent" : "error"
     } catch {
-      status.value = "error";
+      status.value = "error"
     }
   }
-  if (status.value === "sent") Object.assign(state, initialState());
-  await nextTick();
-  result.value?.focus();
+  if (status.value === "sent") {
+    $track("Enquiry Sent", {
+      service: event.data.service,
+      urgency: event.data.urgency,
+    })
+    Object.assign(state, initialState())
+  }
+  await nextTick()
+  result.value?.focus()
 }
 
 const details = [
@@ -118,7 +126,7 @@ const details = [
     href: `mailto:${business.email}`,
   },
   { icon: "i-lucide-map-pin", title: "Based in", label: business.location },
-];
+]
 </script>
 
 <template>

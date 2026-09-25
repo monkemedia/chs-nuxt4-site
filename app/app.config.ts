@@ -4,42 +4,62 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: 'chs',
-      neutral: 'zinc'
+      primary: "chs",
+      neutral: "zinc",
     },
     button: {
-      slots: { base: 'uppercase font-extrabold tracking-wider' }
+      slots: { base: "uppercase font-extrabold tracking-wider" },
     },
     formField: {
-      slots: { label: 'uppercase text-xs font-extrabold tracking-wide text-highlighted' }
-    }
+      slots: {
+        label:
+          "uppercase text-xs font-extrabold tracking-wide text-highlighted",
+      },
+    },
   },
   business: {
-    name: 'Crosshands Hydraulic Services',
-    phoneDisplay: '01269 123 456',
-    phoneHref: 'tel:+441269123456',
-    phoneIntl: '+44 1269 123456',
-    email: 'info@chshydraulics.co.uk',
-    location: 'Cross Hands, Carmarthenshire',
+    name: "Crosshands Hydraulic Services",
+    phoneDisplay: "01269 123 456",
+    phoneHref: "tel:+441269123456",
+    phoneIntl: "+44 1269 123456",
+    email: "info@chshydraulics.co.uk",
+    location: "Cross Hands, Carmarthenshire",
     // Leave street/postcode empty until confirmed; the address is only added to structured data once both are set.
     address: {
-      street: '',
-      locality: 'Cross Hands',
-      town: 'Llanelli',
-      region: 'Carmarthenshire',
-      postcode: ''
+      street: "",
+      locality: "Cross Hands",
+      town: "Llanelli",
+      region: "Carmarthenshire",
+      postcode: "",
     },
-    serviceArea: ['Carmarthenshire', 'Llanelli', 'Swansea', 'Neath Port Talbot', 'Pembrokeshire', 'Wider South Wales'],
+    serviceArea: [
+      "Carmarthenshire",
+      "Llanelli",
+      "Swansea",
+      "Neath Port Talbot",
+      "Pembrokeshire",
+      "Wider South Wales",
+    ],
     // Towns named in structured data (areaServed).
-    towns: ['Cross Hands', 'Llanelli', 'Carmarthen', 'Ammanford', 'Burry Port', 'Kidwelly', 'Swansea', 'Neath', 'Port Talbot'],
+    towns: [
+      "Cross Hands",
+      "Llanelli",
+      "Carmarthen",
+      "Ammanford",
+      "Burry Port",
+      "Kidwelly",
+      "Swansea",
+      "Neath",
+      "Port Talbot",
+    ],
     hours: [
-      { days: 'Monday – Friday', time: '8:00am – 5:30pm' },
-      { days: 'Saturday', time: '8:00am – 12:00pm' },
-      { days: 'Emergency call-outs', time: 'Call for availability' }
+      { days: "Monday – Friday", time: "8:00am – 5:30pm" },
+      { days: "Saturday", time: "8:00am – 12:00pm" },
+      { days: "Emergency call-outs", time: "Call for availability" },
     ],
     // Same hours in schema.org format; keep in step with `hours` above.
-    openingHours: ['Mo-Fr 08:00-17:30', 'Sa 08:00-12:00'],
+    openingHours: ["Mo-Fr 08:00-17:30", "Sa 08:00-12:00"],
     // Profile URLs (Google Business Profile, Facebook, Yell…) for structured data.
-    sameAs: [] as string[]
-  }
+    sameAs: [] as string[],
+  },
 })
