@@ -1,25 +1,21 @@
 <script setup lang="ts">
-import { sectors } from "~/data/sectors"
-import { findService } from "~/data/services"
+const content = useContent()
+const localePath = useLocalePath()
+const page = computed(() => content.value.sectorsPage)
 
-usePageSeo({
-  title: "Sectors We Support | Hydraulic Repairs South Wales | CHS",
-  description:
-    "Hydraulic repairs for plant and construction, agriculture, industrial and manufacturing, and commercial vehicles across Llanelli, Carmarthenshire and South Wales.",
-  path: "/sectors",
-})
+usePageSeo({ ...page.value.seo, path: "/sectors" })
 useBreadcrumbs([
-  { name: "Home", path: "/" },
-  { name: "Sectors", path: "/sectors" },
+  { name: content.value.common.home, path: "/" },
+  { name: page.value.crumb, path: "/sectors" },
 ])
 
-const crumbs = [
-  { label: "Home", to: "/" },
-  { label: "Sectors", class: "text-white" },
-]
+const crumbs = computed(() => [
+  { label: content.value.common.home, to: localePath("/") },
+  { label: page.value.crumb, class: "text-white" },
+])
 
 const sectorServices = (slugs: string[]) =>
-  slugs.map(findService).filter((s) => !!s)
+  content.value.services.filter((s) => slugs.includes(s.slug))
 </script>
 
 <template>
@@ -34,23 +30,27 @@ const sectorServices = (slugs: string[]) =>
         id="sectors-title"
         class="heading-display text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
       >
-        Sectors we <em class="text-primary not-italic">support</em>
+        {{ page.title[0] }}
+        <em class="text-primary not-italic">{{ page.title[1] }}</em>
       </h1>
       <p class="mt-5 max-w-xl text-base text-zinc-200 sm:text-lg">
-        From building sites and farms to factories and fleets, we keep hydraulic
-        machinery working across Llanelli, Carmarthenshire and South Wales.
+        {{ page.intro }}
       </p>
     </PageHero>
 
     <nav
       class="sticky top-(--ui-header-height) z-40 border-b border-zinc-200 bg-white/95 backdrop-blur-sm"
-      aria-label="Sectors"
+      :aria-label="page.navLabel"
     >
       <UContainer>
         <ul
           class="-mx-4 flex gap-1 overflow-x-auto px-4 py-3 [scrollbar-width:none] sm:mx-0 sm:px-0 lg:justify-center"
         >
-          <li v-for="sector in sectors" :key="sector.slug" class="shrink-0">
+          <li
+            v-for="sector in content.sectors"
+            :key="sector.slug"
+            class="shrink-0"
+          >
             <ULink
               raw
               :to="`#${sector.slug}`"
@@ -66,7 +66,7 @@ const sectorServices = (slugs: string[]) =>
 
     <div class="divide-y divide-zinc-200">
       <section
-        v-for="(sector, i) in sectors"
+        v-for="(sector, i) in content.sectors"
         :id="sector.slug"
         :key="sector.slug"
         class="scroll-mt-[calc(var(--ui-header-height)+4rem)] py-14 sm:py-18"
@@ -94,7 +94,7 @@ const sectorServices = (slugs: string[]) =>
 
             <div class="mt-7">
               <h3 class="heading-display mb-3 text-[13px] tracking-wide">
-                Services for this sector
+                {{ page.servicesForSector }}
               </h3>
               <ul class="flex flex-wrap gap-2.5">
                 <li
@@ -102,7 +102,7 @@ const sectorServices = (slugs: string[]) =>
                   :key="service.slug"
                 >
                   <UButton
-                    :to="`/services/${service.slug}`"
+                    :to="localePath(`/services/${service.slug}`)"
                     color="neutral"
                     variant="outline"
                     :icon="service.icon"
@@ -122,9 +122,7 @@ const sectorServices = (slugs: string[]) =>
           >
             <h3 class="heading-display mb-4 text-[13px] tracking-wide">
               {{
-                sector.slug === "more"
-                  ? "Other work we take on"
-                  : "Typical machines"
+                sector.slug === "more" ? page.otherWork : page.typicalMachines
               }}
             </h3>
             <ul class="space-y-3">
@@ -147,9 +145,9 @@ const sectorServices = (slugs: string[]) =>
     </div>
 
     <CtaBand
-      kicker="Don't see your sector?"
-      title="If it runs on hydraulics, call us."
-      text="We work on a wide range of machinery. Tell us what you've got and we'll let you know how we can help."
+      :kicker="page.cta.kicker"
+      :title="page.cta.title"
+      :text="page.cta.text"
     />
   </div>
 </template>

@@ -1,23 +1,8 @@
+import type { Service } from "../types"
+
 // Content for the services index, each /services/<slug> page, the homepage cards
 // and the contact form's service dropdown.
 // Check every claim with the business before launch: only publish what CHS actually does.
-
-export interface Service {
-  slug: string
-  title: string
-  icon: string
-  image: string
-  alt: string
-  summary: string
-  metaTitle: string
-  metaDescription: string
-  h1: string
-  lead: string
-  intro: string[]
-  includes: string[]
-  process: { title: string; text: string }[]
-  faqs: { q: string; a: string }[]
-}
 
 export const services: Service[] = [
   {
@@ -252,6 +237,3 @@ export const services: Service[] = [
     ],
   },
 ]
-
-export const findService = (slug: string) =>
-  services.find((s) => s.slug === slug)

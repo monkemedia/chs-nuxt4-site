@@ -1,27 +1,44 @@
 <script setup lang="ts">
 const { business } = useAppConfig()
 const route = useRoute()
+const content = useContent()
+const localePath = useLocalePath()
+const switchLocalePath = useSwitchLocalePath()
+const { locale } = useI18n()
 
-const links = [
-  { label: "Home", to: "/" },
-  { label: "Services", to: "/services" },
-  { label: "About", to: "/about" },
-  { label: "Sectors", to: "/sectors" },
-  { label: "Why CHS", to: "/why-chs" },
-  { label: "Contact", to: "/contact" },
-]
+const links = computed(() => {
+  const { nav } = content.value
+  return [
+    { label: nav.home, to: localePath("/") },
+    { label: nav.services, to: localePath("/services") },
+    { label: nav.about, to: localePath("/about") },
+    { label: nav.sectors, to: localePath("/sectors") },
+    { label: nav.whyChs, to: localePath("/why-chs") },
+    { label: nav.contact, to: localePath("/contact") },
+  ]
+})
 
 function isCurrent(to: string) {
-  if (to === "/") return route.path === "/"
+  if (to === localePath("/")) return route.path === to
   return route.path === to || route.path.startsWith(`${to}/`)
 }
+
+// Language switcher: the same page in the other language. Uses NuxtLink, not ULink:
+// ULink localises paths itself, which would re-prefix the other language's URL.
+const otherLocale = computed(() => (locale.value === "en" ? "cy" : "en"))
+const otherLocaleFlag = computed(() =>
+  otherLocale.value === "cy" ? "i-circle-flags-gb-wls" : "i-circle-flags-gb",
+)
+const otherLocaleTag = computed(() =>
+  otherLocale.value === "cy" ? "cy-GB" : "en-GB",
+)
 
 // Desktop nav indicator: one red bar that sits under the current page's link and glides to
 // whichever link is hovered or focused, returning when the pointer leaves the menu.
 const items = ref<HTMLLIElement[]>([])
 const hovered = ref<number | null>(null)
 const activeIndex = computed(() =>
-  links.findIndex((link) => isCurrent(link.to)),
+  links.value.findIndex((link) => isCurrent(link.to)),
 )
 const target = computed(() => hovered.value ?? activeIndex.value)
 const bar = ref({ left: 0, width: 0 })
@@ -54,7 +71,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
 
 <template>
   <UHeader
-    to="/"
+    :to="localePath('/')"
     mode="slideover"
     toggle-side="right"
     :toggle="{
@@ -86,9 +103,9 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
       />
     </template>
 
-    <nav aria-label="Primary navigation">
+    <nav :aria-label="content.common.primaryNav">
       <ul
-        class="relative flex gap-8"
+        class="relative flex gap-5 xl:gap-8"
         @mouseleave="hovered = null"
         @focusout="hovered = null"
       >
@@ -128,17 +145,27 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
     </nav>
 
     <template #right>
+      <NuxtLink
+        :to="switchLocalePath(otherLocale)"
+        :lang="otherLocaleTag"
+        :hreflang="otherLocaleTag"
+        :aria-label="content.common.languageSwitchLabel"
+        class="me-2 hidden items-center gap-1.5 text-sm font-semibold text-white/85 transition-colors hover:text-white md:inline-flex"
+      >
+        <UIcon :name="otherLocaleFlag" class="size-4" />
+        {{ content.common.languageSwitch }}
+      </NuxtLink>
       <UButton
         :to="business.phoneHref"
         icon="i-lucide-phone"
         size="xl"
-        aria-label="Call CHS Hydraulic Services"
+        :aria-label="content.common.callChs"
         class="h-10 lg:h-14 px-2 sm:px-5"
       >
         <span class="hidden flex-col text-left leading-tight sm:flex">
-          <span class="text-[13px] tracking-[2px] lg:text-[17px]"
-            >Call now</span
-          >
+          <span class="text-[13px] tracking-[2px] lg:text-[17px]">{{
+            content.common.callNow
+          }}</span>
           <span class="text-xs tracking-[1.5px] lg:text-sm">{{
             business.phoneDisplay
           }}</span>
@@ -147,7 +174,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
     </template>
 
     <template #body>
-      <nav aria-label="Mobile navigation">
+      <nav :aria-label="content.common.mobileNav">
         <ul class="divide-y divide-white/10">
           <li v-for="link in links" :key="link.to">
             <ULink
@@ -163,10 +190,20 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
           </li>
         </ul>
       </nav>
-      <div class="p-5">
+      <div class="space-y-4 p-5">
         <UButton :to="business.phoneHref" icon="i-lucide-phone" size="xl" block>
-          Call {{ business.phoneDisplay }}
+          {{ content.common.call(business.phoneDisplay) }}
         </UButton>
+        <NuxtLink
+          :to="switchLocalePath(otherLocale)"
+          :lang="otherLocaleTag"
+          :hreflang="otherLocaleTag"
+          :aria-label="content.common.languageSwitchLabel"
+          class="flex items-center justify-center gap-2 py-2 font-semibold text-white/85 hover:text-white"
+        >
+          <UIcon :name="otherLocaleFlag" class="size-5" />
+          {{ content.common.languageSwitch }}
+        </NuxtLink>
       </div>
     </template>
   </UHeader>

@@ -6,19 +6,18 @@ const props = withDefaults(
     limit?: number
     muted?: boolean
   }>(),
-  {
-    kicker: "What customers say",
-    title: "Trusted by businesses across South Wales",
-    limit: 3,
-    muted: false,
-  },
+  { limit: 3, muted: false },
 )
+
+const content = useContent()
+const kicker = computed(() => props.kicker ?? content.value.reviews.kicker)
+const title = computed(() => props.title ?? content.value.reviews.title)
 
 const { showSamples, allReviews, summary, readUrl, writeUrl } = useReviews()
 const items = allReviews.slice(0, props.limit)
 
 const formatDate = (date: string) =>
-  new Date(date).toLocaleDateString("en-GB", {
+  new Date(date).toLocaleDateString(content.value.dateLocale, {
     month: "long",
     year: "numeric",
     timeZone: "UTC",
@@ -64,7 +63,7 @@ const formatDate = (date: string) =>
           <div>
             <StarRating :rating="summary.rating" class="text-xl" />
             <p class="mt-1 text-sm text-zinc-600">
-              from {{ summary.count }} Google reviews
+              {{ content.reviews.fromGoogleReviews(summary.count) }}
             </p>
           </div>
         </div>
@@ -99,7 +98,9 @@ const formatDate = (date: string) =>
               <p class="text-sm text-zinc-600">
                 {{
                   review.company ??
-                  (review.source === "google" ? "Google review" : "Customer")
+                  (review.source === "google"
+                    ? content.reviews.googleReview
+                    : content.reviews.customer)
                 }}
                 · {{ formatDate(review.date) }}
               </p>
@@ -118,7 +119,7 @@ const formatDate = (date: string) =>
           trailing-icon="i-lucide-external-link"
           class="justify-center bg-transparent text-ink-950 ring-2 ring-ink-950 hover:bg-ink-950 hover:text-white"
         >
-          Read all reviews on Google
+          {{ content.reviews.readAll }}
         </UButton>
         <UButton
           :to="writeUrl"
@@ -127,7 +128,7 @@ const formatDate = (date: string) =>
           icon="i-lucide-star"
           class="justify-center"
         >
-          Leave us a review
+          {{ content.reviews.leaveReview }}
         </UButton>
       </div>
     </UContainer>

@@ -1,4 +1,5 @@
-// Single source for business details shown across the site and in structured data.
+// Business details that are the same in every language (name, phone, email, structured data).
+// Translatable details (location, service area, opening hours) live in app/content/<locale>/.
 // Placeholder values: replace before launch (see README). These must match the
 // Google Business Profile and directory listings exactly (name, address, phone).
 export default defineAppConfig({
@@ -23,7 +24,6 @@ export default defineAppConfig({
     phoneHref: "tel:+441269123456",
     phoneIntl: "+44 1269 123456",
     email: "info@chshydraulics.co.uk",
-    location: "Cross Hands, Carmarthenshire",
     // Leave street/postcode empty until confirmed; the address is only added to structured data once both are set.
     address: {
       street: "",
@@ -32,14 +32,6 @@ export default defineAppConfig({
       region: "Carmarthenshire",
       postcode: "",
     },
-    serviceArea: [
-      "Carmarthenshire",
-      "Llanelli",
-      "Swansea",
-      "Neath Port Talbot",
-      "Pembrokeshire",
-      "Wider South Wales",
-    ],
     // Towns named in structured data (areaServed).
     towns: [
       "Cross Hands",
@@ -52,12 +44,7 @@ export default defineAppConfig({
       "Neath",
       "Port Talbot",
     ],
-    hours: [
-      { days: "Monday – Friday", time: "8am – 5.30pm" },
-      { days: "Saturday", time: "8am – 12pm" },
-      { days: "Emergency call-outs", time: "Call for availability" },
-    ],
-    // Same hours in schema.org format; keep in step with `hours` above.
+    // Opening hours in schema.org format; keep in step with `business.hours` in app/content/<locale>/index.ts.
     openingHours: ["Mo-Fr 08:00-17:30", "Sa 08:00-12:00"],
     // Profile URLs (Google Business Profile, Facebook, Yell…) for structured data.
     sameAs: [] as string[],

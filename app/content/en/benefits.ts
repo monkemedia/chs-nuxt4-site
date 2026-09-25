@@ -1,13 +1,7 @@
+import type { Benefit } from "../types"
+
 // "Why choose CHS" points shown on the homepage band and the /why-chs page.
 // Check with the business before launch: only publish what CHS can stand behind.
-
-export interface Benefit {
-  icon: string
-  // Two-line title for the homepage band.
-  title: [string, string]
-  summary: string
-  detail: string
-}
 
 export const benefits: Benefit[] = [
   {

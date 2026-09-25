@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { services } from "~/data/services"
+const content = useContent()
+const localePath = useLocalePath()
+const page = computed(() => content.value.servicesPage)
 
-usePageSeo({
-  title: "Hydraulic Services Llanelli & Carmarthenshire | CHS",
-  description:
-    "Hose replacement, ram and cylinder repairs, fault finding and mobile on-site service from our Cross Hands workshop, covering Llanelli and Carmarthenshire.",
-  path: "/services",
-})
+usePageSeo({ ...page.value.seo, path: "/services" })
 useBreadcrumbs([
-  { name: "Home", path: "/" },
-  { name: "Services", path: "/services" },
+  { name: content.value.common.home, path: "/" },
+  { name: page.value.crumb, path: "/services" },
 ])
 
-const crumbs = [
-  { label: "Home", to: "/" },
-  { label: "Services", class: "text-white" },
-]
+const crumbs = computed(() => [
+  { label: content.value.common.home, to: localePath("/") },
+  { label: page.value.crumb, class: "text-white" },
+])
 </script>
 
 <template>
@@ -30,20 +27,19 @@ const crumbs = [
         id="services-title"
         class="heading-display text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
       >
-        Hydraulic <em class="text-primary not-italic">services</em>
+        {{ page.title[0] }}
+        <em class="text-primary not-italic">{{ page.title[1] }}</em>
       </h1>
       <p class="mt-5 max-w-xl text-base text-zinc-200 sm:text-lg">
-        Hose replacement, ram repairs, fault finding and mobile call-outs from
-        our workshop in Cross Hands, serving Llanelli, Carmarthenshire and South
-        Wales.
+        {{ page.intro }}
       </p>
     </PageHero>
 
-    <section class="py-16 sm:py-20" aria-label="Our services">
+    <section class="py-16 sm:py-20" :aria-label="page.listLabel">
       <UContainer>
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <ServiceCard
-            v-for="service in services"
+            v-for="service in content.services"
             :key="service.slug"
             :service="service"
             heading-level="h2"
@@ -53,9 +49,9 @@ const crumbs = [
     </section>
 
     <CtaBand
-      kicker="Not sure what you need?"
-      title="Tell us what's happening."
-      text="Describe the problem and we'll point you in the right direction."
+      :kicker="page.cta.kicker"
+      :title="page.cta.title"
+      :text="page.cta.text"
     />
   </div>
 </template>

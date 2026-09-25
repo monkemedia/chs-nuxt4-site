@@ -1,47 +1,57 @@
 <script setup lang="ts">
-import { findService, services } from "~/data/services"
-
 const route = useRoute()
 const { business } = useAppConfig()
 const { url: siteUrl } = useSiteConfig()
-const service = findService(String(route.params.slug))
-if (!service)
+const content = useContent()
+const localePath = useLocalePath()
+const page = computed(() => content.value.servicePage)
+
+const service = computed(() =>
+  content.value.services.find((s) => s.slug === String(route.params.slug)),
+)
+if (!service.value)
   throw createError({
     statusCode: 404,
-    statusMessage: "Service not found",
+    statusMessage: page.value.notFound,
     fatal: true,
   })
 
-const path = `/services/${service.slug}`
-const others = services.filter((s) => s.slug !== service.slug)
+const path = `/services/${service.value.slug}`
+const others = computed(() =>
+  content.value.services.filter((s) => s.slug !== service.value!.slug),
+)
 
 usePageSeo({
-  title: service.metaTitle,
-  description: service.metaDescription,
+  title: service.value.metaTitle,
+  description: service.value.metaDescription,
   path,
 })
 useBreadcrumbs([
-  { name: "Home", path: "/" },
-  { name: "Services", path: "/services" },
-  { name: service.title, path },
+  { name: content.value.common.home, path: "/" },
+  { name: content.value.servicesPage.crumb, path: "/services" },
+  { name: service.value.title, path },
 ])
 useJsonLd("service", {
   "@type": "Service",
-  name: service.h1,
-  serviceType: service.title,
-  description: service.metaDescription,
-  url: new URL(path, siteUrl).href,
+  name: service.value.h1,
+  serviceType: service.value.title,
+  description: service.value.metaDescription,
+  url: new URL(localePath(path), siteUrl).href,
   provider: { "@id": useBusinessId() },
   areaServed: business.towns.map((name) => ({ "@type": "City", name })),
 })
 
-const crumbs = [
-  { label: "Home", to: "/" },
-  { label: "Services", to: "/services" },
-  { label: service.title, class: "text-white" },
-]
-const faqs = service.faqs.map((faq) => ({ label: faq.q, content: faq.a }))
-const enquiryTo = `/contact?service=${service.slug}`
+const crumbs = computed(() => [
+  { label: content.value.common.home, to: localePath("/") },
+  { label: content.value.servicesPage.crumb, to: localePath("/services") },
+  { label: service.value!.title, class: "text-white" },
+])
+const faqs = computed(() =>
+  service.value!.faqs.map((faq) => ({ label: faq.q, content: faq.a })),
+)
+// English path; CtaBand localises it itself.
+const enquiryPath = `/contact?service=${service.value.slug}`
+const enquiryTo = computed(() => localePath(enquiryPath))
 </script>
 
 <template>
@@ -56,10 +66,10 @@ const enquiryTo = `/contact?service=${service.slug}`
         id="service-title"
         class="heading-display max-w-4xl text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
       >
-        {{ service.h1 }}
+        {{ service!.h1 }}
       </h1>
       <p class="mt-5 max-w-xl text-base text-zinc-200 sm:text-lg">
-        {{ service.lead }}
+        {{ service!.lead }}
       </p>
       <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-5">
         <UButton
@@ -68,7 +78,7 @@ const enquiryTo = `/contact?service=${service.slug}`
           size="xl"
           class="h-14 justify-center px-6"
         >
-          Call {{ business.phoneDisplay }}
+          {{ content.common.call(business.phoneDisplay) }}
         </UButton>
         <UButton
           :to="enquiryTo"
@@ -78,7 +88,7 @@ const enquiryTo = `/contact?service=${service.slug}`
           size="xl"
           class="h-14 justify-center px-6 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
         >
-          Send an enquiry
+          {{ content.common.sendEnquiry }}
         </UButton>
       </div>
     </PageHero>
@@ -89,7 +99,7 @@ const enquiryTo = `/contact?service=${service.slug}`
       >
         <article class="max-w-3xl">
           <p
-            v-for="(paragraph, i) in service.intro"
+            v-for="(paragraph, i) in service!.intro"
             :key="i"
             class="mb-4.5"
             :class="
@@ -102,11 +112,11 @@ const enquiryTo = `/contact?service=${service.slug}`
           </p>
 
           <h2 class="heading-display mt-12 mb-5.5 text-[clamp(24px,3vw,32px)]">
-            What we do
+            {{ page.whatWeDo }}
           </h2>
           <ul class="grid gap-x-6 gap-y-3.5 sm:grid-cols-2">
             <li
-              v-for="item in service.includes"
+              v-for="item in service!.includes"
               :key="item"
               class="flex items-start gap-3 text-[15px] font-semibold"
             >
@@ -120,11 +130,11 @@ const enquiryTo = `/contact?service=${service.slug}`
           </ul>
 
           <h2 class="heading-display mt-12 mb-5.5 text-[clamp(24px,3vw,32px)]">
-            How it works
+            {{ page.howItWorks }}
           </h2>
           <ol class="grid gap-4 sm:grid-cols-3">
             <li
-              v-for="(step, i) in service.process"
+              v-for="(step, i) in service!.process"
               :key="step.title"
               class="border-t-3 border-primary bg-zinc-100 px-5 py-6"
             >
@@ -141,7 +151,7 @@ const enquiryTo = `/contact?service=${service.slug}`
           </ol>
 
           <h2 class="heading-display mt-12 mb-3 text-[clamp(24px,3vw,32px)]">
-            Common questions
+            {{ page.commonQuestions }}
           </h2>
           <UAccordion
             :items="faqs"
@@ -159,14 +169,14 @@ const enquiryTo = `/contact?service=${service.slug}`
 
         <aside
           class="grid gap-5 sm:grid-cols-2 lg:sticky lg:top-[calc(var(--ui-header-height)+1.5rem)] lg:grid-cols-1"
-          aria-label="Get help"
+          :aria-label="page.getHelp"
         >
           <div
             class="bg-primary p-6 text-white sm:col-span-2 sm:p-7.5 lg:col-span-1"
           >
-            <p class="kicker mb-3">Need it sorted?</p>
+            <p class="kicker mb-3">{{ page.needSorted }}</p>
             <h2 class="heading-display mb-5 text-2xl leading-[1.1]">
-              Talk to our team
+              {{ page.talkToTeam }}
             </h2>
             <UButton
               :to="business.phoneHref"
@@ -184,7 +194,7 @@ const enquiryTo = `/contact?service=${service.slug}`
               :to="enquiryTo"
               class="mt-4 inline-flex items-center gap-2 text-[13px] font-extrabold tracking-wider text-white uppercase hover:underline"
             >
-              Or send an enquiry
+              {{ content.common.orSendEnquiry }}
               <UIcon name="i-lucide-chevron-right" class="size-4" />
             </ULink>
           </div>
@@ -197,13 +207,13 @@ const enquiryTo = `/contact?service=${service.slug}`
               id="other-services-title"
               class="heading-display mb-2 text-[13px] tracking-wide"
             >
-              Other services
+              {{ page.otherServices }}
             </h2>
             <ul class="divide-y divide-zinc-200">
               <li v-for="other in others" :key="other.slug">
                 <ULink
                   raw
-                  :to="`/services/${other.slug}`"
+                  :to="localePath(`/services/${other.slug}`)"
                   class="flex items-center gap-3 py-3.5 text-sm font-bold hover:text-chs-600"
                 >
                   <UIcon
@@ -222,10 +232,10 @@ const enquiryTo = `/contact?service=${service.slug}`
 
           <div class="bg-ink-900 px-5 py-6 text-white sm:px-7.5">
             <h3 class="heading-display mb-3.5 text-[13px] tracking-wide">
-              Areas we cover
+              {{ page.areasWeCover }}
             </h3>
             <ul class="flex flex-wrap gap-2">
-              <li v-for="area in business.serviceArea" :key="area">
+              <li v-for="area in content.business.serviceArea" :key="area">
                 <UBadge
                   :label="area"
                   color="neutral"
@@ -241,9 +251,9 @@ const enquiryTo = `/contact?service=${service.slug}`
     </section>
 
     <CtaBand
-      kicker="Based in Cross Hands, Carmarthenshire"
-      text="Serving Llanelli, Carmarthen, Ammanford, Swansea and across South Wales."
-      :enquiry-to="enquiryTo"
+      :kicker="page.ctaKicker"
+      :text="page.ctaText"
+      :enquiry-to="enquiryPath"
     />
   </div>
 </template>

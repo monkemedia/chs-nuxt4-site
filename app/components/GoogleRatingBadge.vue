@@ -4,6 +4,7 @@ import { ratingBadgeThreshold } from "~/data/reviews"
 // Compact "★★★★★ 4.8 on Google · 23 reviews" line for the dark homepage hero.
 // Hidden until the Google rating meets ratingBadgeThreshold.
 const { showSamples, summary, readUrl } = useReviews()
+const content = useContent()
 
 const visible =
   !!summary &&
@@ -26,10 +27,10 @@ const visible =
       <strong class="font-extrabold text-white">{{
         summary.rating.toFixed(1)
       }}</strong>
-      on Google ·
-      <span :class="{ 'underline-offset-4 group-hover:underline': readUrl }"
-        >{{ summary.count }} reviews</span
-      >
+      {{ content.reviews.onGoogle }} ·
+      <span :class="{ 'underline-offset-4 group-hover:underline': readUrl }">{{
+        content.reviews.reviewCount(summary.count)
+      }}</span>
     </span>
     <DevOnly>
       <span v-if="showSamples" class="text-xs text-amber-300">(sample)</span>

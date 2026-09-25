@@ -1,48 +1,43 @@
 <script setup lang="ts">
 import * as z from "zod"
 import type { FormSubmitEvent } from "@nuxt/ui"
-import { services } from "~/data/services"
-
+import { contentByLocale } from "~/content"
 const { business } = useAppConfig()
 const runtimeConfig = useRuntimeConfig()
 const endpoint = runtimeConfig.public.contactFormEndpoint as string
 const { $track } = useNuxtApp()
+const content = useContent()
+const page = computed(() => content.value.contact)
+const { locale } = useI18n()
 
-usePageSeo({
-  title: "Contact CHS Hydraulics | Cross Hands, Llanelli",
-  description:
-    "Contact Crosshands Hydraulic Services for hose replacement, ram repairs, fault finding and on-site call-outs across Llanelli and Carmarthenshire.",
-  path: "/contact",
+usePageSeo({ ...page.value.seo, path: "/contact" })
+
+const serviceOptions = computed(() => [
+  ...content.value.services.map((s) => ({ value: s.slug, label: s.h1 })),
+  { value: "other", label: page.value.fields.somethingElse },
+])
+
+// Urgency is stored as a key; the business always receives the English label.
+type UrgencyKey = keyof typeof contentByLocale.en.contact.urgencies
+const urgencyKeys: UrgencyKey[] = ["emergency", "soon", "quote"]
+const urgencyItems = computed(() =>
+  urgencyKeys.map((key) => ({ value: key, label: page.value.urgencies[key] })),
+)
+
+const schema = computed(() => {
+  const errors = page.value.errors
+  return z.object({
+    name: z.string().trim().min(1, errors.name),
+    company: z.string().trim().optional(),
+    phone: z.string().trim().min(6, errors.phone),
+    email: z.email(errors.email),
+    service: z.string({ error: errors.service }).min(1, errors.service),
+    location: z.string().trim().optional(),
+    urgency: z.enum(["emergency", "soon", "quote"], { error: errors.urgency }),
+    message: z.string().trim().min(10, errors.message),
+  })
 })
-
-const serviceOptions = [
-  ...services.map((s) => ({ value: s.slug, label: s.h1 })),
-  { value: "other", label: "Something else" },
-]
-const urgencies = [
-  "Emergency – machine is down",
-  "Within the next few days",
-  "Just after a quote",
-]
-
-const schema = z.object({
-  name: z.string().trim().min(1, "Please enter your name"),
-  company: z.string().trim().optional(),
-  phone: z
-    .string()
-    .trim()
-    .min(6, "Please enter a phone number we can reach you on"),
-  email: z.email("Please enter a valid email address"),
-  service: z
-    .string({ error: "Please choose a service" })
-    .min(1, "Please choose a service"),
-  location: z.string().trim().optional(),
-  urgency: z
-    .string({ error: "Please tell us how urgent it is" })
-    .min(1, "Please tell us how urgent it is"),
-  message: z.string().trim().min(10, "Please give us a few more details"),
-})
-type Schema = z.output<typeof schema>
+type Schema = z.output<typeof schema.value>
 
 const initialState = (): Partial<Schema> => ({
   name: "",
@@ -51,7 +46,7 @@ const initialState = (): Partial<Schema> => ({
   email: "",
   service: undefined,
   location: "",
-  urgency: urgencies[1],
+  urgency: "soon",
   message: "",
 })
 const state = reactive(initialState())
@@ -67,7 +62,7 @@ const router = useRouter()
 function preselect(requested: unknown) {
   if (
     typeof requested === "string" &&
-    serviceOptions.some((s) => s.value === requested)
+    serviceOptions.value.some((s) => s.value === requested)
   )
     state.service = requested
 }
@@ -88,6 +83,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const body = new FormData()
     for (const [key, value] of Object.entries(event.data))
       if (value) body.append(key, value)
+    body.set(
+      "urgency",
+      contentByLocale.en.contact.urgencies[event.data.urgency],
+    )
+    // Tells the business which language to reply in.
+    body.append("language", locale.value === "cy" ? "Welsh" : "English")
     body.append("_subject", "New website enquiry – CHS Hydraulic Services")
     body.append("_gotcha", gotcha.value)
     try {
@@ -104,7 +105,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   if (status.value === "sent") {
     $track("Enquiry Sent", {
       service: event.data.service,
-      urgency: event.data.urgency,
+      urgency: contentByLocale.en.contact.urgencies[event.data.urgency],
+      language: locale.value,
     })
     Object.assign(state, initialState())
   }
@@ -112,43 +114,49 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   result.value?.focus()
 }
 
-const details = [
+const details = computed(() => [
   {
     icon: "i-lucide-phone",
-    title: "Phone",
+    title: page.value.phone,
     label: business.phoneDisplay,
     href: business.phoneHref,
   },
   {
     icon: "i-lucide-mail",
-    title: "Email",
+    title: page.value.email,
     label: business.email,
     href: `mailto:${business.email}`,
   },
-  { icon: "i-lucide-map-pin", title: "Based in", label: business.location },
-]
+  {
+    icon: "i-lucide-map-pin",
+    title: page.value.basedIn,
+    label: content.value.business.location,
+  },
+])
 </script>
 
 <template>
   <div>
     <PageHero labelledby="contact-title">
       <p class="kicker mb-4 sm:tracking-[3px]">
-        Contact <span class="px-2 opacity-80" aria-hidden="true">|</span> Quotes
-        <span class="px-2 opacity-80" aria-hidden="true">|</span> Call-outs
+        <template v-for="(word, i) in page.kicker" :key="word"
+          ><span v-if="i" class="px-2 opacity-80" aria-hidden="true">|</span
+          >{{ word }}</template
+        >
       </p>
       <h1
         id="contact-title"
         class="heading-display text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
       >
-        Get in <em class="text-primary not-italic">touch</em>
+        {{ page.title[0] }}
+        <em class="text-primary not-italic">{{ page.title[1] }}</em>
       </h1>
       <p class="mt-5 max-w-xl text-base text-zinc-200 sm:text-lg">
-        Machine down, need a hose made up or want a quote for a ram rebuild?
-        Call us, or send the details below and we'll get back to you.
+        {{ page.intro }}
       </p>
     </PageHero>
 
-    <section class="bg-zinc-100 py-16 sm:py-20" aria-label="Contact options">
+    <section class="bg-zinc-100 py-16 sm:py-20" :aria-label="page.sectionLabel">
       <UContainer
         class="grid items-start gap-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]"
       >
@@ -165,7 +173,7 @@ const details = [
               color="success"
               variant="subtle"
               icon="i-lucide-circle-check"
-              title="Thanks, your enquiry has been sent"
+              :title="page.sentTitle"
               :ui="{
                 title: 'heading-display text-xl text-green-800 sm:text-2xl',
                 description: 'mt-2 text-base text-ink-950',
@@ -173,8 +181,7 @@ const details = [
               }"
             >
               <template #description>
-                We'll be in touch as soon as possible. If your machine is down,
-                call us on
+                {{ page.sentText }}
                 <a
                   :href="business.phoneHref"
                   class="font-extrabold whitespace-nowrap text-chs-600 underline"
@@ -189,7 +196,7 @@ const details = [
               trailing-icon="i-lucide-chevron-right"
               @click="status = 'idle'"
             >
-              Send another enquiry
+              {{ page.sendAnother }}
             </UButton>
           </div>
 
@@ -201,19 +208,20 @@ const details = [
             @submit="onSubmit"
           >
             <div>
-              <p class="kicker mb-3 text-chs-600">Send an enquiry</p>
+              <p class="kicker mb-3 text-chs-600">{{ page.formKicker }}</p>
               <h2 class="heading-display text-[clamp(24px,3vw,32px)]">
-                Tell us what you need
+                {{ page.formTitle }}
               </h2>
               <p class="mt-2.5 text-[13px] text-zinc-600">
-                Fields marked
+                {{ page.requiredNote[0] }}
                 <span class="text-error" aria-hidden="true">*</span
-                ><span class="sr-only">with an asterisk</span> are required.
+                ><span class="sr-only">{{ page.requiredNote[1] }}</span>
+                {{ page.requiredNote[2] }}
               </p>
             </div>
 
             <div class="sr-only" aria-hidden="true">
-              <label for="f-company-website">Leave this field empty</label>
+              <label for="f-company-website">{{ page.honeypot }}</label>
               <input
                 id="f-company-website"
                 v-model="gotcha"
@@ -225,7 +233,7 @@ const details = [
             </div>
 
             <div class="grid gap-5 sm:grid-cols-2">
-              <UFormField label="Name" name="name" required>
+              <UFormField :label="page.fields.name" name="name" required>
                 <UInput
                   v-model="state.name"
                   autocomplete="name"
@@ -233,7 +241,11 @@ const details = [
                   class="w-full"
                 />
               </UFormField>
-              <UFormField label="Company" name="company" hint="Optional">
+              <UFormField
+                :label="page.fields.company"
+                name="company"
+                :hint="page.optional"
+              >
                 <UInput
                   v-model="state.company"
                   autocomplete="organization"
@@ -241,7 +253,7 @@ const details = [
                   class="w-full"
                 />
               </UFormField>
-              <UFormField label="Phone" name="phone" required>
+              <UFormField :label="page.fields.phone" name="phone" required>
                 <UInput
                   v-model="state.phone"
                   type="tel"
@@ -251,7 +263,7 @@ const details = [
                   class="w-full"
                 />
               </UFormField>
-              <UFormField label="Email" name="email" required>
+              <UFormField :label="page.fields.email" name="email" required>
                 <UInput
                   v-model="state.email"
                   type="email"
@@ -260,34 +272,34 @@ const details = [
                   class="w-full"
                 />
               </UFormField>
-              <UFormField label="Service" name="service" required>
+              <UFormField :label="page.fields.service" name="service" required>
                 <USelect
                   v-model="state.service"
                   :items="serviceOptions"
-                  placeholder="Choose a service"
+                  :placeholder="page.fields.servicePlaceholder"
                   size="xl"
                   class="w-full"
                 />
               </UFormField>
               <UFormField
-                label="Location or postcode"
+                :label="page.fields.location"
                 name="location"
-                hint="Optional"
+                :hint="page.optional"
               >
                 <UInput
                   v-model="state.location"
                   autocomplete="postal-code"
-                  placeholder="e.g. SA14"
+                  :placeholder="page.fields.locationPlaceholder"
                   size="xl"
                   class="w-full"
                 />
               </UFormField>
             </div>
 
-            <UFormField label="How urgent is it?" name="urgency" required>
+            <UFormField :label="page.fields.urgency" name="urgency" required>
               <URadioGroup
                 v-model="state.urgency"
-                :items="urgencies"
+                :items="urgencyItems"
                 variant="card"
                 orientation="horizontal"
                 :ui="{
@@ -298,12 +310,12 @@ const details = [
               />
             </UFormField>
 
-            <UFormField label="Details" name="message" required>
+            <UFormField :label="page.fields.details" name="message" required>
               <UTextarea
                 v-model="state.message"
                 :rows="6"
                 autoresize
-                placeholder="Machine make/model, what's gone wrong, part numbers if you have them…"
+                :placeholder="page.fields.detailsPlaceholder"
                 size="xl"
                 class="w-full"
               />
@@ -319,7 +331,7 @@ const details = [
                 color="error"
                 variant="subtle"
                 icon="i-lucide-circle-alert"
-                title="Sorry, your enquiry couldn't be sent"
+                :title="page.errorTitle"
                 :ui="{
                   title: 'text-chs-800',
                   description: 'text-ink-950',
@@ -327,7 +339,7 @@ const details = [
                 }"
               >
                 <template #description>
-                  Please try again, or call us on
+                  {{ page.errorText }}
                   <a
                     :href="business.phoneHref"
                     class="font-extrabold whitespace-nowrap underline"
@@ -345,10 +357,10 @@ const details = [
                 :loading="status === 'sending'"
                 class="h-13.5 w-full justify-center px-8 sm:w-auto"
               >
-                {{ status === "sending" ? "Sending…" : "Send enquiry" }}
+                {{ status === "sending" ? page.sending : page.send }}
               </UButton>
               <p class="text-[13px] text-zinc-600">
-                We only use your details to respond to your enquiry.
+                {{ page.privacy }}
               </p>
             </div>
           </UForm>
@@ -356,14 +368,14 @@ const details = [
 
         <aside
           class="grid gap-5 md:grid-cols-2 lg:grid-cols-1"
-          aria-label="Contact details"
+          :aria-label="page.detailsLabel"
         >
           <div
             class="bg-primary p-6 text-white sm:p-7.5 md:col-span-2 lg:col-span-1"
           >
-            <p class="kicker mb-3">Machine down?</p>
+            <p class="kicker mb-3">{{ page.emergencyKicker }}</p>
             <h2 class="heading-display mb-5 text-2xl leading-[1.1]">
-              Call for emergency call&#8209;outs
+              {{ page.emergencyTitle }}
             </h2>
             <UButton
               :to="business.phoneHref"
@@ -410,12 +422,15 @@ const details = [
               />
               <div>
                 <h3 class="heading-display mb-1 text-[13px] tracking-wide">
-                  Opening hours
+                  {{ page.openingHours }}
                 </h3>
                 <dl
                   class="mt-1.5 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-sm"
                 >
-                  <template v-for="row in business.hours" :key="row.days">
+                  <template
+                    v-for="row in content.business.hours"
+                    :key="row.days"
+                  >
                     <dt class="text-zinc-600">{{ row.days }}</dt>
                     <dd class="font-bold">{{ row.time }}</dd>
                   </template>
@@ -426,10 +441,10 @@ const details = [
 
           <div class="bg-ink-900 px-5 py-6 text-white sm:px-7.5">
             <h3 class="heading-display mb-3.5 text-[13px] tracking-wide">
-              Areas we cover
+              {{ page.areasWeCover }}
             </h3>
             <ul class="flex flex-wrap gap-2">
-              <li v-for="area in business.serviceArea" :key="area">
+              <li v-for="area in content.business.serviceArea" :key="area">
                 <UBadge
                   :label="area"
                   color="neutral"

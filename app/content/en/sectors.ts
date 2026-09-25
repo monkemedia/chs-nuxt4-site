@@ -1,17 +1,7 @@
+import type { Sector } from "../types"
+
 // Sectors shown on the homepage band and the /sectors page.
 // Check with the business before launch: only list machines and work CHS actually takes on.
-
-export interface Sector {
-  slug: string
-  icon: string
-  // Two-line label for the homepage band.
-  label: [string] | [string, string]
-  title: string
-  summary: string
-  machines: string[]
-  // Slugs from app/data/services.ts.
-  services: string[]
-}
 
 export const sectors: Sector[] = [
   {

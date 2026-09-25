@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { Service } from "~/data/services"
+import type { Service } from "~/content/types"
 
 defineProps<{ service: Service; headingLevel?: "h2" | "h3" }>()
+
+const localePath = useLocalePath()
 </script>
 
 <template>
@@ -33,7 +35,7 @@ defineProps<{ service: Service; headingLevel?: "h2" | "h3" }>()
         class="heading-display mb-2.5 text-lg leading-tight"
       >
         <NuxtLink
-          :to="`/services/${service.slug}`"
+          :to="localePath(`/services/${service.slug}`)"
           class="after:absolute after:inset-0 after:z-10"
           >{{ service.title }}</NuxtLink
         >

@@ -1,26 +1,32 @@
 <script setup lang="ts">
-import { services } from "~/data/services"
-
 const { business } = useAppConfig()
+const content = useContent()
+const localePath = useLocalePath()
 
-const columns = [
-  {
-    id: "footer-services",
-    title: "Services",
-    links: services.map((s) => ({ label: s.h1, to: `/services/${s.slug}` })),
-  },
-  {
-    id: "footer-explore",
-    title: "Explore",
-    links: [
-      { label: "All services", to: "/services" },
-      { label: "About us", to: "/about" },
-      { label: "Sectors", to: "/sectors" },
-      { label: "Why CHS", to: "/why-chs" },
-      { label: "Contact", to: "/contact" },
-    ],
-  },
-]
+const columns = computed(() => {
+  const { footer, nav, services } = content.value
+  return [
+    {
+      id: "footer-services",
+      title: footer.services,
+      links: services.map((s) => ({
+        label: s.h1,
+        to: localePath(`/services/${s.slug}`),
+      })),
+    },
+    {
+      id: "footer-explore",
+      title: footer.explore,
+      links: [
+        { label: footer.allServices, to: localePath("/services") },
+        { label: footer.aboutUs, to: localePath("/about") },
+        { label: nav.sectors, to: localePath("/sectors") },
+        { label: nav.whyChs, to: localePath("/why-chs") },
+        { label: nav.contact, to: localePath("/contact") },
+      ],
+    },
+  ]
+})
 
 const linkClass = "transition-colors hover:text-white focus-visible:text-white"
 </script>
@@ -42,10 +48,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
           loading="lazy"
           :img-attrs="{ class: 'h-auto w-[130px]' }"
         />
-        <p class="mt-4 max-w-xs">
-          Hydraulic repair, hose supply and on-site service from Cross Hands,
-          covering Llanelli, Carmarthenshire and South Wales.
-        </p>
+        <p class="mt-4 max-w-xs">{{ content.footer.blurb }}</p>
       </div>
 
       <nav
@@ -70,7 +73,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
         <h2
           class="heading-display mb-3.5 text-[13px] tracking-[1.5px] text-white"
         >
-          Get in touch
+          {{ content.footer.getInTouch }}
         </h2>
         <ul class="space-y-2 wrap-anywhere">
           <li>
@@ -83,7 +86,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
               business.email
             }}</a>
           </li>
-          <li>{{ business.location }}</li>
+          <li>{{ content.business.location }}</li>
         </ul>
       </div>
     </UContainer>

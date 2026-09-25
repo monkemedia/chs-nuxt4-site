@@ -1,68 +1,18 @@
 <script setup lang="ts">
-const { business } = useAppConfig()
+const content = useContent()
+const localePath = useLocalePath()
+const page = computed(() => content.value.about)
 
-usePageSeo({
-  title: "About CHS | Hydraulic Engineers in Cross Hands, Llanelli",
-  description:
-    "Crosshands Hydraulic Services is a hydraulic repair and supply business in Cross Hands, Carmarthenshire, with a workshop and mobile unit serving Llanelli and South Wales.",
-  path: "/about",
-})
+usePageSeo({ ...page.value.seo, path: "/about" })
 useBreadcrumbs([
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
+  { name: content.value.common.home, path: "/" },
+  { name: page.value.crumb, path: "/about" },
 ])
 
-const crumbs = [
-  { label: "Home", to: "/" },
-  { label: "About", class: "text-white" },
-]
-
-// "2004" is the Companies House incorporation date for Crosshands Hydraulic Services LLP; confirm with the business.
-const facts = [
-  { value: "2004", label: "Established" },
-  { value: "Cross Hands", label: "Workshop base" },
-  { value: "Mobile", label: "On-site service unit" },
-  { value: "South Wales", label: "Area we cover" },
-]
-
-const values = [
-  {
-    icon: "i-lucide-message-square-text",
-    title: "Straight answers",
-    text: "We tell you what's wrong, what it needs and what it'll cost before we start, with no surprises.",
-  },
-  {
-    icon: "i-lucide-hard-hat",
-    title: "Practical experience",
-    text: "Hands-on hydraulic work every day across plant, farm, commercial and industrial machinery.",
-  },
-  {
-    icon: "i-lucide-map-pinned",
-    title: "Local and reachable",
-    text: "Based in Cross Hands, so we're close to Llanelli, Carmarthen, Ammanford and Swansea when you need us.",
-  },
-]
-
-const ways = [
-  {
-    icon: "i-lucide-warehouse",
-    title: "At our workshop",
-    text: "Bring hoses, rams and components to our Cross Hands workshop. Most hoses are made up while you wait, and rams are stripped, inspected and rebuilt in-house.",
-    link: {
-      label: "Hose repair & replacement",
-      to: "/services/hydraulic-hoses",
-    },
-  },
-  {
-    icon: "i-lucide-truck",
-    title: "On your site",
-    text: "When the machine can't come to us, our fully equipped mobile unit goes to it: building sites, quarries, farms and yards across South Wales.",
-    link: {
-      label: "On-site & mobile service",
-      to: "/services/on-site-hydraulic-service",
-    },
-  },
-]
+const crumbs = computed(() => [
+  { label: content.value.common.home, to: localePath("/") },
+  { label: page.value.crumb, class: "text-white" },
+])
 </script>
 
 <template>
@@ -77,45 +27,37 @@ const ways = [
         id="about-title"
         class="heading-display text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
       >
-        About <em class="text-primary not-italic">CHS</em>
+        {{ page.title[0] }}
+        <em class="text-primary not-italic">{{ page.title[1] }}</em>
       </h1>
       <p class="mt-5 max-w-xl text-base text-zinc-200 sm:text-lg">
-        A hydraulic repair and supply business in Cross Hands, Carmarthenshire,
-        keeping plant, farm and industrial machinery working across South Wales.
+        {{ page.intro }}
       </p>
     </PageHero>
 
     <section class="py-16 sm:py-20" aria-labelledby="who-title">
       <UContainer class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p class="kicker mb-3 text-chs-600">Who we are</p>
+          <p class="kicker mb-3 text-chs-600">{{ page.whoKicker }}</p>
           <h2
             id="who-title"
             class="heading-display mb-6 text-[clamp(28px,3.6vw,40px)]"
           >
-            Hydraulic specialists, close to home
+            {{ page.whoTitle }}
           </h2>
           <div class="space-y-4 text-zinc-600">
-            <p class="text-[17px] text-ink-950 sm:text-[19px]">
-              {{ business.name }} repairs, services and supplies hydraulic
-              equipment for customers across Llanelli, Carmarthenshire and South
-              Wales.
-            </p>
-            <p>
-              From a burst hose on an excavator to a leaking ram on a tractor
-              loader or a fault on an industrial press, we find the problem, fix
-              it properly and get you back to work.
-            </p>
-            <p>
-              We run a workshop at Cross Hands and a fully equipped mobile
-              service unit, so we can work wherever makes most sense for you and
-              your machine.
+            <p
+              v-for="(paragraph, i) in page.who"
+              :key="i"
+              :class="{ 'text-[17px] text-ink-950 sm:text-[19px]': i === 0 }"
+            >
+              {{ paragraph }}
             </p>
           </div>
         </div>
         <NuxtPicture
           src="/images/van.jpg"
-          alt="CHS Crosshands Hydraulic Services mobile service van"
+          :alt="page.vanAlt"
           sizes="444px"
           width="444"
           height="200"
@@ -130,11 +72,11 @@ const ways = [
       </UContainer>
     </section>
 
-    <section class="bg-ink-900 text-white" aria-label="CHS at a glance">
+    <section class="bg-ink-900 text-white" :aria-label="page.factsLabel">
       <UContainer>
         <dl class="grid grid-cols-2 divide-white/15 lg:grid-cols-4 lg:divide-x">
           <div
-            v-for="fact in facts"
+            v-for="fact in page.facts"
             :key="fact.label"
             class="px-2 py-8 lg:px-8 lg:first:pl-0"
           >
@@ -149,16 +91,16 @@ const ways = [
 
     <section class="py-16 sm:py-20" aria-labelledby="values-title">
       <UContainer>
-        <p class="kicker mb-3 text-chs-600">How we work</p>
+        <p class="kicker mb-3 text-chs-600">{{ page.valuesKicker }}</p>
         <h2
           id="values-title"
           class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"
         >
-          What you can expect from us
+          {{ page.valuesTitle }}
         </h2>
         <ul class="grid gap-5 md:grid-cols-3">
           <li
-            v-for="value in values"
+            v-for="value in page.values"
             :key="value.title"
             class="border-t-3 border-primary bg-zinc-100 p-6 sm:p-7"
           >
@@ -172,16 +114,16 @@ const ways = [
 
     <section class="bg-zinc-100 py-16 sm:py-20" aria-labelledby="ways-title">
       <UContainer>
-        <p class="kicker mb-3 text-chs-600">Workshop or on-site</p>
+        <p class="kicker mb-3 text-chs-600">{{ page.waysKicker }}</p>
         <h2
           id="ways-title"
           class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"
         >
-          Two ways we can help
+          {{ page.waysTitle }}
         </h2>
         <div class="grid gap-5 md:grid-cols-2">
           <article
-            v-for="way in ways"
+            v-for="way in page.ways"
             :key="way.title"
             class="flex flex-col bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-8"
           >
@@ -192,7 +134,7 @@ const ways = [
             <p class="mb-6 flex-1 text-zinc-600">{{ way.text }}</p>
             <ULink
               raw
-              :to="way.link.to"
+              :to="localePath(way.link.to)"
               class="inline-flex items-center gap-2 self-start border-b-2 border-primary pb-1 text-[13px] font-extrabold tracking-wider uppercase hover:text-chs-600"
             >
               {{ way.link.label }}
@@ -211,20 +153,19 @@ const ways = [
         class="grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]"
       >
         <div>
-          <p class="kicker mb-3 text-chs-600">Where we work</p>
+          <p class="kicker mb-3 text-chs-600">{{ page.areasKicker }}</p>
           <h2
             id="areas-title"
             class="heading-display mb-4 text-[clamp(28px,3.6vw,40px)]"
           >
-            Areas we cover
+            {{ page.areasTitle }}
           </h2>
           <p class="text-zinc-600">
-            Based at Cross Hands, we're well placed for customers right across
-            the region. Not sure if we cover you? Just ask.
+            {{ page.areasText }}
           </p>
         </div>
         <ul class="flex flex-wrap gap-2.5">
-          <li v-for="area in business.serviceArea" :key="area">
+          <li v-for="area in content.business.serviceArea" :key="area">
             <UBadge
               :label="area"
               color="neutral"

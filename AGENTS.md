@@ -52,10 +52,12 @@ app/
     StarRating.vue        1–5 star display (filled `i-chs-star` icon)
     GoogleRatingBadge.vue Hero rating line, shown once the rating meets the threshold
   composables/usePageSeo.ts  usePageSeo, useJsonLd, useBreadcrumbs, useBusinessId
-  data/                   Content, shared by pages and homepage sections
-    services.ts           -> /services and /services/[slug], footer, contact form dropdown
-    sectors.ts            -> /sectors and the homepage sectors band
-    benefits.ts           -> /why-chs and the homepage "why" band
+  content/                All copy, per language (see "Languages")
+    en/index.ts, cy/index.ts   Page and UI copy (cy typed against en)
+    <locale>/services.ts  -> /services and /services/[slug], footer, contact form dropdown
+    <locale>/sectors.ts   -> /sectors and the homepage sectors band
+    <locale>/benefits.ts  -> /why-chs and the homepage "why" band
+  data/reviews.ts         Real Google reviews/testimonials (not translated)
   pages/                  index, about, sectors, why-chs, contact, services/index, services/[slug]
   plugins/analytics.client.ts  Plausible init + tel:/mailto: click events, provides $track
   data/reviews.ts         Real Google reviews/testimonials (empty until they exist); reviews.sample.ts is dev-only
@@ -88,7 +90,16 @@ public/
 
 - **Formatting:** Prettier, configured in `.prettierrc`: **no semicolons**, double quotes, trailing commas. The whole repo is formatted; run `npm run format` after changes (`npm run format:check` to verify). The maintainer's editor also formats on save.
 - Match the surrounding comment density. Comments explain _why_, not what.
-- Put content in `app/data/*.ts` rather than hard-coding it in templates when it appears in more than one place.
+- Never hard-code copy in templates: add it to `app/content/en/` and `app/content/cy/`.
+
+### Languages (English / Welsh)
+
+- `@nuxtjs/i18n` with `prefix_except_default`: English at `/`, Welsh at `/cy/`. No browser-language redirects. It outputs `<html lang>`, canonical links, `hreflang` alternates and `og:locale` (via `useLocaleHead` in the layout), plus a sitemap per language (`sitemap_index.xml`).
+- **All copy lives in `app/content/<locale>/`**, not i18n JSON messages (they break on `|` and `@`). `cy/index.ts` is typed as `Content`, so `nuxt typecheck` fails if a Welsh string is missing. Services, sectors and benefits must keep the same slugs/order in every locale; `app/content/index.ts` fails the build otherwise.
+- In components: `const content = useContent()` then `content.home.heroCopy` in templates. Internal links: `const localePath = useLocalePath()` and `:to="localePath('/about')"`. Pass English paths to `usePageSeo`, `useBreadcrumbs` and `CtaBand`; they localise them.
+- The language switcher uses `NuxtLink` + `useSwitchLocalePath()`. **Not `ULink`**, which re-localises the path and sends Welsh visitors back to `/cy/…`.
+- Contact enquiries always send the English urgency label plus a `language` field, so the business knows to reply in Welsh.
+- The Welsh is a drafted translation: have it checked by a fluent speaker (e.g. the Welsh Government's free Helo Blod service) before launch.
 
 ### Styling
 

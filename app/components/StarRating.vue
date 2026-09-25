@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{ rating: number }>()
+const content = useContent()
 
 const stars = computed(() =>
   Array.from({ length: 5 }, (_, i) => i < Math.round(props.rating)),
@@ -10,7 +11,7 @@ const stars = computed(() =>
   <span
     class="inline-flex gap-0.5"
     role="img"
-    :aria-label="`Rated ${rating} out of 5`"
+    :aria-label="content.reviews.rated(rating)"
   >
     <UIcon
       v-for="(filled, i) in stars"

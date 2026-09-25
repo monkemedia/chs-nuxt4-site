@@ -5,7 +5,9 @@ interface PageSeo {
   image?: string
 }
 
-// Title, description, canonical and social tags for a page.
+// Title, description and social tags for a page. `path` is the English path; it's
+// localised here. Canonical, hreflang alternates and og:locale come from @nuxtjs/i18n
+// (useLocaleHead in layouts/default.vue).
 export function usePageSeo({
   title,
   description,
@@ -13,7 +15,8 @@ export function usePageSeo({
   image = "/images/hero.jpg",
 }: PageSeo) {
   const { url: siteUrl, name: siteName } = useSiteConfig()
-  const url = new URL(path, siteUrl).href
+  const localePath = useLocalePath()
+  const url = new URL(localePath(path), siteUrl).href
 
   useSeoMeta({
     title,
@@ -24,11 +27,9 @@ export function usePageSeo({
     ogUrl: url,
     ogImage: new URL(image, siteUrl).href,
     ogSiteName: siteName,
-    ogLocale: "en_GB",
     twitterCard: "summary_large_image",
     robots: "index, follow",
   })
-  useHead({ link: [{ rel: "canonical", href: url }] })
 }
 
 // Adds one JSON-LD block; `key` stops duplicates when a page re-renders.
@@ -52,15 +53,17 @@ export function useBusinessId() {
   return new URL("/#business", url).href
 }
 
+// `path`s are English paths; they're localised here.
 export function useBreadcrumbs(items: { name: string; path: string }[]) {
   const { url: siteUrl } = useSiteConfig()
+  const localePath = useLocalePath()
   useJsonLd("breadcrumbs", {
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: item.name,
-      item: new URL(item.path, siteUrl).href,
+      item: new URL(localePath(item.path), siteUrl).href,
     })),
   })
 }

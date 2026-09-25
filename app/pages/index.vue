@@ -1,30 +1,11 @@
 <script setup lang="ts">
-import { benefits } from "~/data/benefits"
-import { sectors } from "~/data/sectors"
-import { services } from "~/data/services"
-
 const { business } = useAppConfig()
+const content = useContent()
+const localePath = useLocalePath()
 
-usePageSeo({
-  title: "Hydraulic Repairs Llanelli & Carmarthenshire | CHS",
-  description:
-    "Hydraulic hose replacement, ram repairs, fault finding and mobile call-outs from Cross Hands, covering Llanelli, Carmarthenshire and South Wales.",
-  path: "/",
-})
+usePageSeo({ ...content.value.home.seo, path: "/" })
 
-const trust = [
-  { icon: "i-lucide-zap", label: ["Fast", "turnaround"] },
-  { icon: "i-lucide-wrench", label: ["On-site", "support"] },
-  { icon: "i-lucide-shield-check", label: ["Quality", "you can trust"] },
-]
-
-const onsite = [
-  "Emergency call-outs",
-  "On-site hose replacement",
-  "Hydraulic system diagnostics",
-  "Plant, agricultural & commercial",
-  "Flexible, reliable scheduling",
-]
+const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
 </script>
 
 <template>
@@ -35,7 +16,7 @@ const onsite = [
     >
       <NuxtPicture
         src="/images/hero.jpg"
-        alt="Red hydraulic cylinder with polished ram and hoses"
+        :alt="content.home.heroImageAlt"
         sizes="524px"
         width="524"
         height="328"
@@ -64,15 +45,16 @@ const onsite = [
         >
           <span
             class="kicker mb-4.5 block font-sans leading-normal tracking-[1.5px] sm:mb-6.5 sm:tracking-[3px]"
-            >Hydraulic repairs in Llanelli &amp; Carmarthenshire</span
+            >{{ content.home.heroKicker }}</span
           >
-          Keeping <span class="block">industry</span>
-          <em class="block text-primary not-italic">moving</em>
+          {{ content.home.heroTitle[0] }}
+          <span class="block">{{ content.home.heroTitle[1] }}</span>
+          <em class="block text-primary not-italic">{{
+            content.home.heroTitle[2]
+          }}</em>
         </h1>
         <p class="mt-5 max-w-xl text-base text-zinc-200 sm:mt-7 sm:text-lg">
-          Expert hydraulic repair, hose supply and on-site service for plant,
-          agriculture, commercial and industrial customers across Llanelli,
-          Carmarthenshire and South Wales.
+          {{ content.home.heroCopy }}
         </p>
 
         <div
@@ -89,7 +71,7 @@ const onsite = [
                 size="xl"
                 class="h-14 justify-center px-6"
               >
-                Call now
+                {{ content.common.callNow }}
               </UButton>
               <UButton
                 to="#services"
@@ -99,20 +81,26 @@ const onsite = [
                 size="xl"
                 class="h-14 justify-center px-6 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
               >
-                Our services
+                {{ content.common.ourServices }}
               </UButton>
             </div>
             <GoogleRatingBadge />
           </div>
 
-          <ul class="flex flex-wrap gap-x-8 gap-y-4" aria-label="Key benefits">
+          <ul
+            class="flex flex-wrap gap-x-8 gap-y-4"
+            :aria-label="content.home.keyBenefits"
+          >
             <li
-              v-for="item in trust"
-              :key="item.icon"
+              v-for="(label, i) in content.home.trust"
+              :key="trustIcons[i]"
               class="flex items-center gap-3 text-[11px] leading-snug font-extrabold tracking-wide uppercase sm:text-xs"
             >
-              <UIcon :name="item.icon" class="size-8 text-chs-400 sm:size-9" />
-              <span>{{ item.label[0] }}<br />{{ item.label[1] }}</span>
+              <UIcon
+                :name="trustIcons[i]!"
+                class="size-8 text-chs-400 sm:size-9"
+              />
+              <span>{{ label[0] }}<br />{{ label[1] }}</span>
             </li>
           </ul>
         </div>
@@ -129,34 +117,35 @@ const onsite = [
           class="mb-9 grid items-end gap-8 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] md:gap-15"
         >
           <div>
-            <p class="kicker mb-3 text-chs-600">Our services</p>
+            <p class="kicker mb-3 text-chs-600">
+              {{ content.common.ourServices }}
+            </p>
             <h2
               id="services-title"
               class="heading-display max-w-2xl text-[clamp(30px,4vw,44px)]"
             >
-              Complete hydraulic solutions
+              {{ content.home.servicesTitle }}
             </h2>
           </div>
           <div>
             <p class="mb-5 text-[15px] text-zinc-600">
-              From emergency hose replacements to full system repairs, we keep
-              your equipment running with minimal downtime.
+              {{ content.home.servicesIntro }}
             </p>
             <UButton
-              to="/services"
+              :to="localePath('/services')"
               variant="link"
               color="neutral"
               trailing-icon="i-lucide-chevron-right"
               class="border-b-2 border-primary px-0 pb-1.5 text-[13px] text-ink-950 md:float-right"
               :ui="{ trailingIcon: 'text-primary' }"
             >
-              View all services
+              {{ content.common.viewAllServices }}
             </UButton>
           </div>
         </div>
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <ServiceCard
-            v-for="service in services"
+            v-for="service in content.services"
             :key="service.slug"
             :service="service"
           />
@@ -178,7 +167,9 @@ const onsite = [
         />
       </div>
       <UContainer>
-        <p class="kicker mb-3 text-[11px] text-chs-400">Why choose CHS</p>
+        <p class="kicker mb-3 text-[11px] text-chs-400">
+          {{ content.home.whyKicker }}
+        </p>
         <div
           class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
         >
@@ -186,22 +177,22 @@ const onsite = [
             id="why-title"
             class="heading-display text-[clamp(32px,4.4vw,50px)]"
           >
-            Minimum downtime.<br />Maximum support.
+            {{ content.home.whyTitle[0] }}<br />{{ content.home.whyTitle[1] }}
           </h2>
           <UButton
-            to="/why-chs"
+            :to="localePath('/why-chs')"
             variant="link"
             color="neutral"
             trailing-icon="i-lucide-chevron-right"
             class="border-b-2 border-primary px-0 pb-1.5 text-[13px] text-white hover:text-white/80"
             :ui="{ trailingIcon: 'text-chs-400' }"
           >
-            Why choose CHS
+            {{ content.home.whyLink }}
           </UButton>
         </div>
         <ul class="mt-12 grid gap-y-8 sm:grid-cols-2 sm:gap-y-9 lg:grid-cols-4">
           <li
-            v-for="(item, i) in benefits"
+            v-for="(item, i) in content.benefits"
             :key="item.title.join(' ')"
             class="grid grid-cols-[44px_1fr] content-start items-center gap-x-3.5 border-white/20 sm:px-5 lg:border-l lg:px-7 lg:first:border-l-0 lg:first:pl-0"
             :class="i % 2 === 1 ? 'sm:border-l' : 'sm:pl-0'"
@@ -228,7 +219,7 @@ const onsite = [
       <div class="self-stretch md:col-span-2 lg:col-span-1">
         <NuxtPicture
           src="/images/van.jpg"
-          alt="CHS Crosshands Hydraulic Services mobile service van on site"
+          :alt="content.home.vanAlt"
           sizes="444px"
           width="444"
           height="200"
@@ -241,29 +232,29 @@ const onsite = [
         />
       </div>
       <div class="px-4 pt-11 pb-2 sm:px-6 md:py-11 lg:px-10">
-        <p class="kicker mb-3 text-chs-600">On-site hydraulic service</p>
+        <p class="kicker mb-3 text-chs-600">
+          {{ content.home.onsiteKicker }}
+        </p>
         <h2
           id="onsite-title"
           class="heading-display mb-4 text-[clamp(30px,4vw,44px)]"
         >
-          We come to you
+          {{ content.home.onsiteTitle }}
         </h2>
         <p class="mb-6 text-[15px] text-zinc-600">
-          Our fully equipped mobile service unit can carry out repairs, hose
-          replacements and system diagnostics on-site, helping you avoid costly
-          downtime.
+          {{ content.home.onsiteText }}
         </p>
         <UButton
           :to="business.phoneHref"
           trailing-icon="i-lucide-chevron-right"
           size="xl"
         >
-          Book a service
+          {{ content.home.bookService }}
         </UButton>
       </div>
       <ul class="space-y-3.5 px-4 pb-12 sm:px-6 md:py-11 md:pl-0 lg:pr-6">
         <li
-          v-for="item in onsite"
+          v-for="item in content.home.onsiteList"
           :key="item"
           class="flex items-center gap-3 text-sm"
         >
@@ -285,27 +276,28 @@ const onsite = [
       <div
         class="bg-primary px-4 py-9 sm:px-6 lg:py-11 lg:pr-22 lg:pl-[max(2rem,calc((100vw-var(--ui-container))/2+2rem))] lg:[clip-path:polygon(0_0,100%_0,calc(100%-56px)_100%,0_100%)]"
       >
-        <p class="kicker mb-3 text-white">Our sectors</p>
+        <p class="kicker mb-3 text-white">{{ content.home.sectorsKicker }}</p>
         <h2
           id="sectors-title"
           class="heading-display text-[clamp(22px,2.4vw,30px)] leading-[1.1]"
         >
-          Proud to support
-          <span class="block">a wide range of industries.</span>
+          {{ content.home.sectorsTitle[0] }}
+          <span class="block">{{ content.home.sectorsTitle[1] }}</span>
         </h2>
         <NuxtLink
-          to="/sectors"
+          :to="localePath('/sectors')"
           class="mt-5 inline-flex items-center gap-2 border-b-2 border-white pb-1.5 text-[13px] font-extrabold tracking-wider uppercase hover:border-white/70 hover:text-white/85"
         >
-          View sectors <UIcon name="i-lucide-chevron-right" class="size-4" />
+          {{ content.home.viewSectors }}
+          <UIcon name="i-lucide-chevron-right" class="size-4" />
         </NuxtLink>
       </div>
       <ul
         class="grid grid-cols-2 items-center gap-x-3 gap-y-7 px-4 py-8 sm:grid-cols-3 sm:px-6 md:grid-cols-5 lg:py-8 lg:pr-[max(2rem,calc((100vw-var(--ui-container))/2+2rem))] lg:pl-5"
       >
-        <li v-for="sector in sectors" :key="sector.slug">
+        <li v-for="sector in content.sectors" :key="sector.slug">
           <NuxtLink
-            :to="`/sectors#${sector.slug}`"
+            :to="`${localePath('/sectors')}#${sector.slug}`"
             class="group flex flex-col items-center gap-3.5 text-center text-[11.5px] leading-snug font-extrabold tracking-wide uppercase transition-colors hover:text-chs-400"
           >
             <UIcon

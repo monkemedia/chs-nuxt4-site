@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-01",
   devtools: { enabled: false },
-  modules: ["@nuxt/ui", "@nuxt/image", "@nuxtjs/sitemap"],
+  modules: ["@nuxt/ui", "@nuxtjs/i18n", "@nuxt/image", "@nuxtjs/sitemap"],
   css: ["~/assets/css/main.css"],
   ui: {
     // Light-only design with system fonts: skip the color-mode and web-font modules.
@@ -10,19 +10,30 @@ export default defineNuxtConfig({
   },
   icon: {
     // Bundle icons at build time: a static host has no icon API to fetch from.
-    serverBundle: { collections: ["lucide"] },
+    serverBundle: { collections: ["lucide", "circle-flags"] },
     clientBundle: { scan: true },
     customCollections: [{ prefix: "chs", dir: "./app/assets/icons" }],
   },
   app: {
     head: {
-      htmlAttrs: { lang: "en-GB" },
       meta: [
         { name: "theme-color", content: "#0d1012" },
         { name: "color-scheme", content: "light" },
       ],
       link: [{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     },
+  },
+  i18n: {
+    // English at /, Welsh at /cy/. Copy lives in app/content/<locale>/, not i18n JSON.
+    baseUrl: "https://www.chshydraulics.co.uk",
+    defaultLocale: "en",
+    strategy: "prefix_except_default",
+    locales: [
+      { code: "en", language: "en-GB", name: "English" },
+      { code: "cy", language: "cy-GB", name: "Cymraeg" },
+    ],
+    // No automatic redirects by browser language: bad for SEO and static hosting.
+    detectBrowserLanguage: false,
   },
   runtimeConfig: {
     public: {
@@ -48,7 +59,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ["/", "/services", "/contact", "/sitemap.xml"],
+      routes: ["/", "/cy", "/services", "/contact", "/sitemap_index.xml"],
     },
   },
 })

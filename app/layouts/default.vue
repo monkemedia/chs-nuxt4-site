@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { services } from "~/data/services"
-
 const { business } = useAppConfig()
 const { url: siteUrl } = useSiteConfig()
 const { address } = business
+const content = useContent()
+
+// <html lang>, canonical, hreflang alternates and og:locale for the current language.
+const localeHead = useLocaleHead({ seo: true })
+useHead(() => ({
+  htmlAttrs: { lang: localeHead.value.htmlAttrs.lang },
+  link: [...(localeHead.value.link ?? [])],
+  meta: [...(localeHead.value.meta ?? [])],
+}))
 
 // Site-wide LocalBusiness data; service pages reference it by @id.
 useJsonLd("business", {
@@ -16,8 +23,7 @@ useJsonLd("business", {
   image: new URL("/images/van.jpg", siteUrl).href,
   telephone: business.phoneIntl,
   email: business.email,
-  description:
-    "Hydraulic hose replacement, ram and cylinder repairs, system fault finding and mobile on-site hydraulic service in Cross Hands, Llanelli and Carmarthenshire.",
+  description: content.value.home.seo.description,
   ...(address.street && address.postcode
     ? {
         address: {
@@ -32,7 +38,8 @@ useJsonLd("business", {
     : {}),
   areaServed: business.towns.map((name) => ({ "@type": "City", name })),
   openingHours: business.openingHours,
-  knowsAbout: services.map((s) => s.h1),
+  knowsAbout: content.value.services.map((s) => s.h1),
+  knowsLanguage: ["en-GB", "cy-GB"],
   ...(business.sameAs.length ? { sameAs: business.sameAs } : {}),
 })
 </script>
@@ -42,7 +49,7 @@ useJsonLd("business", {
     <a
       href="#main"
       class="sr-only z-100 bg-white px-3.5 py-2.5 text-black focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
-      >Skip to main content</a
+      >{{ content.common.skipToContent }}</a
     >
     <AppHeader />
     <main id="main">

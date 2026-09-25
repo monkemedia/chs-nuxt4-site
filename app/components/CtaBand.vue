@@ -1,20 +1,20 @@
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    kicker?: string
-    title?: string
-    text?: string
-    enquiryTo?: string
-  }>(),
-  {
-    kicker: "Need hydraulic support?",
-    title: "Let's keep your equipment moving.",
-    text: "Call CHS to discuss a repair, service or on-site visit.",
-    enquiryTo: "/contact",
-  },
-)
+// Copy defaults to the current language's `cta` content; `enquiryTo` is an English path.
+const props = defineProps<{
+  kicker?: string
+  title?: string
+  text?: string
+  enquiryTo?: string
+}>()
 
 const { business } = useAppConfig()
+const content = useContent()
+const localePath = useLocalePath()
+
+const kicker = computed(() => props.kicker ?? content.value.cta.kicker)
+const title = computed(() => props.title ?? content.value.cta.title)
+const text = computed(() => props.text ?? content.value.cta.text)
+const enquiryTo = computed(() => localePath(props.enquiryTo ?? "/contact"))
 </script>
 
 <template>
@@ -48,7 +48,7 @@ const { business } = useAppConfig()
           trailing-icon="i-lucide-chevron-right"
           class="justify-center bg-transparent ring-2 ring-ink-950 text-ink-950 hover:bg-ink-950 hover:text-white"
         >
-          Send an enquiry
+          {{ content.common.sendEnquiry }}
         </UButton>
       </div>
     </UContainer>
