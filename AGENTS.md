@@ -26,7 +26,7 @@ npx nuxt typecheck   # type check; must pass with no errors
 npm run format       # Prettier (no semicolons); format:check to verify
 ```
 
-Build-time environment variables (both optional):
+Build-time environment variables (both optional). Copy `.env.example` to `.env` for local builds (Nuxt loads it for `dev` and `generate`; `.env` is git-ignored). In production, set them in the host's build settings. Values are baked into the static pages and are public, so never put secrets here.
 
 | Variable                            | Purpose                                                          | Unset                                       |
 | ----------------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |

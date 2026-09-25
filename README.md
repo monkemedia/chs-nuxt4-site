@@ -6,6 +6,7 @@ A static, SEO-first Nuxt 4 marketing site based on the approved CHS homepage dir
 
 ```bash
 npm install
+cp .env.example .env   # optional: contact form endpoint and Plausible domain
 npm run dev
 ```
 
@@ -14,6 +15,8 @@ npm run dev
 ```bash
 npm run generate
 ```
+
+Environment variables are read at build time, so set `NUXT_PUBLIC_CONTACT_FORM_ENDPOINT` and `NUXT_PUBLIC_PLAUSIBLE_DOMAIN` in your host's build settings (see `.env.example`).
 
 Deploy `.output/public/` to Netlify, Cloudflare Pages, GitHub Pages (with routing configured), S3/CloudFront, or any static host.
 
