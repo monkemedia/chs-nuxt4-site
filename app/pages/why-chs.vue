@@ -99,6 +99,13 @@ const steps = [
       </UContainer>
     </section>
 
+    <ReviewsSection
+      kicker="Customer reviews"
+      title="Don't just take our word for it"
+      :limit="6"
+      muted
+    />
+
     <section
       class="relative isolate overflow-hidden bg-ink-950 py-16 text-white sm:py-20"
       aria-labelledby="promise-title"

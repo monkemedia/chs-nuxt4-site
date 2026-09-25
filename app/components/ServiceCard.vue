@@ -22,7 +22,7 @@ defineProps<{ service: Service; headingLevel?: "h2" | "h3" }>()
       />
       <!-- Sized/positioned as percentages so it always covers the same spot of the photo. -->
       <span
-        class="absolute top-[73%] left-[6%] grid aspect-square w-[21%] place-items-center bg-primary text-white"
+        class="absolute top-[73%] left-[6%] grid aspect-square w-[21%] place-items-center bg-primary text-white rounded-md"
       >
         <UIcon :name="service.icon" class="size-[45%]" />
       </span>

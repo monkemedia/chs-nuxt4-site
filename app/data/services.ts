@@ -26,7 +26,7 @@ export const services: Service[] = [
     icon: "i-lucide-cable",
     image: "/images/hoses.jpg",
     alt: "Hydraulic hoses and crimped couplings",
-    summary: "Custom hose manufacture and replacement, while you wait.",
+    summary: "Bespoke hose manufacture and replacement, while you wait.",
     metaTitle: "Hydraulic Hose Repair Llanelli & Carmarthenshire | CHS",
     metaDescription:
       "Hydraulic hoses made up while you wait at our Cross Hands workshop, or replaced on-site by our mobile unit. Serving Llanelli, Carmarthenshire and South Wales.",

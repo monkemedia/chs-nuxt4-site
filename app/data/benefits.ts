@@ -33,7 +33,7 @@ export const benefits: Benefit[] = [
   },
   {
     icon: "i-lucide-map-pin",
-    title: ["On-site", "nationwide"],
+    title: ["On-site across", "South Wales"],
     summary: "Mobile service to your site, workshop or farm.",
     detail:
       "Our fully equipped mobile service unit brings the workshop to you, whether that's a building site, a quarry, a field or your yard.",

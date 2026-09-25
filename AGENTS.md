@@ -48,6 +48,9 @@ app/
     PageHero.vue          Dark hero with preloaded image, used by every inner page
     ServiceCard.vue       Card used on the homepage and /services
     CtaBand.vue           "Let's keep your equipment moving" call-to-action strip
+    ReviewsSection.vue    Google reviews + testimonials (hidden in production until reviews exist)
+    StarRating.vue        1–5 star display (filled `i-chs-star` icon)
+    GoogleRatingBadge.vue Hero rating line, shown once the rating meets the threshold
   composables/usePageSeo.ts  usePageSeo, useJsonLd, useBreadcrumbs, useBusinessId
   data/                   Content, shared by pages and homepage sections
     services.ts           -> /services and /services/[slug], footer, contact form dropdown
@@ -55,6 +58,7 @@ app/
     benefits.ts           -> /why-chs and the homepage "why" band
   pages/                  index, about, sectors, why-chs, contact, services/index, services/[slug]
   plugins/analytics.client.ts  Plausible init + tel:/mailto: click events, provides $track
+  data/reviews.ts         Real Google reviews/testimonials (empty until they exist); reviews.sample.ts is dev-only
   utils/ui.ts             Shared `ui` prop overrides (e.g. heroBreadcrumbUi)
 public/
   images/                 Site images (small, cropped from the design mockup; replace with real photos)
@@ -93,7 +97,7 @@ public/
   - `chs-50…950`: brand red. `primary` = `chs`, with 500 as the brand red for buttons and panels.
   - **Small red text:** use `text-chs-600` on light backgrounds and `text-chs-400` on dark ones. Both pass WCAG AA; `text-primary` (500) does not at small sizes.
   - `ink-700…950`: near-blacks. The header, hero and dark bands use `ink-950` (`#0D1012`) / `ink-900`.
-  - `font-display`: Arial Black, for headings via `heading-display`.
+  - `font-display`: Lato, for headings via `heading-display`.
 - **`--ui-radius` is `0rem`** so Nuxt UI components are square like the design. Nuxt UI defines Tailwind's `rounded-sm…3xl` as multiples of `--ui-radius`, so **those classes do nothing**. Use `rounded-full`, `rounded-none` or arbitrary values like `rounded-[0.5rem]`.
 - Colour mode and web fonts are disabled (`ui.colorMode: false`, `ui.fonts: false`): light-only design, system fonts.
 - Override Nuxt UI components with the `ui` prop or `class` (merged with tailwind-merge), or globally in `app.config.ts`.
@@ -119,6 +123,14 @@ public/
 - One `h1` per page. The homepage H1 includes the keyword line inside it.
 - New pages are picked up by the prerender crawler and sitemap automatically if something links to them.
 
+### Reviews and testimonials
+
+- `<ReviewsSection>` (homepage and `/why-chs`) renders `app/data/reviews.ts`: Google reviews and testimonials in one list, plus the overall `googleRating`. With `business.googlePlaceId` set in `app.config.ts`, it also shows "Read all reviews on Google" and "Leave us a review" links.
+- `<GoogleRatingBadge>` shows "★★★★★ 4.8 on Google · 23 reviews" under the homepage hero buttons, but only once `googleRating` meets `ratingBadgeThreshold` in `reviews.ts` (10+ reviews, 4.5+ stars). Shared logic (dev samples, rating, Google links) lives in `composables/useReviews.ts`.
+- **Only real reviews**, copied exactly (Google) or collected with permission (testimonials). Never write, edit or pad reviews: it breaches UK consumer law (CMA) and Google policy.
+- With `reviews` empty the section renders nothing in production. `npm run dev` shows labelled samples from `reviews.sample.ts` instead. The dev check (`import.meta.dev`) is written out in each expression so production builds drop the samples; keep it that way, and keep the sample badge inside `<DevOnly>`.
+- **No `Review` / `AggregateRating` JSON-LD for the business itself.** Google treats reviews a business shows about itself as self-serving and won't give them star rich results.
+
 ### Analytics
 
 `app/plugins/analytics.client.ts` provides `$track(event, props)`, which does nothing when Plausible is disabled. Current events: `Phone Call`, `Email Click` (automatic on `tel:` / `mailto:` clicks) and `Enquiry Sent` (contact form success). Each needs a matching goal in Plausible.
@@ -135,7 +147,7 @@ public/
 
 - **Placeholder business details** (phone `01269 123 456`, email, hours, service area, domain `chshydraulics.co.uk`) live in `app/app.config.ts` and `nuxt.config.ts`. They must match the Google Business Profile exactly before launch. Public listings show a different phone number and two conflicting addresses; confirm with the business.
 - The street address is only output in JSON-LD once `address.street` and `address.postcode` are set.
-- **Service, sector, benefit and About content was drafted, not supplied by the business.** Claims (e.g. "Established 2004", "while you wait", "On-site nationwide", machine lists) must be checked with CHS. Never invent reviews or testimonials.
+- **Service, sector, benefit and About content was drafted, not supplied by the business.** Claims (e.g. "Established 2004", "while you wait" turnaround, machine lists) must be checked with CHS. Never invent reviews or testimonials; `app/data/reviews.ts` is empty until real ones exist.
 - `public/images/` are low-resolution crops from the design mockup; replace them with real photography. `hero-hydraulic.jpg`, `industrial-bg.jpg`, `service-van.jpg` and `chs-logo-source.jpg` are unused originals kept as sources.
 
 ## Before finishing a change

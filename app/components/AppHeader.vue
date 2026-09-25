@@ -61,7 +61,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
       color: 'neutral',
       variant: 'outline',
       size: 'xl',
-      class: 'text-white ring-white/25 hover:bg-white/10',
+      class: 'text-white ring-white ring-2 bg-transparent hover:bg-white/10',
     }"
     :menu="{ side: 'right' }"
     :ui="{
@@ -78,11 +78,11 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
       <NuxtPicture
         src="/images/chs-logo-white.png"
         alt="CHS Crosshands Hydraulic Services"
-        sizes="150px"
-        width="150"
+        sizes="120px"
+        width="120"
         densities="x1 x2"
         format="avif,webp"
-        :img-attrs="{ class: 'h-auto w-[108px] sm:w-[130px] lg:w-[150px]' }"
+        :img-attrs="{ class: 'h-auto w-[80px] sm:w-[100px] lg:w-[120px]' }"
       />
     </template>
 
@@ -133,7 +133,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
         icon="i-lucide-phone"
         size="xl"
         aria-label="Call CHS Hydraulic Services"
-        class="h-12 px-3 sm:px-5 lg:h-16"
+        class="h-10 lg:h-14 px-2 sm:px-5"
       >
         <span class="hidden flex-col text-left leading-tight sm:flex">
           <span class="text-[13px] tracking-[2px] lg:text-[17px]"

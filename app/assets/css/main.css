@@ -2,8 +2,8 @@
 @import "@nuxt/ui";
 
 @theme static {
-  --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Roboto", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Lato", "Helvetica Neue", Arial, sans-serif;
 
   /* Brand red: 500 is the CHS red (buttons, panels). Use 600 for small red text on
      light backgrounds and 400 on dark backgrounds, both pass WCAG AA. */

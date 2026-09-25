@@ -78,28 +78,31 @@ const onsite = [
         <div
           class="mt-8 flex flex-col items-start justify-between gap-8 md:flex-row md:flex-wrap md:items-end"
         >
-          <div
-            class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-5"
-          >
-            <UButton
-              :to="business.phoneHref"
-              icon="i-lucide-phone"
-              trailing-icon="i-lucide-chevron-right"
-              size="xl"
-              class="h-14 justify-center px-6"
+          <div class="flex w-full flex-col gap-5 sm:w-auto">
+            <div
+              class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-5"
             >
-              Call now
-            </UButton>
-            <UButton
-              to="#services"
-              color="neutral"
-              variant="outline"
-              trailing-icon="i-lucide-chevron-right"
-              size="xl"
-              class="h-14 justify-center px-6 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
-            >
-              Our services
-            </UButton>
+              <UButton
+                :to="business.phoneHref"
+                icon="i-lucide-phone"
+                trailing-icon="i-lucide-chevron-right"
+                size="xl"
+                class="h-14 justify-center px-6"
+              >
+                Call now
+              </UButton>
+              <UButton
+                to="#services"
+                color="neutral"
+                variant="outline"
+                trailing-icon="i-lucide-chevron-right"
+                size="xl"
+                class="h-14 justify-center px-6 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
+              >
+                Our services
+              </UButton>
+            </div>
+            <GoogleRatingBadge />
           </div>
 
           <ul class="flex flex-wrap gap-x-8 gap-y-4" aria-label="Key benefits">
@@ -319,6 +322,8 @@ const onsite = [
         </li>
       </ul>
     </section>
+
+    <ReviewsSection />
 
     <CtaBand />
   </div>

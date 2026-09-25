@@ -53,13 +53,16 @@ export default defineAppConfig({
       "Port Talbot",
     ],
     hours: [
-      { days: "Monday – Friday", time: "8:00am – 5:30pm" },
-      { days: "Saturday", time: "8:00am – 12:00pm" },
+      { days: "Monday – Friday", time: "8am – 5.30pm" },
+      { days: "Saturday", time: "8am – 12pm" },
       { days: "Emergency call-outs", time: "Call for availability" },
     ],
     // Same hours in schema.org format; keep in step with `hours` above.
     openingHours: ["Mo-Fr 08:00-17:30", "Sa 08:00-12:00"],
     // Profile URLs (Google Business Profile, Facebook, Yell…) for structured data.
     sameAs: [] as string[],
+    // Google Business Profile Place ID (find it at developers.google.com/maps/documentation/places/web-service/place-id).
+    // Powers the "Read all reviews" and "Leave a review" links. Empty = links hidden.
+    googlePlaceId: "",
   },
 })
