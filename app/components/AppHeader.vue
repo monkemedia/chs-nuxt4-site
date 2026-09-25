@@ -133,7 +133,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect());
         icon="i-lucide-phone"
         size="xl"
         aria-label="Call CHS Hydraulic Services"
-        class="h-12 px-3 sm:px-5 lg:h-16 rounded-lg"
+        class="h-12 px-3 sm:px-5 lg:h-16"
       >
         <span class="hidden flex-col text-left leading-tight sm:flex">
           <span class="text-[13px] tracking-[2px] lg:text-[17px]"

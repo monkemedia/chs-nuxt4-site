@@ -27,7 +27,7 @@
 }
 
 :root {
-  --ui-radius: 0rem;
+  --ui-radius: 0.1rem;
   --ui-container: 78rem;
   --ui-header-height: 4.25rem;
   /* Near-black body/heading text instead of Nuxt UI's default neutral-700. */
@@ -38,7 +38,9 @@
 }
 
 @media (min-width: 64rem) {
-  :root { --ui-header-height: 5.75rem; }
+  :root {
+    --ui-header-height: 5.75rem;
+  }
 }
 
 /* Small uppercase label above headings. */
@@ -59,11 +61,20 @@
 }
 
 @layer base {
-  html { scroll-behavior: smooth; }
-  [id] { scroll-margin-top: var(--ui-header-height); }
-  body { background: var(--color-white); color: var(--ui-text); }
+  html {
+    scroll-behavior: smooth;
+  }
+  [id] {
+    scroll-margin-top: var(--ui-header-height);
+  }
+  body {
+    background: var(--color-white);
+    color: var(--ui-text);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
 }
