@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { benefits } from "~/data/benefits";
+import { sectors } from "~/data/sectors";
 import { services } from "~/data/services";
 
 const { business } = useAppConfig();
-
-const { phoneDisplay, phoneHref } = business;
 
 usePageSeo({
   title: "Hydraulic Repairs Llanelli & Carmarthenshire | CHS",
@@ -13,32 +13,9 @@ usePageSeo({
 });
 
 const trust = [
-  { icon: "bolt", label: ["Fast", "turnaround"] },
-  { icon: "wrench", label: ["On-site", "support"] },
-  { icon: "shield", label: ["Quality", "you can trust"] },
-];
-
-const benefits = [
-  {
-    icon: "timer",
-    title: ["Fast", "response"],
-    text: "Get back up and running quickly.",
-  },
-  {
-    icon: "users",
-    title: ["Experienced", "team"],
-    text: "Real-world expertise across multiple sectors.",
-  },
-  {
-    icon: "shield",
-    title: ["Quality", "components"],
-    text: "We use trusted, durable parts and materials.",
-  },
-  {
-    icon: "pin",
-    title: ["On-site", "nationwide"],
-    text: "Mobile service to your site, workshop or farm.",
-  },
+  { icon: "i-lucide-zap", label: ["Fast", "turnaround"] },
+  { icon: "i-lucide-wrench", label: ["On-site", "support"] },
+  { icon: "i-lucide-shield-check", label: ["Quality", "you can trust"] },
 ];
 
 const onsite = [
@@ -49,20 +26,15 @@ const onsite = [
   "Flexible, reliable scheduling",
 ];
 
-const sectors = [
-  { icon: "excavator", label: ["Plant &", "construction"] },
-  { icon: "tractor", label: ["Agriculture", "& farms"] },
-  { icon: "factory", label: ["Industrial", "& manufacturing"] },
-  { icon: "truck", label: ["Commercial", "vehicles"] },
-  { icon: "cog", label: ["And more"] },
-];
 </script>
 
 <template>
   <div>
-    <section class="hero" aria-labelledby="hero-title">
+    <section
+      class="relative isolate overflow-hidden bg-ink-950 text-white"
+      aria-labelledby="hero-title"
+    >
       <NuxtPicture
-        class="hero-media"
         src="/images/hero.jpg"
         alt="Red hydraulic cylinder with polished ram and hoses"
         sizes="524px"
@@ -71,89 +43,189 @@ const sectors = [
         densities="x1"
         format="avif,webp"
         :preload="{ fetchPriority: 'high' }"
-        :img-attrs="{ fetchpriority: 'high' }"
+        :img-attrs="{
+          fetchpriority: 'high',
+          class:
+            'absolute inset-y-0 right-0 -z-20 h-full w-full object-cover object-[60%_center] lg:w-[68%]',
+        }"
       />
-      <div class="hero-shade" aria-hidden="true"></div>
-      <div class="container hero-content">
-        <h1 id="hero-title">
-          <span class="eyebrow hero-eyebrow"
+      <div
+        class="absolute inset-0 -z-10 bg-linear-to-r from-ink-950/95 via-ink-950/75 to-ink-950/35 lg:from-ink-950 lg:from-30% lg:via-ink-950/80 lg:via-45% lg:to-ink-950/10"
+        aria-hidden="true"
+      />
+      <div
+        class="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-linear-to-t from-ink-950/90 to-transparent"
+        aria-hidden="true"
+      />
+
+      <UContainer class="pt-12 pb-8 sm:pt-16 lg:pt-22 lg:pb-9">
+        <h1
+          id="hero-title"
+          class="heading-display text-[clamp(44px,7.2vw,96px)] leading-[0.92] tracking-tight"
+        >
+          <span
+            class="kicker mb-4.5 block font-sans leading-normal tracking-[1.5px] sm:mb-6.5 sm:tracking-[3px]"
             >Hydraulic repairs in Llanelli &amp; Carmarthenshire</span
           >
-          Keeping <span>industry</span> <em>moving</em>
+          Keeping <span class="block">industry</span>
+          <em class="block text-primary not-italic">moving</em>
         </h1>
-        <p class="hero-copy">
+        <p class="mt-5 max-w-xl text-base text-zinc-200 sm:mt-7 sm:text-lg">
           Expert hydraulic repair, hose supply and on-site service for plant,
           agriculture, commercial and industrial customers across Llanelli,
           Carmarthenshire and South Wales.
         </p>
-        <div class="hero-bottom">
-          <div class="hero-actions">
-            <a class="button button-red" :href="phoneHref"
-              ><AppIcon name="phone" class="icon-fill" /> Call now
-              <AppIcon name="chevron"
-            /></a>
-            <a class="button button-outline" href="#services"
-              >Our services <AppIcon name="chevron"
-            /></a>
+
+        <div
+          class="mt-8 flex flex-col items-start justify-between gap-8 md:flex-row md:flex-wrap md:items-end"
+        >
+          <div
+            class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-5"
+          >
+            <UButton
+              :to="business.phoneHref"
+              icon="i-lucide-phone"
+              trailing-icon="i-lucide-chevron-right"
+              size="xl"
+              class="h-14 justify-center px-6"
+            >
+              Call now
+            </UButton>
+            <UButton
+              to="#services"
+              color="neutral"
+              variant="outline"
+              trailing-icon="i-lucide-chevron-right"
+              size="xl"
+              class="h-14 justify-center px-6 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
+            >
+              Our services
+            </UButton>
           </div>
-          <ul class="trust-row" aria-label="Key benefits">
-            <li v-for="item in trust" :key="item.icon">
-              <AppIcon :name="item.icon" /><span
-                >{{ item.label[0] }}<br />{{ item.label[1] }}</span
-              >
+
+          <ul class="flex flex-wrap gap-x-8 gap-y-4" aria-label="Key benefits">
+            <li
+              v-for="item in trust"
+              :key="item.icon"
+              class="flex items-center gap-3 text-[11px] leading-snug font-extrabold tracking-wide uppercase sm:text-xs"
+            >
+              <UIcon :name="item.icon" class="size-8 text-chs-400 sm:size-9" />
+              <span>{{ item.label[0] }}<br />{{ item.label[1] }}</span>
             </li>
           </ul>
         </div>
-      </div>
+      </UContainer>
     </section>
 
     <section
       id="services"
-      class="section services"
+      class="py-16 sm:py-20"
       aria-labelledby="services-title"
     >
-      <div class="container">
-        <div class="section-head">
+      <UContainer>
+        <div
+          class="mb-9 grid items-end gap-8 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] md:gap-15"
+        >
           <div>
-            <p class="kicker">Our services</p>
-            <h2 id="services-title">Complete hydraulic solutions</h2>
+            <p class="kicker mb-3 text-chs-600">Our services</p>
+            <h2
+              id="services-title"
+              class="heading-display max-w-2xl text-[clamp(30px,4vw,44px)]"
+            >
+              Complete hydraulic solutions
+            </h2>
           </div>
-          <div class="section-head-aside">
-            <p>
+          <div>
+            <p class="mb-5 text-[15px] text-zinc-600">
               From emergency hose replacements to full system repairs, we keep
               your equipment running with minimal downtime.
             </p>
-            <NuxtLink class="text-link" to="/services"
-              >View all services <AppIcon name="chevron"
-            /></NuxtLink>
+            <UButton
+              to="/services"
+              variant="link"
+              color="neutral"
+              trailing-icon="i-lucide-chevron-right"
+              class="border-b-2 border-primary px-0 pb-1.5 text-[13px] text-ink-950 md:float-right"
+              :ui="{ trailingIcon: 'text-primary' }"
+            >
+              View all services
+            </UButton>
           </div>
         </div>
-        <div class="service-grid">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <ServiceCard
             v-for="service in services"
             :key="service.slug"
             :service="service"
           />
         </div>
-      </div>
+      </UContainer>
     </section>
 
-    <section id="why" class="why" aria-labelledby="why-title">
-      <div class="container">
-        <p class="kicker">Why choose CHS</p>
-        <h2 id="why-title">Minimum downtime.<br />Maximum support.</h2>
-        <ul class="benefits">
-          <li v-for="item in benefits" :key="item.icon">
-            <AppIcon :name="item.icon" />
-            <strong>{{ item.title[0] }}<br />{{ item.title[1] }}</strong>
-            <p>{{ item.text }}</p>
+    <section
+      id="why"
+      class="relative isolate overflow-hidden bg-ink-900 py-18 text-white"
+      aria-labelledby="why-title"
+    >
+      <div
+        class="absolute inset-y-0 right-0 -z-10 w-full bg-[url('/images/why-bg.jpg')] bg-cover bg-right lg:w-[62%] lg:bg-center"
+        aria-hidden="true"
+      >
+        <div
+          class="size-full bg-linear-to-r from-ink-900/95 to-ink-900/70 lg:from-ink-900 lg:via-ink-900/45 lg:to-ink-900/30"
+        />
+      </div>
+      <UContainer>
+        <p class="kicker mb-3 text-[11px] text-chs-400">Why choose CHS</p>
+        <div
+          class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
+        >
+          <h2
+            id="why-title"
+            class="heading-display text-[clamp(32px,4.4vw,50px)]"
+          >
+            Minimum downtime.<br />Maximum support.
+          </h2>
+          <UButton
+            to="/why-chs"
+            variant="link"
+            color="neutral"
+            trailing-icon="i-lucide-chevron-right"
+            class="border-b-2 border-primary px-0 pb-1.5 text-[13px] text-white hover:text-white/80"
+            :ui="{ trailingIcon: 'text-chs-400' }"
+          >
+            Why choose CHS
+          </UButton>
+        </div>
+        <ul
+          class="mt-12 grid gap-y-8 sm:grid-cols-2 sm:gap-y-9 lg:grid-cols-4"
+        >
+          <li
+            v-for="(item, i) in benefits"
+            :key="item.title.join(' ')"
+            class="grid grid-cols-[44px_1fr] content-start items-center gap-x-3.5 border-white/20 sm:px-5 lg:border-l lg:px-7 lg:first:border-l-0 lg:first:pl-0"
+            :class="i % 2 === 1 ? 'sm:border-l' : 'sm:pl-0'"
+          >
+            <UIcon :name="item.icon" class="size-10 text-chs-400" />
+            <strong
+              class="text-[15px] leading-tight font-extrabold tracking-wide uppercase"
+            >
+              {{ item.title[0] }}<br />{{ item.title[1] }}
+            </strong>
+            <p class="col-start-2 mt-3.5 text-sm text-zinc-300">
+              {{ item.summary }}
+            </p>
           </li>
         </ul>
-      </div>
+      </UContainer>
     </section>
 
-    <section id="about" class="onsite" aria-labelledby="onsite-title">
-      <div class="onsite-image">
+    <section
+      id="onsite"
+      class="grid items-center bg-zinc-100 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,0.72fr)]"
+      aria-labelledby="onsite-title"
+    >
+      <div class="self-stretch md:col-span-2 lg:col-span-1">
         <NuxtPicture
           src="/images/van.jpg"
           alt="CHS Crosshands Hydraulic Services mobile service van on site"
@@ -163,63 +235,94 @@ const sectors = [
           densities="x1"
           format="avif,webp"
           loading="lazy"
+          :img-attrs="{
+            class: 'size-full min-h-75 max-h-105 object-cover lg:max-h-none',
+          }"
         />
       </div>
-      <div class="onsite-copy">
-        <p class="kicker">On-site hydraulic service</p>
-        <h2 id="onsite-title">We come to you</h2>
-        <p>
+      <div class="px-4 pt-11 pb-2 sm:px-6 md:py-11 lg:px-10">
+        <p class="kicker mb-3 text-chs-600">On-site hydraulic service</p>
+        <h2
+          id="onsite-title"
+          class="heading-display mb-4 text-[clamp(30px,4vw,44px)]"
+        >
+          We come to you
+        </h2>
+        <p class="mb-6 text-[15px] text-zinc-600">
           Our fully equipped mobile service unit can carry out repairs, hose
           replacements and system diagnostics on-site, helping you avoid costly
           downtime.
         </p>
-        <a class="button button-red" :href="phoneHref"
-          >Book a service <AppIcon name="chevron"
-        /></a>
+        <UButton
+          :to="business.phoneHref"
+          trailing-icon="i-lucide-chevron-right"
+          size="xl"
+        >
+          Book a service
+        </UButton>
       </div>
-      <ul class="checklist">
-        <li v-for="item in onsite" :key="item">
-          <span><AppIcon name="check" /></span>{{ item }}
-        </li>
-      </ul>
-    </section>
-
-    <section id="sectors" class="sectors" aria-labelledby="sectors-title">
-      <div class="sectors-intro">
-        <p class="kicker">Our sectors</p>
-        <h2 id="sectors-title">
-          Proud to support <span>a wide range of industries.</span>
-        </h2>
-      </div>
-      <ul class="sector-list">
-        <li v-for="sector in sectors" :key="sector.icon">
-          <AppIcon :name="sector.icon" />
+      <ul class="space-y-3.5 px-4 pb-12 sm:px-6 md:py-11 md:pl-0 lg:pr-6">
+        <li
+          v-for="item in onsite"
+          :key="item"
+          class="flex items-center gap-3 text-sm"
+        >
           <span
-            >{{ sector.label[0]
-            }}<template v-if="sector.label[1]"
-              ><br />{{ sector.label[1] }}</template
-            ></span
+            class="grid size-5.5 shrink-0 place-items-center rounded-full bg-primary text-white"
           >
+            <UIcon name="i-lucide-check" class="size-3.5" />
+          </span>
+          {{ item }}
         </li>
       </ul>
     </section>
 
-    <section class="cta" aria-labelledby="cta-title">
-      <div class="container cta-inner">
-        <div>
-          <p class="kicker">Need hydraulic support?</p>
-          <h2 id="cta-title">Let's keep your equipment moving.</h2>
-          <p>Call CHS to discuss a repair, service or on-site visit.</p>
-        </div>
-        <div class="cta-actions">
-          <a class="button button-red" :href="phoneHref"
-            ><AppIcon name="phone" class="icon-fill" /> {{ phoneDisplay }}</a
-          >
-          <NuxtLink class="button button-outline" to="/contact"
-            >Send an enquiry <AppIcon name="chevron"
-          /></NuxtLink>
-        </div>
+    <section
+      id="sectors"
+      class="grid bg-ink-900 text-white lg:grid-cols-[minmax(0,42%)_minmax(0,1fr)]"
+      aria-labelledby="sectors-title"
+    >
+      <div
+        class="bg-primary px-4 py-9 sm:px-6 lg:py-11 lg:pr-22 lg:pl-[max(2rem,calc((100vw-var(--ui-container))/2+2rem))] lg:[clip-path:polygon(0_0,100%_0,calc(100%-56px)_100%,0_100%)]"
+      >
+        <p class="kicker mb-3 text-white">Our sectors</p>
+        <h2
+          id="sectors-title"
+          class="heading-display text-[clamp(22px,2.4vw,30px)] leading-[1.1]"
+        >
+          Proud to support
+          <span class="block">a wide range of industries.</span>
+        </h2>
+        <NuxtLink
+          to="/sectors"
+          class="mt-5 inline-flex items-center gap-2 border-b-2 border-white pb-1.5 text-[13px] font-extrabold tracking-wider uppercase hover:border-white/70 hover:text-white/85"
+        >
+          View sectors <UIcon name="i-lucide-chevron-right" class="size-4" />
+        </NuxtLink>
       </div>
+      <ul
+        class="grid grid-cols-2 items-center gap-x-3 gap-y-7 px-4 py-8 sm:grid-cols-3 sm:px-6 md:grid-cols-5 lg:py-8 lg:pr-[max(2rem,calc((100vw-var(--ui-container))/2+2rem))] lg:pl-5"
+      >
+        <li v-for="sector in sectors" :key="sector.slug">
+          <NuxtLink
+            :to="`/sectors#${sector.slug}`"
+            class="group flex flex-col items-center gap-3.5 text-center text-[11.5px] leading-snug font-extrabold tracking-wide uppercase transition-colors hover:text-chs-400"
+          >
+            <UIcon
+              :name="sector.icon"
+              class="size-11 transition-transform group-hover:-translate-y-0.5"
+            />
+            <span
+              >{{ sector.label[0]
+              }}<template v-if="sector.label[1]"
+                ><br />{{ sector.label[1] }}</template
+              ></span
+            >
+          </NuxtLink>
+        </li>
+      </ul>
     </section>
+
+    <CtaBand />
   </div>
 </template>

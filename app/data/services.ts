@@ -23,7 +23,7 @@ export const services: Service[] = [
   {
     slug: 'hydraulic-hoses',
     title: 'Hydraulic Hoses',
-    icon: 'ring',
+    icon: 'i-lucide-cable',
     image: '/images/hoses.jpg',
     alt: 'Hydraulic hoses and crimped couplings',
     summary: 'Custom hose manufacture and replacement, while you wait.',
@@ -58,7 +58,7 @@ export const services: Service[] = [
   {
     slug: 'ram-repairs',
     title: 'Ram Repairs',
-    icon: 'link',
+    icon: 'i-lucide-cylinder',
     image: '/images/rams.jpg',
     alt: 'Hydraulic ram with polished cylinder rod',
     summary: 'Strip, inspect, repair and reseal all types of hydraulic rams and cylinders.',
@@ -93,7 +93,7 @@ export const services: Service[] = [
   {
     slug: 'hydraulic-system-repairs',
     title: 'System Repairs',
-    icon: 'cog',
+    icon: 'i-lucide-cog',
     image: '/images/systems.jpg',
     alt: 'Hydraulic system components and pipework',
     summary: 'Diagnostics, fault finding and complete hydraulic system repairs.',
@@ -128,7 +128,7 @@ export const services: Service[] = [
   {
     slug: 'on-site-hydraulic-service',
     title: 'On-site Service',
-    icon: 'wrench',
+    icon: 'i-lucide-wrench',
     image: '/images/onsite.jpg',
     alt: 'CHS mobile hydraulic service van',
     summary: 'Mobile hydraulic service and emergency call-outs to keep you moving.',

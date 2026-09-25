@@ -1,87 +1,173 @@
 <script setup lang="ts">
-const { business } = useAppConfig()
-const route = useRoute()
+const { business } = useAppConfig();
+const route = useRoute();
 
 const links = [
-  { label: 'Home', to: '/#top' },
-  { label: 'Services', to: '/services' },
-  { label: 'About', to: '/#about' },
-  { label: 'Sectors', to: '/#sectors' },
-  { label: 'Why CHS', to: '/#why' },
-  { label: 'Contact', to: '/contact' }
-]
+  { label: "Home", to: "/" },
+  { label: "Services", to: "/services" },
+  { label: "About", to: "/about" },
+  { label: "Sectors", to: "/sectors" },
+  { label: "Why CHS", to: "/why-chs" },
+  { label: "Contact", to: "/contact" },
+];
 
-// Home sections are anchors on "/", so only the page-level links can be current.
 function isCurrent(to: string) {
-  if (to === '/#top') return route.path === '/'
-  return !to.startsWith('/#') && (route.path === to || route.path.startsWith(`${to}/`))
+  if (to === "/") return route.path === "/";
+  return route.path === to || route.path.startsWith(`${to}/`);
 }
 
-// The burger menu runs as a small inline script rather than Vue state, so it works on
-// pages rendered with `noScripts` (no Nuxt bundle) as well as hydrated ones.
-// Listeners are delegated from `document` and guarded so they're only ever bound once.
-const navScript = `(() => {
-  if (window.__chsNav) return
-  window.__chsNav = true
-  const doc = document
-  const isOpen = () => !!doc.querySelector('.site-header.is-open')
-  const set = (open, returnFocus) => {
-    const header = doc.querySelector('.site-header')
-    const toggle = doc.querySelector('.nav-toggle')
-    if (!header || !toggle) return
-    header.classList.toggle('is-open', open)
-    doc.querySelector('.nav-backdrop')?.classList.toggle('is-open', open)
-    toggle.setAttribute('aria-expanded', String(open))
-    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
-    doc.documentElement.classList.toggle('nav-open', open)
-    if (returnFocus) toggle.focus()
-  }
-  doc.addEventListener('click', (event) => {
-    const target = event.target.closest?.('.nav-toggle, .nav-backdrop, #primary-nav a, .brand')
-    if (!target) return
-    if (target.matches('.nav-toggle')) set(!isOpen())
-    else if (isOpen()) set(false)
-  })
-  doc.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && isOpen()) set(false, true)
-  })
-  // The menu panel only exists below the desktop breakpoint, so reset it when the viewport grows.
-  matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
-    if (event.matches) set(false)
-  })
-})()`
+// Desktop nav indicator: one red bar that sits under the current page's link and glides to
+// whichever link is hovered or focused, returning when the pointer leaves the menu.
+const items = ref<HTMLLIElement[]>([]);
+const hovered = ref<number | null>(null);
+const activeIndex = computed(() =>
+  links.findIndex((link) => isCurrent(link.to)),
+);
+const target = computed(() => hovered.value ?? activeIndex.value);
+const bar = ref({ left: 0, width: 0 });
+// Until the links are measured (server render, first paint) the current link draws its own
+// underline; transitions switch on only after the bar is placed, so it doesn't slide in on load.
+const measured = ref(false);
+const animate = ref(false);
 
-useHead({ script: [{ key: 'nav', innerHTML: navScript, tagPosition: 'bodyClose' }] })
+function placeBar() {
+  const el = items.value[target.value];
+  if (el) bar.value = { left: el.offsetLeft, width: el.offsetWidth };
+}
+
+watch(target, () => nextTick(placeBar));
+
+// Re-measure whenever a link changes size: the nav appearing at the desktop breakpoint,
+// window resizes, text reflow.
+let resizeObserver: ResizeObserver | undefined;
+onMounted(() => {
+  placeBar();
+  measured.value = true;
+  requestAnimationFrame(() => {
+    animate.value = true;
+  });
+  resizeObserver = new ResizeObserver(placeBar);
+  items.value.forEach((el) => resizeObserver!.observe(el));
+});
+onBeforeUnmount(() => resizeObserver?.disconnect());
 </script>
 
 <template>
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <NuxtLink class="brand" to="/#top" aria-label="Crosshands Hydraulic Services home">
-        <NuxtPicture src="/images/chs-logo-white.png" alt="CHS Crosshands Hydraulic Services" sizes="170px" width="170" height="83" densities="x1 x2" format="avif,webp" />
-      </NuxtLink>
+  <UHeader
+    to="/"
+    mode="slideover"
+    toggle-side="right"
+    :toggle="{
+      color: 'neutral',
+      variant: 'outline',
+      size: 'xl',
+      class: 'text-white ring-white/25 hover:bg-white/10',
+    }"
+    :menu="{ side: 'right' }"
+    :ui="{
+      root: 'bg-ink-950 border-b-0 backdrop-blur-none',
+      left: 'lg:flex-none',
+      center: 'lg:flex-1 justify-center',
+      right: 'lg:flex-none',
+      content: 'bg-ink-950 text-white',
+      header: 'border-b border-white/10',
+      body: 'p-0',
+    }"
+  >
+    <template #title>
+      <NuxtPicture
+        src="/images/chs-logo-white.png"
+        alt="CHS Crosshands Hydraulic Services"
+        sizes="150px"
+        width="150"
+        densities="x1 x2"
+        format="avif,webp"
+        :img-attrs="{ class: 'h-auto w-[108px] sm:w-[130px] lg:w-[150px]' }"
+      />
+    </template>
 
-      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
-        <ul>
+    <nav aria-label="Primary navigation">
+      <ul
+        class="relative flex gap-8"
+        @mouseleave="hovered = null"
+        @focusout="hovered = null"
+      >
+        <li
+          v-for="(link, i) in links"
+          :key="link.to"
+          ref="items"
+          @mouseenter="hovered = i"
+          @focusin="hovered = i"
+        >
+          <ULink
+            :to="link.to"
+            :active="isCurrent(link.to)"
+            :aria-current="isCurrent(link.to) ? 'page' : undefined"
+            class="relative block py-2 text-[15px] font-medium transition-colors hover:text-white"
+            :active-class="
+              measured
+                ? 'text-white'
+                : 'text-white after:absolute after:inset-x-0 after:bottom-0 after:h-0.75 after:bg-primary'
+            "
+            inactive-class="text-white/85"
+          >
+            {{ link.label }}
+          </ULink>
+        </li>
+        <li
+          aria-hidden="true"
+          class="pointer-events-none absolute bottom-0 left-0 h-0.75 bg-primary"
+          :class="[
+            animate &&
+              'transition-[translate,width,opacity] duration-300 ease-out motion-reduce:transition-none',
+            measured && target >= 0 ? 'opacity-100' : 'opacity-0',
+          ]"
+          :style="{ width: `${bar.width}px`, translate: `${bar.left}px 0` }"
+        />
+      </ul>
+    </nav>
+
+    <template #right>
+      <UButton
+        :to="business.phoneHref"
+        icon="i-lucide-phone"
+        size="xl"
+        aria-label="Call CHS Hydraulic Services"
+        class="h-12 px-3 sm:px-5 lg:h-16 rounded-lg"
+      >
+        <span class="hidden flex-col text-left leading-tight sm:flex">
+          <span class="text-[13px] tracking-[2px] lg:text-[17px]"
+            >Call now</span
+          >
+          <span class="text-xs tracking-[1.5px] lg:text-sm">{{
+            business.phoneDisplay
+          }}</span>
+        </span>
+      </UButton>
+    </template>
+
+    <template #body>
+      <nav aria-label="Mobile navigation">
+        <ul class="divide-y divide-white/10">
           <li v-for="link in links" :key="link.to">
-            <NuxtLink :to="link.to" :aria-current="isCurrent(link.to) ? 'page' : undefined">{{ link.label }}</NuxtLink>
+            <ULink
+              :to="link.to"
+              :active="isCurrent(link.to)"
+              :aria-current="isCurrent(link.to) ? 'page' : undefined"
+              class="block border-l-3 px-5 py-4 text-[17px] font-medium transition-colors hover:bg-white/5 hover:text-white"
+              active-class="border-primary text-white"
+              inactive-class="border-transparent text-white/85"
+            >
+              {{ link.label }}
+            </ULink>
           </li>
         </ul>
-        <a class="button button-red nav-panel-call" :href="business.phoneHref">
-          <AppIcon name="phone" /> Call {{ business.phoneDisplay }}
-        </a>
       </nav>
-
-      <a class="header-call" :href="business.phoneHref" aria-label="Call CHS Hydraulic Services">
-        <AppIcon name="phone" />
-        <span class="header-call-text"><strong>Call now</strong><span>{{ business.phoneDisplay }}</span></span>
-      </a>
-
-      <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu">
-        <AppIcon name="menu" class="nav-icon-open" />
-        <AppIcon name="close" class="nav-icon-close" />
-      </button>
-    </div>
-  </header>
-  <div class="nav-backdrop" aria-hidden="true" />
+      <div class="p-5">
+        <UButton :to="business.phoneHref" icon="i-lucide-phone" size="xl" block>
+          Call {{ business.phoneDisplay }}
+        </UButton>
+      </div>
+    </template>
+  </UHeader>
 </template>

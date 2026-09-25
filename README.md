@@ -35,19 +35,21 @@ Without it, the form shows an error asking visitors to call. The form includes a
 
 Replace the placeholder business details (phone, email, location, opening hours, service area) in `app/app.config.ts`, and the canonical domain in `nuxt.config.ts`, the page SEO blocks and `public/robots.txt`. Replace the cropped concept imagery in `public/images/` with final licensed/original photography. The current images are design-development assets derived from the approved concept board.
 
-## Performance choices
+## Stack
 
-Mobile Lighthouse (production build): 100 across all categories on the homepage and service pages, 99 performance on `/contact`. Always measure `npm run generate` output, not `npm run dev`, which is unbundled and much slower.
+- **Nuxt 4** static generation (`npm run generate`), **Nuxt UI 4** components and **Tailwind CSS v4**.
+- Theme tokens (brand `chs` red scale, `ink` near-blacks, fonts, radius) live in `app/assets/css/main.css`; Nuxt UI colour aliases and component defaults in `app/app.config.ts`.
+- Icons are Lucide via `UIcon`, bundled at build time (no icon API needed on a static host). Custom icons go in `app/assets/icons/` and are used as `i-chs-<name>`.
+- Nuxt UI's colour-mode and web-font modules are disabled: the design is light-only with system fonts.
 
-- Full static generation with SSR/prerendering for indexable HTML.
-- Home and service pages use Nuxt `noScripts`: no Nuxt/Vue bundle is shipped. Only `/contact` hydrates, for the form.
-- The burger menu is a ~1 KB inline script in `AppHeader.vue`, so it works with or without the Nuxt bundle.
-- Global CSS is imported in `app.vue` (not `nuxt.config` `css`) so it is inlined into the HTML rather than render-blocking.
+## Performance
+
+Mobile Lighthouse (production build): ~92 performance and 100 accessibility, best practices and SEO. Every page hydrates Vue for Nuxt UI (header slide-over menu, accordion, form), which costs roughly 140 KB of compressed JS; that is what holds performance in the low 90s. Always measure `npm run generate` output, not `npm run dev`.
+
 - `@nuxt/image` AVIF/WebP at each image's native size (the source images are small, so larger sizes would only upscale). Hero images are real `<img>` elements, preloaded with `fetchpriority="high"`.
 - Explicit image dimensions and lazy loading below the fold to reduce CLS and bandwidth.
 - `public/_headers` sets long-lived cache headers on Netlify / Cloudflare Pages; set the equivalent on other hosts.
 - System fonts only: no render-blocking web-font requests.
-- Minimal CSS, no UI framework, no icon library.
 - Reduced-motion support.
 
 ## SEO/accessibility

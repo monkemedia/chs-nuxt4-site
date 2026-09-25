@@ -1,13 +1,25 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-09-01',
   devtools: { enabled: false },
-  modules: ['@nuxt/image', '@nuxtjs/sitemap'],
+  modules: ['@nuxt/ui', '@nuxt/image', '@nuxtjs/sitemap'],
+  css: ['~/assets/css/main.css'],
+  ui: {
+    // Light-only design with system fonts: skip the color-mode and web-font modules.
+    colorMode: false,
+    fonts: false
+  },
+  icon: {
+    // Bundle icons at build time: a static host has no icon API to fetch from.
+    serverBundle: { collections: ['lucide'] },
+    clientBundle: { scan: true },
+    customCollections: [{ prefix: 'chs', dir: './app/assets/icons' }]
+  },
   app: {
     head: {
       htmlAttrs: { lang: 'en-GB' },
       meta: [
-        { name: 'theme-color', content: '#0b1114' },
-        { name: 'color-scheme', content: 'light dark' }
+        { name: 'theme-color', content: '#0d1012' },
+        { name: 'color-scheme', content: 'light' }
       ],
       link: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }]
     }
@@ -27,11 +39,8 @@ export default defineNuxtConfig({
     format: ['avif', 'webp']
   },
   routeRules: {
-    // Content pages need no client-side Vue: skipping the Nuxt bundle keeps them fast.
-    // The burger menu is a small inline script (see AppHeader.vue). /contact hydrates for the form.
-    '/': { prerender: true, noScripts: true },
-    '/services': { prerender: true, noScripts: true },
-    '/services/**': { prerender: true, noScripts: true },
+    '/': { prerender: true },
+    '/services/**': { prerender: true },
     '/contact': { prerender: true }
   },
   nitro: {

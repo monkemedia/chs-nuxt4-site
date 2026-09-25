@@ -29,7 +29,7 @@ useJsonLd('business', {
 
 <template>
   <div id="top">
-    <a class="skip-link" href="#main">Skip to main content</a>
+    <a href="#main" class="sr-only z-100 bg-white px-3.5 py-2.5 text-black focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Skip to main content</a>
     <AppHeader />
     <main id="main">
       <slot />

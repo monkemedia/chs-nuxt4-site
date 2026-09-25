@@ -2,6 +2,18 @@
 // Placeholder values: replace before launch (see README). These must match the
 // Google Business Profile and directory listings exactly (name, address, phone).
 export default defineAppConfig({
+  ui: {
+    colors: {
+      primary: 'chs',
+      neutral: 'zinc'
+    },
+    button: {
+      slots: { base: 'uppercase font-extrabold tracking-wider' }
+    },
+    formField: {
+      slots: { label: 'uppercase text-xs font-extrabold tracking-wide text-highlighted' }
+    }
+  },
   business: {
     name: 'Crosshands Hydraulic Services',
     phoneDisplay: '01269 123 456',
