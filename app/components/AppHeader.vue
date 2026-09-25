@@ -9,12 +9,12 @@ const { locale } = useI18n()
 const links = computed(() => {
   const { nav } = content.value
   return [
-    { label: nav.home, to: localePath("/") },
-    { label: nav.services, to: localePath("/services") },
-    { label: nav.about, to: localePath("/about") },
-    { label: nav.sectors, to: localePath("/sectors") },
-    { label: nav.whyChs, to: localePath("/why-chs") },
-    { label: nav.contact, to: localePath("/contact") },
+    { id: "home", label: nav.home, to: localePath("/") },
+    { id: "services", label: nav.services, to: localePath("/services") },
+    { id: "about", label: nav.about, to: localePath("/about") },
+    { id: "sectors", label: nav.sectors, to: localePath("/sectors") },
+    { id: "why-chs", label: nav.whyChs, to: localePath("/why-chs") },
+    { id: "contact", label: nav.contact, to: localePath("/contact") },
   ]
 })
 
@@ -52,7 +52,9 @@ function placeBar() {
   if (el) bar.value = { left: el.offsetLeft, width: el.offsetWidth }
 }
 
-watch(target, () => nextTick(placeBar))
+// Re-place on a new target, and when the links change (switching language changes every
+// label's width while the current item's index can stay the same).
+watch([target, links], () => nextTick(placeBar))
 
 // Re-measure whenever a link changes size: the nav appearing at the desktop breakpoint,
 // window resizes, text reflow.
@@ -111,7 +113,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
       >
         <li
           v-for="(link, i) in links"
-          :key="link.to"
+          :key="link.id"
           ref="items"
           @mouseenter="hovered = i"
           @focusin="hovered = i"
@@ -176,7 +178,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
     <template #body>
       <nav :aria-label="content.common.mobileNav">
         <ul class="divide-y divide-white/10">
-          <li v-for="link in links" :key="link.to">
+          <li v-for="link in links" :key="link.id">
             <ULink
               :to="link.to"
               :active="isCurrent(link.to)"
