@@ -19,7 +19,7 @@ useJsonLd("business", {
   name: business.name,
   alternateName: "CHS",
   url: siteUrl,
-  logo: new URL("/images/chs-logo.png", siteUrl).href,
+  logo: new URL("/images/chs-logo-source.png", siteUrl).href,
   image: new URL("/images/service-van.jpg", siteUrl).href,
   telephone: business.phoneIntl,
   email: business.email,
