@@ -139,7 +139,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
               class="border-t-3 border-primary bg-zinc-100 px-5 py-6"
             >
               <span
-                class="heading-display text-[28px] text-chs-600"
+                class="heading-display text-[28px] text-chs-700"
                 aria-hidden="true"
                 >{{ String(i + 1).padStart(2, "0") }}</span
               >
@@ -160,7 +160,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
             trailing-icon="i-lucide-chevron-down"
             :ui="{
               item: 'border-zinc-200',
-              trigger: 'py-5 text-base font-extrabold hover:text-chs-600',
+              trigger: 'py-5 text-base font-extrabold hover:text-chs-700',
               trailingIcon: 'size-5 text-primary',
               body: 'pb-5 text-zinc-600 max-w-2xl',
             }"
@@ -214,7 +214,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
                 <ULink
                   raw
                   :to="localePath(`/services/${other.slug}`)"
-                  class="flex items-center gap-3 py-3.5 text-sm font-bold hover:text-chs-600"
+                  class="flex items-center gap-3 py-3.5 text-sm font-bold hover:text-chs-700"
                 >
                   <UIcon
                     :name="other.icon"

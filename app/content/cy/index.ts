@@ -66,7 +66,7 @@ export const cy: Content = {
 
   cta: {
     kicker: "Angen cymorth hydrolig?",
-    title: "Gadewch i ni gadw'ch offer i symud.",
+    title: "Gadewch i ni gadw'ch\noffer i symud.",
     text: "Ffoniwch CHS i drafod gwaith atgyweirio, gwasanaeth neu ymweliad ar y safle.",
   },
 

@@ -37,7 +37,7 @@ const crumbs = computed(() => [
 
     <section class="py-16 sm:py-20" aria-labelledby="reasons-title">
       <UContainer>
-        <p class="kicker mb-3 text-chs-600">{{ page.reasonsKicker }}</p>
+        <p class="kicker mb-3 text-chs-700">{{ page.reasonsKicker }}</p>
         <h2
           id="reasons-title"
           class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"
@@ -116,7 +116,7 @@ const crumbs = computed(() => [
 
     <section class="py-16 sm:py-20" aria-labelledby="steps-title">
       <UContainer>
-        <p class="kicker mb-3 text-chs-600">{{ page.stepsKicker }}</p>
+        <p class="kicker mb-3 text-chs-700">{{ page.stepsKicker }}</p>
         <h2
           id="steps-title"
           class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"

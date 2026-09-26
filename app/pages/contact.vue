@@ -184,7 +184,7 @@ const details = computed(() => [
                 {{ page.sentText }}
                 <a
                   :href="business.phoneHref"
-                  class="font-extrabold whitespace-nowrap text-chs-600 underline"
+                  class="font-extrabold whitespace-nowrap text-chs-700 underline"
                   >{{ business.phoneDisplay }}</a
                 >.
               </template>
@@ -208,7 +208,7 @@ const details = computed(() => [
             @submit="onSubmit"
           >
             <div>
-              <p class="kicker mb-3 text-chs-600">{{ page.formKicker }}</p>
+              <p class="kicker mb-3 text-chs-700">{{ page.formKicker }}</p>
               <h2 class="heading-display text-[clamp(24px,3vw,32px)]">
                 {{ page.formTitle }}
               </h2>
@@ -333,9 +333,9 @@ const details = computed(() => [
                 icon="i-lucide-circle-alert"
                 :title="page.errorTitle"
                 :ui="{
-                  title: 'text-chs-800',
+                  title: 'text-red-800',
                   description: 'text-ink-950',
-                  icon: 'text-chs-700',
+                  icon: 'text-red-700',
                 }"
               >
                 <template #description>
@@ -409,7 +409,7 @@ const details = computed(() => [
                 <a
                   v-if="item.href"
                   :href="item.href"
-                  class="font-bold wrap-anywhere hover:text-chs-600"
+                  class="font-bold wrap-anywhere hover:text-chs-700"
                   >{{ item.label }}</a
                 >
                 <p v-else>{{ item.label }}</p>

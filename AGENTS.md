@@ -43,7 +43,7 @@ app/
   assets/icons/           Custom SVG icons, used as `i-chs-<name>`
   layouts/default.vue     Skip link, header, footer, site-wide LocalBusiness JSON-LD
   components/
-    AppHeader.vue         UHeader: desktop nav with gliding red indicator, slide-over mobile menu
+    AppHeader.vue         UHeader: desktop nav with gliding orange indicator, slide-over mobile menu
     AppFooter.vue
     PageHero.vue          Dark hero with preloaded image, used by every inner page
     ServiceCard.vue       Card used on the homepage and /services
@@ -105,8 +105,9 @@ public/
 
 - **Tailwind utilities in templates.** No component `<style>` blocks, no new global CSS classes. Shared patterns live in `main.css` as `@utility` (`kicker`, `heading-display`).
 - **Theme tokens** in `main.css`:
-  - `chs-50…950`: brand red. `primary` = `chs`, with 500 as the brand red for buttons and panels.
-  - **Small red text:** use `text-chs-600` on light backgrounds and `text-chs-400` on dark ones. Both pass WCAG AA; `text-primary` (500) does not at small sizes.
+  - `chs-50…950`: brand orange. `primary` = `chs`, with 500 (`#FD5D01`) as the brand colour for buttons, panels and accents.
+  - **Small orange text:** use `text-chs-700` on light backgrounds (5.1–5.6:1) and `text-chs-400` on dark ones (7.3:1). `text-primary` (500) only reaches 3.1:1 on white, so never use it for small text on light backgrounds.
+  - **Errors use Nuxt UI's `error` / Tailwind `red`**, never the brand scale.
   - `ink-700…950`: near-blacks. The header, hero and dark bands use `ink-950` (`#0D1012`) / `ink-900`.
   - `font-display`: Lato, for headings via `heading-display`.
 - **`--ui-radius` is `0rem`** so Nuxt UI components are square like the design. Nuxt UI defines Tailwind's `rounded-sm…3xl` as multiples of `--ui-radius`, so **those classes do nothing**. Use `rounded-full`, `rounded-none` or arbitrary values like `rounded-[0.5rem]`.

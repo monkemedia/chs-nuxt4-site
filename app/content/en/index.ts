@@ -64,7 +64,8 @@ export const en = {
 
   cta: {
     kicker: "Need hydraulic support?",
-    title: "Let's keep your equipment moving.",
+    // "\n" = line break in the heading.
+    title: "Let's keep\nyour equipment moving.",
     text: "Call CHS to discuss a repair, service or on-site visit.",
   },
 

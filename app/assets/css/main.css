@@ -5,19 +5,21 @@
   --font-sans: "Roboto", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Lato", "Helvetica Neue", Arial, sans-serif;
 
-  /* Brand red: 500 is the CHS red (buttons, panels). Use 600 for small red text on
-     light backgrounds and 400 on dark backgrounds, both pass WCAG AA. */
-  --color-chs-50: #fff1f2;
-  --color-chs-100: #ffe0e2;
-  --color-chs-200: #ffc6ca;
-  --color-chs-300: #ff9ba2;
-  --color-chs-400: #ff4452;
-  --color-chs-500: #e5101f;
-  --color-chs-600: #d10e1c;
-  --color-chs-700: #b00a16;
-  --color-chs-800: #910c16;
-  --color-chs-900: #780f18;
-  --color-chs-950: #42030a;
+  /* Brand orange: 500 is the CHS orange (#FD5D01) for buttons, panels and accents.
+     Small orange text needs 700 on light backgrounds (5.1–5.6:1) and 400 on dark ones
+     (7.3:1); 500 itself only reaches 3.1:1 against white, so never use it for small text
+     on light backgrounds. */
+  --color-chs-50: #fff4ed;
+  --color-chs-100: #ffe6d4;
+  --color-chs-200: #ffc9a8;
+  --color-chs-300: #ffa270;
+  --color-chs-400: #fe7a36;
+  --color-chs-500: #fd5d01;
+  --color-chs-600: #e04f00;
+  --color-chs-700: #b93f02;
+  --color-chs-800: #933309;
+  --color-chs-900: #772d0b;
+  --color-chs-950: #401303;
 
   /* Near-black backgrounds used for the header, hero and dark bands. */
   --color-ink-700: #2a3134;

@@ -38,7 +38,7 @@ const crumbs = computed(() => [
     <section class="py-16 sm:py-20" aria-labelledby="who-title">
       <UContainer class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p class="kicker mb-3 text-chs-600">{{ page.whoKicker }}</p>
+          <p class="kicker mb-3 text-chs-700">{{ page.whoKicker }}</p>
           <h2
             id="who-title"
             class="heading-display mb-6 text-[clamp(28px,3.6vw,40px)]"
@@ -56,7 +56,7 @@ const crumbs = computed(() => [
           </div>
         </div>
         <NuxtPicture
-          src="/images/van.jpg"
+          src="/images/service-van.jpg"
           :alt="page.vanAlt"
           sizes="444px"
           width="444"
@@ -91,7 +91,7 @@ const crumbs = computed(() => [
 
     <section class="py-16 sm:py-20" aria-labelledby="values-title">
       <UContainer>
-        <p class="kicker mb-3 text-chs-600">{{ page.valuesKicker }}</p>
+        <p class="kicker mb-3 text-chs-700">{{ page.valuesKicker }}</p>
         <h2
           id="values-title"
           class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"
@@ -114,7 +114,7 @@ const crumbs = computed(() => [
 
     <section class="bg-zinc-100 py-16 sm:py-20" aria-labelledby="ways-title">
       <UContainer>
-        <p class="kicker mb-3 text-chs-600">{{ page.waysKicker }}</p>
+        <p class="kicker mb-3 text-chs-700">{{ page.waysKicker }}</p>
         <h2
           id="ways-title"
           class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"
@@ -135,7 +135,7 @@ const crumbs = computed(() => [
             <ULink
               raw
               :to="localePath(way.link.to)"
-              class="inline-flex items-center gap-2 self-start border-b-2 border-primary pb-1 text-[13px] font-extrabold tracking-wider uppercase hover:text-chs-600"
+              class="inline-flex items-center gap-2 self-start border-b-2 border-primary pb-1 text-[13px] font-extrabold tracking-wider uppercase hover:text-chs-700"
             >
               {{ way.link.label }}
               <UIcon
@@ -153,7 +153,7 @@ const crumbs = computed(() => [
         class="grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]"
       >
         <div>
-          <p class="kicker mb-3 text-chs-600">{{ page.areasKicker }}</p>
+          <p class="kicker mb-3 text-chs-700">{{ page.areasKicker }}</p>
           <h2
             id="areas-title"
             class="heading-display mb-4 text-[clamp(28px,3.6vw,40px)]"

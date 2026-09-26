@@ -117,7 +117,7 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
           class="mb-9 grid items-end gap-8 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] md:gap-15"
         >
           <div>
-            <p class="kicker mb-3 text-chs-600">
+            <p class="kicker mb-3 text-chs-700">
               {{ content.common.ourServices }}
             </p>
             <h2
@@ -218,7 +218,7 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
     >
       <div class="self-stretch md:col-span-2 lg:col-span-1">
         <NuxtPicture
-          src="/images/van.jpg"
+          src="/images/service-van.jpg"
           :alt="content.home.vanAlt"
           sizes="444px"
           width="444"
@@ -232,7 +232,7 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
         />
       </div>
       <div class="px-4 pt-11 pb-2 sm:px-6 md:py-11 lg:px-10">
-        <p class="kicker mb-3 text-chs-600">
+        <p class="kicker mb-3 text-chs-700">
           {{ content.home.onsiteKicker }}
         </p>
         <h2

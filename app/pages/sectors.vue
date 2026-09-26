@@ -54,7 +54,7 @@ const sectorServices = (slugs: string[]) =>
             <ULink
               raw
               :to="`#${sector.slug}`"
-              class="flex items-center gap-2 px-3 py-2 text-[13px] font-extrabold tracking-wide whitespace-nowrap uppercase transition-colors hover:bg-zinc-100 hover:text-chs-600"
+              class="flex items-center gap-2 px-3 py-2 text-[13px] font-extrabold tracking-wide whitespace-nowrap uppercase transition-colors hover:bg-zinc-100 hover:text-chs-700"
             >
               <UIcon :name="sector.icon" class="size-5 text-primary" />
               {{ sector.title }}

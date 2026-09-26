@@ -47,7 +47,7 @@ const formatDate = (date: string) =>
         class="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
       >
         <div>
-          <p class="kicker mb-3 text-chs-600">{{ kicker }}</p>
+          <p class="kicker mb-3 text-chs-700">{{ kicker }}</p>
           <h2
             id="reviews-title"
             class="heading-display max-w-2xl text-[clamp(28px,3.6vw,40px)]"
