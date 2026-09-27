@@ -65,7 +65,7 @@ app/
   utils/ui.ts             Shared `ui` prop overrides (e.g. heroBreadcrumbUi)
 public/
   images/                 Site images (small, cropped from the design mockup; replace with real photos)
-  _headers                Cache headers for Netlify / Cloudflare Pages
+  _headers                Cache headers for Netlify / Cloudflare Pages (Vercel: vercel.json)
 ```
 
 ## Conventions
