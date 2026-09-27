@@ -4,7 +4,7 @@ Guide for AI coding agents (and developers) working on this repo: how the site i
 
 ## What this is
 
-Static marketing site for **Crosshands Hydraulic Services (CHS)**, a hydraulic repair business in Cross Hands, Llanelli, Carmarthenshire. The goals are local SEO (rank for hydraulic repairs in Llanelli / Carmarthenshire / South Wales) and turning visitors into phone calls and enquiries.
+Static marketing site for **CHS Hydraulics**, a hydraulic repair business in Cross Hands, Llanelli, Carmarthenshire. The goals are local SEO (rank for hydraulic repairs in Llanelli / Carmarthenshire / South Wales) and turning visitors into phone calls and enquiries.
 
 ## Stack
 
@@ -46,6 +46,7 @@ app/
     AppHeader.vue         UHeader: desktop nav with gliding orange indicator, slide-over mobile menu
     AppFooter.vue
     PageHero.vue          Dark hero with preloaded image, used by every inner page
+    BrandPicture.vue      NuxtPicture that swaps images per brand A/B variant
     ServiceCard.vue       Card used on the homepage and /services
     CtaBand.vue           "Let's keep your equipment moving" call-to-action strip
     ReviewsSection.vue    Google reviews + testimonials (hidden in production until reviews exist)
@@ -100,6 +101,14 @@ public/
 - The language switcher uses `NuxtLink` + `useSwitchLocalePath()`. **Not `ULink`**, which re-localises the path and sends Welsh visitors back to `/cy/…`.
 - Contact enquiries always send the English urgency label plus a `language` field, so the business knows to reply in Welsh.
 - The Welsh is a drafted translation: have it checked by a fluent speaker (e.g. the Welsh Government's free Helo Blod service) before launch.
+
+### Brand A/B test (orange vs red)
+
+- Configured in `app.config.ts` → `brand` (`abTest`, `default`, `variants`, `images`). A tiny script in `app.vue` runs in `<head>` before first paint: `?brand=red|orange` forces (and remembers) a variant, otherwise a previous assignment in localStorage (`chs-brand`), otherwise a random pick (or `default` if `abTest` is off). It sets `<html data-brand>`.
+- Colours: `:root[data-brand="red"]` in `main.css` overrides the `chs-*` scale, so every `chs`/`primary` class follows. **Never hard-code a brand hex value**; always use the tokens.
+- Images: use `<BrandPicture>` (same props as `NuxtPicture`) for any image listed in `brand.images`. It renders one picture per variant, and CSS (`.brand-only-<variant>`) shows the active one. Lazy images for the hidden variant aren't downloaded. Eager ones (logos, hero) are, which keeps both variants equally fast.
+- Red image variants (`*-red.*`) were made by hue-shifting the orange originals. Regenerate them if the originals change.
+- Plausible gets `brand` on every event; compare goals per variant by filtering on that property.
 
 ### Styling
 

@@ -14,7 +14,7 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
       class="relative isolate overflow-hidden bg-ink-950 text-white"
       aria-labelledby="hero-title"
     >
-      <NuxtPicture
+      <BrandPicture
         src="/images/hero.jpg"
         :alt="content.home.heroImageAlt"
         sizes="524px"
@@ -217,7 +217,7 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
       aria-labelledby="onsite-title"
     >
       <div class="self-stretch md:col-span-2 lg:col-span-1">
-        <NuxtPicture
+        <BrandPicture
           src="/images/service-van.jpg"
           :alt="content.home.vanAlt"
           sizes="444px"

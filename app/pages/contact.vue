@@ -89,7 +89,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     )
     // Tells the business which language to reply in.
     body.append("language", locale.value === "cy" ? "Welsh" : "English")
-    body.append("_subject", "New website enquiry – CHS Hydraulic Services")
+    body.append("_subject", "New website enquiry – CHS Hydraulics")
     body.append("_gotcha", gotcha.value)
     try {
       const response = await fetch(endpoint, {

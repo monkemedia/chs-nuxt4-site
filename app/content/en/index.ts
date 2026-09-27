@@ -14,7 +14,7 @@ export const en = {
     skipToContent: "Skip to main content",
     primaryNav: "Primary navigation",
     mobileNav: "Mobile navigation",
-    callChs: "Call CHS Hydraulic Services",
+    callChs: "Call CHS Hydraulics",
     callNow: "Call now",
     call: (phone: string) => `Call ${phone}`,
     sendEnquiry: "Send an enquiry",
@@ -117,7 +117,7 @@ export const en = {
       "Flexible, reliable scheduling",
     ],
     bookService: "Book a service",
-    vanAlt: "CHS Crosshands Hydraulic Services mobile service van on site",
+    vanAlt: "CHS Hydraulics mobile service van on site",
     sectorsKicker: "Our sectors",
     sectorsTitle: ["Proud to support", "a wide range of industries."] as [
       string,
@@ -163,7 +163,7 @@ export const en = {
     seo: {
       title: "About CHS | Hydraulic Engineers in Cross Hands, Llanelli",
       description:
-        "Crosshands Hydraulic Services is a hydraulic repair and supply business in Cross Hands, Carmarthenshire, with a workshop and mobile unit serving Llanelli and South Wales.",
+        "CHS Hydraulics is a hydraulic repair and supply business in Cross Hands, Carmarthenshire, with a workshop and mobile unit serving Llanelli and South Wales.",
     },
     crumb: "About",
     title: ["About", "CHS"] as [string, string],
@@ -172,11 +172,11 @@ export const en = {
     whoKicker: "Who we are",
     whoTitle: "Hydraulic specialists, close to home",
     who: [
-      "Crosshands Hydraulic Services repairs, services and supplies hydraulic equipment for customers across Llanelli, Carmarthenshire and South Wales.",
+      "CHS Hydraulics repairs, services and supplies hydraulic equipment for customers across Llanelli, Carmarthenshire and South Wales.",
       "From a burst hose on an excavator to a leaking ram on a tractor loader or a fault on an industrial press, we find the problem, fix it properly and get you back to work.",
       "We run a workshop at Cross Hands and a fully equipped mobile service unit, so we can work wherever makes most sense for you and your machine.",
     ],
-    vanAlt: "CHS Crosshands Hydraulic Services mobile service van",
+    vanAlt: "CHS Hydraulics mobile service van",
     factsLabel: "CHS at a glance",
     // "2004" is the Companies House incorporation date for Crosshands Hydraulic Services LLP; confirm with the business.
     facts: [
@@ -309,7 +309,7 @@ export const en = {
     seo: {
       title: "Contact CHS Hydraulics | Cross Hands, Llanelli",
       description:
-        "Contact Crosshands Hydraulic Services for hose replacement, ram repairs, fault finding and on-site call-outs across Llanelli and Carmarthenshire.",
+        "Contact CHS Hydraulics for hose replacement, ram repairs, fault finding and on-site call-outs across Llanelli and Carmarthenshire.",
     },
     kicker: ["Contact", "Quotes", "Call-outs"],
     title: ["Get in", "touch"] as [string, string],

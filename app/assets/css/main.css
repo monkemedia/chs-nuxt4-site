@@ -28,6 +28,30 @@
   --color-ink-950: #0d1012;
 }
 
+/* Brand A/B test: the red variant. <html data-brand="red"> is set before first paint by the
+   script in app.vue; everything built on the chs-* tokens (and Nuxt UI's primary) follows.
+   Same text rules as orange: 700 for small text on light, 400 on dark. */
+:root[data-brand="red"] {
+  --color-chs-50: #fff1f2;
+  --color-chs-100: #ffe0e2;
+  --color-chs-200: #ffc6ca;
+  --color-chs-300: #ff9ba2;
+  --color-chs-400: #ff4452;
+  --color-chs-500: #e5101f;
+  --color-chs-600: #d10e1c;
+  --color-chs-700: #b00a16;
+  --color-chs-800: #910c16;
+  --color-chs-900: #780f18;
+  --color-chs-950: #42030a;
+}
+
+/* <BrandPicture> renders one picture per variant; only the active brand's is shown
+   (hidden lazy images aren't downloaded). Orange is the default, including without JS. */
+:root[data-brand="red"] .brand-only-orange,
+:root:not([data-brand="red"]) .brand-only-red {
+  display: none;
+}
+
 :root {
   --ui-radius: 0.1rem;
   --ui-container: 78rem;

@@ -16,7 +16,7 @@ export const cy: Content = {
     skipToContent: "Neidio i'r prif gynnwys",
     primaryNav: "Prif ddewislen",
     mobileNav: "Dewislen symudol",
-    callChs: "Ffoniwch CHS Hydraulic Services",
+    callChs: "Ffoniwch CHS Hydraulics",
     callNow: "Ffoniwch nawr",
     call: (phone: string) => `Ffoniwch ${phone}`,
     sendEnquiry: "Anfon ymholiad",
@@ -118,8 +118,7 @@ export const cy: Content = {
       "Trefnu hyblyg a dibynadwy",
     ],
     bookService: "Trefnu gwasanaeth",
-    vanAlt:
-      "Fan wasanaeth symudol CHS Crosshands Hydraulic Services ar y safle",
+    vanAlt: "Fan wasanaeth symudol CHS Hydraulics ar y safle",
     sectorsKicker: "Ein sectorau",
     sectorsTitle: ["Yn falch o gefnogi", "ystod eang o ddiwydiannau."],
     viewSectors: "Gweld y sectorau",
@@ -162,7 +161,7 @@ export const cy: Content = {
     seo: {
       title: "Amdanom ni | Peirianwyr Hydrolig Cross Hands, Llanelli | CHS",
       description:
-        "Busnes atgyweirio a chyflenwi hydrolig yn Cross Hands, Sir Gâr yw Crosshands Hydraulic Services, gyda gweithdy ac uned symudol yn gwasanaethu Llanelli a De Cymru.",
+        "Busnes atgyweirio a chyflenwi hydrolig yn Cross Hands, Sir Gâr yw CHS Hydraulics, gyda gweithdy ac uned symudol yn gwasanaethu Llanelli a De Cymru.",
     },
     crumb: "Amdanom ni",
     title: ["Amdanom", "ni"],
@@ -171,11 +170,11 @@ export const cy: Content = {
     whoKicker: "Pwy ydyn ni",
     whoTitle: "Arbenigwyr hydrolig, yn agos at adref",
     who: [
-      "Mae Crosshands Hydraulic Services yn atgyweirio, yn gwasanaethu ac yn cyflenwi offer hydrolig i gwsmeriaid ar draws Llanelli, Sir Gâr a De Cymru.",
+      "Mae CHS Hydraulics yn atgyweirio, yn gwasanaethu ac yn cyflenwi offer hydrolig i gwsmeriaid ar draws Llanelli, Sir Gâr a De Cymru.",
       "O bibell wedi byrstio ar gloddiwr i ram yn gollwng ar lwythwr tractor neu nam ar wasg ddiwydiannol, rydyn ni'n dod o hyd i'r broblem, yn ei thrwsio'n iawn ac yn eich cael yn ôl i weithio.",
       "Mae gennym weithdy yn Cross Hands ac uned wasanaeth symudol gyda'r holl offer angenrheidiol, felly gallwn weithio lle bynnag sydd orau i chi a'ch peiriant.",
     ],
-    vanAlt: "Fan wasanaeth symudol CHS Crosshands Hydraulic Services",
+    vanAlt: "Fan wasanaeth symudol CHS Hydraulics",
     factsLabel: "CHS yn gryno",
     facts: [
       { value: "2004", label: "Sefydlwyd" },
@@ -308,7 +307,7 @@ export const cy: Content = {
     seo: {
       title: "Cysylltu â CHS Hydraulics | Cross Hands, Llanelli",
       description:
-        "Cysylltwch â Crosshands Hydraulic Services am newid pibellau, atgyweirio rams, canfod namau a galwadau allan ar y safle ar draws Llanelli a Sir Gâr.",
+        "Cysylltwch â CHS Hydraulics am newid pibellau, atgyweirio rams, canfod namau a galwadau allan ar y safle ar draws Llanelli a Sir Gâr.",
     },
     kicker: ["Cysylltu", "Dyfynbrisiau", "Galwadau allan"],
     title: ["Cysylltwch", "â ni"],

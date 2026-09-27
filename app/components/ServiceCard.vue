@@ -11,7 +11,7 @@ const localePath = useLocalePath()
     class="group relative flex flex-col bg-white shadow-[0_10px_30px_rgba(15,22,26,0.09)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_38px_rgba(15,22,26,0.15)]"
   >
     <div class="relative aspect-220/130 bg-ink-950">
-      <NuxtPicture
+      <BrandPicture
         :src="service.image"
         :alt="service.alt"
         sizes="220px"

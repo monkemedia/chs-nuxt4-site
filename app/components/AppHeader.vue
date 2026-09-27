@@ -94,9 +94,9 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
     }"
   >
     <template #title>
-      <NuxtPicture
+      <BrandPicture
         src="/images/chs-logo-white.png"
-        alt="CHS Crosshands Hydraulic Services"
+        alt="CHS Hydraulics"
         sizes="120px"
         width="120"
         densities="x1 x2"

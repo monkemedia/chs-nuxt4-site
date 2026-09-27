@@ -45,7 +45,7 @@ export default defineNuxtConfig({
   },
   site: {
     url: "https://www.chshydraulics.co.uk",
-    name: "CHS Hydraulic Services",
+    name: "CHS Hydraulics",
   },
   image: {
     quality: 78,

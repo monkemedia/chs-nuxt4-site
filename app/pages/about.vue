@@ -55,7 +55,7 @@ const crumbs = computed(() => [
             </p>
           </div>
         </div>
-        <NuxtPicture
+        <BrandPicture
           src="/images/service-van.jpg"
           :alt="page.vanAlt"
           sizes="444px"

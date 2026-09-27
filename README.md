@@ -1,4 +1,4 @@
-# CHS Hydraulic Services — Nuxt 4 static site
+# CHS Hydraulics — Nuxt 4 static site
 
 A static, SEO-first Nuxt 4 marketing site based on the approved CHS homepage direction.
 
@@ -39,6 +39,10 @@ Without it, the form shows an error asking visitors to call. The form includes a
 Add real Google reviews and customer testimonials (with permission) to `app/data/reviews.ts`, and the overall Google rating to `googleRating` in the same file. The reviews sections on the homepage and Why CHS stay hidden on the live site until at least one review is added; `npm run dev` previews them with labelled samples. Set `googlePlaceId` in `app/app.config.ts` to show the "Read all reviews on Google" and "Leave us a review" buttons.
 
 The homepage hero also shows a compact Google rating line once `googleRating` reaches the minimum in `ratingBadgeThreshold` (10+ reviews at 4.5+ stars by default).
+
+## Brand A/B test
+
+Visitors are randomly shown the orange or red branding (colours, logo and brand photos) and keep it on return visits. Add `?brand=red` or `?brand=orange` to any URL to force a version (it's remembered). Settings live in `app/app.config.ts` → `brand`; set `abTest: false` to show everyone the default. In Plausible, add `brand` as a custom property and compare the `Phone Call` / `Enquiry Sent` goals per variant.
 
 ## Analytics
 

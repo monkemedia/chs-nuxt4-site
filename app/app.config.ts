@@ -2,6 +2,8 @@
 // Translatable details (location, service area, opening hours) live in app/content/<locale>/.
 // Placeholder values: replace before launch (see README). These must match the
 // Google Business Profile and directory listings exactly (name, address, phone).
+export type BrandVariant = "orange" | "red"
+
 export default defineAppConfig({
   ui: {
     colors: {
@@ -18,8 +20,26 @@ export default defineAppConfig({
       },
     },
   },
+  // Brand colour A/B test (see AGENTS.md "Brand A/B test"). With `abTest` on, each visitor
+  // is randomly assigned a variant on first visit and keeps it (localStorage). `?brand=red`
+  // or `?brand=orange` forces one. Turn `abTest` off to show everyone `default`.
+  brand: {
+    abTest: true,
+    default: "orange" as BrandVariant,
+    variants: ["orange", "red"] as BrandVariant[],
+    // Images that differ per brand: default src -> variant src. <BrandPicture> swaps them.
+    images: {
+      "/images/chs-logo-white.png": { red: "/images/chs-logo-white-red.png" },
+      "/images/hero.jpg": { red: "/images/hero-red.jpg" },
+      "/images/service-van.jpg": { red: "/images/service-van-red.jpg" },
+    } as Record<string, Partial<Record<BrandVariant, string>>>,
+  },
   business: {
-    name: "Crosshands Hydraulic Services",
+    name: "CHS Hydraulics",
+    // Registered name at Companies House (OC308080); confirm it's still the legal entity.
+    legalName: "Crosshands Hydraulic Services LLP",
+    // Former trading name: kept in structured data so Google links old listings to the new brand.
+    formerName: "Crosshands Hydraulic Services",
     phoneDisplay: "01269 123 456",
     phoneHref: "tel:+441269123456",
     phoneIntl: "+44 1269 123456",
