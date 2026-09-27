@@ -56,7 +56,7 @@ const crumbs = computed(() => [
           </div>
         </div>
         <BrandPicture
-          src="/images/service-van.jpg"
+          src="/images/service-van.png"
           :alt="page.vanAlt"
           sizes="444px"
           width="444"

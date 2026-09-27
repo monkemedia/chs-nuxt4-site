@@ -31,7 +31,7 @@ export default defineAppConfig({
     images: {
       "/images/chs-logo-white.png": { red: "/images/chs-logo-white-red.png" },
       "/images/hero.jpg": { red: "/images/hero-red.jpg" },
-      "/images/service-van.jpg": { red: "/images/service-van-red.jpg" },
+      "/images/service-van.png": { red: "/images/service-van-red.png" },
     } as Record<string, Partial<Record<BrandVariant, string>>>,
   },
   business: {

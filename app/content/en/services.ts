@@ -182,7 +182,7 @@ export const services: Service[] = [
     slug: "on-site-hydraulic-service",
     title: "On-site Service",
     icon: "i-lucide-wrench",
-    image: "/images/service-van.jpg",
+    image: "/images/service-van.png",
     alt: "CHS mobile hydraulic service van",
     summary:
       "Mobile hydraulic service and emergency call-outs to keep you moving.",

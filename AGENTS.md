@@ -169,7 +169,7 @@ public/
 - **Placeholder business details** (phone `01269 123 456`, email, hours, service area, domain `chshydraulics.co.uk`) live in `app/app.config.ts` and `nuxt.config.ts`. They must match the Google Business Profile exactly before launch. Public listings show a different phone number and two conflicting addresses; confirm with the business.
 - The street address is only output in JSON-LD once `address.street` and `address.postcode` are set.
 - **Service, sector, benefit and About content was drafted, not supplied by the business.** Claims (e.g. "Established 2004", "while you wait" turnaround, machine lists) must be checked with CHS. Never invent reviews or testimonials; `app/data/reviews.ts` is empty until real ones exist.
-- `public/images/` are low-resolution crops from the design mockup; replace them with real photography. `hero-hydraulic.jpg`, `industrial-bg.jpg`, `service-van.jpg` and `chs-logo-source.jpg` are unused originals kept as sources.
+- `public/images/` are low-resolution crops from the design mockup; replace them with real photography. `hero-hydraulic.jpg`, `industrial-bg.jpg`, `service-van.png` and `chs-logo-source.jpg` are unused originals kept as sources.
 
 ## Before finishing a change
 

@@ -218,7 +218,7 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
     >
       <div class="self-stretch md:col-span-2 lg:col-span-1">
         <BrandPicture
-          src="/images/service-van.jpg"
+          src="/images/service-van.png"
           :alt="content.home.vanAlt"
           sizes="444px"
           width="444"

@@ -21,7 +21,7 @@ useJsonLd("business", {
   alternateName: ["CHS", business.formerName],
   url: siteUrl,
   logo: new URL("/images/chs-logo-source.png", siteUrl).href,
-  image: new URL("/images/service-van.jpg", siteUrl).href,
+  image: new URL("/images/service-van.png", siteUrl).href,
   telephone: business.phoneIntl,
   email: business.email,
   description: content.value.home.seo.description,

@@ -180,7 +180,7 @@ export const services: Service[] = [
     slug: "on-site-hydraulic-service",
     title: "Gwasanaeth ar y Safle",
     icon: "i-lucide-wrench",
-    image: "/images/service-van.jpg",
+    image: "/images/service-van.png",
     alt: "Fan wasanaeth hydrolig symudol CHS",
     summary: "Gwasanaeth hydrolig symudol a galwadau brys i'ch cadw i symud.",
     metaTitle: "Atgyweirio Hydrolig Symudol Llanelli a Sir Gâr | CHS",
