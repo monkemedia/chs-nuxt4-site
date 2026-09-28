@@ -48,7 +48,10 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
           loading="lazy"
           :img-attrs="{ class: 'h-auto w-[130px]' }"
         />
-        <p class="mt-4 max-w-xs">{{ content.footer.blurb }}</p>
+        <p class="kicker mt-4 text-[11px] text-chs-400">
+          {{ business.tagline }}
+        </p>
+        <p class="mt-3 max-w-xs">{{ content.footer.blurb }}</p>
       </div>
 
       <nav

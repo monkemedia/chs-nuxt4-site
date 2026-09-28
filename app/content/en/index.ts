@@ -108,7 +108,6 @@ export const en = {
         "Hydraulic hose replacement, ram repairs, fault finding and mobile call-outs from Cross Hands, covering Llanelli, Carmarthenshire and South Wales.",
     },
     heroKicker: "Hydraulic repairs in Llanelli & Carmarthenshire",
-    heroTitle: ["Keeping", "industry", "moving"] as [string, string, string],
     heroCopy:
       "Expert hydraulic repair, hose supply and on-site service for plant, agriculture, commercial and industrial customers across Llanelli, Carmarthenshire and South Wales.",
     heroImageAlt: "Red hydraulic cylinder with polished ram and hoses",
@@ -127,7 +126,7 @@ export const en = {
       string,
     ],
     whyText:
-      "Founded by {founder1} and {founder2}, and trusted by farmers and plant operators across South Wales for {years} years. No hidden costs, no upselling: just fixed, fast and honest.",
+      "Farmers and plant operators across South Wales have trusted us for {years} years. No hidden costs, no upselling: just fixed, fast and honest.",
     whyLink: "Why choose CHS",
     onsiteKicker: "On-site hydraulic service",
     onsiteTitle: "We come to you",

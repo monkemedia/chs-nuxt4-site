@@ -109,7 +109,6 @@ export const cy: Content = {
         "Newid pibellau hydrolig, atgyweirio rams, canfod namau a galwadau allan symudol o Cross Hands, ar draws Llanelli, Sir Gâr a De Cymru.",
     },
     heroKicker: "Atgyweirio hydrolig yn Llanelli a Sir Gâr",
-    heroTitle: ["Cadw", "diwydiant", "i symud"],
     heroCopy:
       "Arbenigwyr atgyweirio hydrolig, cyflenwi pibellau a gwasanaeth ar y safle i gwsmeriaid peiriannau, amaeth, masnachol a diwydiannol ar draws Llanelli, Sir Gâr a De Cymru.",
     heroImageAlt: "Silindr hydrolig coch gyda ram gloyw a phibellau",
@@ -128,7 +127,7 @@ export const cy: Content = {
       "Trwsio cyflym. Prisiau gonest.",
     ],
     whyText:
-      "Wedi'i sefydlu gan {founder1} a {founder2}, ac mae ffermwyr a gweithredwyr peiriannau ledled De Cymru wedi ymddiried ynom ers {years} mlynedd. Dim costau cudd, dim gwerthu diangen: dim ond gwaith cyflym a gonest.",
+      "Mae ffermwyr a gweithredwyr peiriannau ledled De Cymru wedi ymddiried ynom ers {years} mlynedd. Dim costau cudd, dim gwerthu diangen: dim ond gwaith cyflym a gonest.",
     whyLink: "Pam dewis CHS",
     onsiteKicker: "Gwasanaeth hydrolig ar y safle",
     onsiteTitle: "Rydyn ni'n dod atoch chi",

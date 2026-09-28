@@ -23,6 +23,7 @@ useJsonLd("business", {
   name: business.name,
   legalName: business.legalName,
   alternateName: ["CHS", business.formerName],
+  slogan: business.tagline,
   url: siteUrl,
   logo: new URL("/images/chs-logo-source.png", siteUrl).href,
   image: new URL("/images/service-van.png", siteUrl).href,

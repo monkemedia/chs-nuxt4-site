@@ -38,6 +38,9 @@ export default defineAppConfig({
   },
   business: {
     name: "CHS Hydraulics",
+    // Brand line: the homepage H1, the footer and structured data (`slogan`). Kept in English
+    // on the Welsh pages too, like the name. The last word is highlighted in the hero.
+    tagline: "Driven By Pressure",
     // Registered name at Companies House (OC308080); confirm it's still the legal entity.
     legalName: "Crosshands Hydraulic Services LLP",
     // Founding directors, named in the About page story and the homepage "why" band (copy uses

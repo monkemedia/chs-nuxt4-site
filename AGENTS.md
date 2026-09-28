@@ -150,7 +150,7 @@ public/
 - Every page calls `usePageSeo({ title, description, path })`. Keep titles ≤ 60 characters and descriptions ≤ 160, and include a location (Llanelli / Carmarthenshire).
 - Inner pages add `useBreadcrumbs([...])` and show a matching `UBreadcrumb` in `PageHero` using `heroBreadcrumbUi`.
 - `layouts/default.vue` outputs `LocalBusiness` JSON-LD from `app.config.ts`; service pages add `Service` JSON-LD referencing it via `useBusinessId()`.
-- One `h1` per page. The homepage H1 includes the keyword line inside it.
+- One `h1` per page. The homepage H1 is the brand line (`business.tagline`, "Driven By Pressure", in `app.config.ts`) with the keyword line inside it. The tagline is also in the footer and the LocalBusiness `slogan`; use `business.tagline` rather than typing it.
 - New pages are picked up by the prerender crawler and sitemap automatically if something links to them.
 
 ### Reviews and testimonials

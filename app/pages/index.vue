@@ -5,6 +5,11 @@ const localePath = useLocalePath()
 
 usePageSeo({ ...content.value.home.seo, path: "/" })
 
+// Brand line as the hero heading: last word on its own line, highlighted.
+const taglineWords = business.tagline.split(" ")
+const taglineLead = taglineWords.slice(0, -1).join(" ")
+const taglineLast = taglineWords.at(-1)
+
 const trustIcons = [
   "i-lucide-award",
   "i-lucide-timer",
@@ -51,11 +56,8 @@ const trustIcons = [
             class="kicker mb-4.5 block font-sans leading-normal tracking-[1.5px] sm:mb-6.5 sm:tracking-[3px]"
             >{{ content.home.heroKicker }}</span
           >
-          {{ content.home.heroTitle[0] }}
-          <span class="block">{{ content.home.heroTitle[1] }}</span>
-          <em class="block text-primary not-italic">{{
-            content.home.heroTitle[2]
-          }}</em>
+          {{ taglineLead }}
+          <em class="block text-primary not-italic">{{ taglineLast }}</em>
         </h1>
         <p class="mt-5 max-w-xl text-base text-zinc-200 sm:mt-7 sm:text-lg">
           {{ content.home.heroCopy }}
