@@ -1,10 +1,17 @@
 import { cy } from "./cy"
+import { workshop as cyWorkshop } from "./cy/workshop"
 import { en } from "./en"
+import { workshop as enWorkshop } from "./en/workshop"
 
 export type { Content } from "./en"
 
 export const contentByLocale = { en, cy }
 export type LocaleCode = keyof typeof contentByLocale
+
+// Workshop-only copy per locale, applied while app.config `features.onsite` is off.
+export const workshopByLocale = { en: enWorkshop, cy: cyWorkshop }
+// The service (and its page) hidden while on-site work isn't live.
+export const onsiteServiceSlug = "on-site-hydraulic-service"
 
 // Every locale must list the same services, sectors and benefits in the same order
 // (slugs drive URLs and links). Checked when the server/prerender loads this module,

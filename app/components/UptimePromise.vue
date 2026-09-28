@@ -1,13 +1,13 @@
 <script setup lang="ts">
 // The Uptime Promise guarantee band. Renders nothing until app.config `offer.uptimePromise`
-// is switched on, so it can't go live before CHS can deliver it.
-const { offer } = useAppConfig()
+// and `features.onsite` are both on, so it can't go live before CHS can deliver it.
+const { features, offer } = useAppConfig()
 const content = useContent()
 </script>
 
 <template>
   <section
-    v-if="offer.uptimePromise"
+    v-if="features.onsite && offer.uptimePromise"
     class="bg-chs-700 py-12 text-white sm:py-14"
     aria-labelledby="uptime-title"
   >

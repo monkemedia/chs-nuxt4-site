@@ -34,6 +34,12 @@ export default defineAppConfig({
       "/images/service-van.png": { red: "/images/service-van-red.png" },
     } as Record<string, Partial<Record<BrandVariant, string>>>,
   },
+  // Features not live yet. Off = hidden everywhere, with replacement copy where needed.
+  features: {
+    // On-site / mobile work: the homepage "We come to you" band, the On-site Service page,
+    // on-site claims and the Uptime Promise. Off uses app/content/<locale>/workshop.ts.
+    onsite: false,
+  },
   // The offer. Copy in app/content/ uses {years} and {hours}, filled in by useContent().
   // Only publish numbers CHS can stand behind (misleading claims breach CMA rules).
   offer: {
@@ -43,6 +49,7 @@ export default defineAppConfig({
     responseHours: 4,
     // The Uptime Promise ("on-site within {hours} hours or the call-out's free"). Phase 2: only
     // switch on once a second mechanic and the mobile service can reliably deliver it.
+    // Needs `features.onsite` on too.
     uptimePromise: false,
   },
   business: {

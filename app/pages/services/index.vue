@@ -37,7 +37,12 @@ const crumbs = computed(() => [
 
     <section class="py-16 sm:py-20" :aria-label="page.listLabel">
       <UContainer>
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          class="grid gap-5 sm:grid-cols-2"
+          :class="
+            content.services.length % 4 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+          "
+        >
           <ServiceCard
             v-for="service in content.services"
             :key="service.slug"

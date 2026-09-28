@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { business } = useAppConfig()
+const { business, features } = useAppConfig()
 const content = useContent()
 const localePath = useLocalePath()
 
@@ -148,7 +148,12 @@ const trustIcons = [
             </UButton>
           </div>
         </div>
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          class="grid gap-5 sm:grid-cols-2"
+          :class="
+            content.services.length % 4 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+          "
+        >
           <ServiceCard
             v-for="service in content.services"
             :key="service.slug"
@@ -222,6 +227,7 @@ const trustIcons = [
     <UptimePromise />
 
     <section
+      v-if="features.onsite"
       id="onsite"
       class="grid items-center bg-zinc-100 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,0.72fr)]"
       aria-labelledby="onsite-title"

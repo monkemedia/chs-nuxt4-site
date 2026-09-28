@@ -103,6 +103,12 @@ public/
 - Contact enquiries always send the English urgency label plus a `language` field, so the business knows to reply in Welsh.
 - The Welsh is a drafted translation: have it checked by a fluent speaker (e.g. the Welsh Government's free Helo Blod service) before launch.
 
+### Feature flags (on-site work)
+
+- `app.config.ts` → `features.onsite` is **off until CHS launches on-site/mobile work**. Off: the homepage "We come to you" band, the On-site Service (card, page, footer link, contact dropdown, sector links, sitemap) and the Uptime Promise disappear, and `app/content/<locale>/workshop.ts` replaces every sentence that mentions on-site, mobile or call-out work. Turning it on restores everything; nothing needs deleting.
+- `useContent()` applies this, so components need no checks beyond whole sections (`features.onsite` in `index.vue` and `UptimePromise`).
+- **When writing copy that mentions on-site work, add a workshop-only version to `workshop.ts` in both languages.** Arrays are patched by index (`{ 1: "…" }` replaces, `{ 2: null }` removes; see `app/content/overrides.ts`). To check nothing leaks, build with the flag off and search the HTML for "on-site", "mobile", "call-out", "ar y safle" and "symudol".
+
 ### The offer (years, response time, Uptime Promise)
 
 - `app.config.ts` → `offer` holds the numbers the sales copy relies on: `yearsExperience`, `responseHours` and `uptimePromise`. Copy uses `{years}` / `{hours}` tokens, which `useContent()` fills in, so never type the numbers into copy.

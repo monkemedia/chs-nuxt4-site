@@ -1,11 +1,20 @@
-import { contentByLocale, type LocaleCode } from "~/content"
+import {
+  contentByLocale,
+  onsiteServiceSlug,
+  workshopByLocale,
+  type LocaleCode,
+} from "~/content"
+import { applyOverrides } from "~/content/overrides"
 
 // Copy for the current language (see app/content/). Use in templates as content.home.heroCopy.
 // {years} and {hours} in any string are filled in from app.config `offer`, so the numbers
 // stay the same in every language and live in one place.
+// While app.config `features.onsite` is off, the workshop-only copy (app/content/<locale>/
+// workshop.ts) replaces anything that mentions on-site work, and the On-site Service is
+// removed everywhere services are listed (so its page isn't linked, prerendered or mapped).
 export function useContent() {
   const { locale } = useI18n()
-  const { offer } = useAppConfig()
+  const { features, offer } = useAppConfig()
 
   const tokens: Record<string, string> = {
     years: String(offer.yearsExperience),
@@ -25,5 +34,19 @@ export function useContent() {
     return value
   }
 
-  return computed(() => fill(contentByLocale[locale.value as LocaleCode]))
+  const forFeatures = (code: LocaleCode) => {
+    const content = contentByLocale[code]
+    if (features.onsite) return content
+    const workshop = applyOverrides(content, workshopByLocale[code])
+    return {
+      ...workshop,
+      services: workshop.services.filter((s) => s.slug !== onsiteServiceSlug),
+      sectors: workshop.sectors.map((sector) => ({
+        ...sector,
+        services: sector.services.filter((slug) => slug !== onsiteServiceSlug),
+      })),
+    }
+  }
+
+  return computed(() => fill(forFeatures(locale.value as LocaleCode)))
 }
