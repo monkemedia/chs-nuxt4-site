@@ -8,7 +8,7 @@ const localePath = useLocalePath()
 
 <template>
   <article
-    class="group relative flex flex-col bg-white shadow-[0_10px_30px_rgba(15,22,26,0.09)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_38px_rgba(15,22,26,0.15)]"
+    class="group relative flex flex-col overflow-hidden rounded-box bg-white shadow-[0_10px_30px_rgba(15,22,26,0.09)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_38px_rgba(15,22,26,0.15)]"
   >
     <div class="relative aspect-220/130 bg-ink-950">
       <BrandPicture
@@ -24,7 +24,7 @@ const localePath = useLocalePath()
       />
       <!-- Sized/positioned as percentages so it always covers the same spot of the photo. -->
       <span
-        class="absolute top-[73%] left-[6%] grid aspect-square w-[21%] place-items-center bg-primary text-white rounded-md"
+        class="absolute top-[73%] left-[6%] grid aspect-square w-[21%] place-items-center rounded-box bg-primary text-white"
       >
         <UIcon :name="service.icon" class="size-[45%]" />
       </span>

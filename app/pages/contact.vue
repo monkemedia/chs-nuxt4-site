@@ -161,7 +161,7 @@ const details = computed(() => [
         class="grid items-start gap-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]"
       >
         <div
-          class="-mx-4 border-t-4 border-primary bg-white px-5 py-7 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:mx-0 sm:p-10"
+          class="-mx-4 border-t-4 sm:rounded-box border-primary bg-white px-5 py-7 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:mx-0 sm:p-10"
         >
           <div
             v-if="status === 'sent'"
@@ -371,7 +371,7 @@ const details = computed(() => [
           :aria-label="page.detailsLabel"
         >
           <div
-            class="bg-primary p-6 text-white sm:p-7.5 md:col-span-2 lg:col-span-1"
+            class="rounded-box bg-primary p-6 text-white sm:p-7.5 md:col-span-2 lg:col-span-1"
           >
             <p class="kicker mb-3">{{ page.emergencyKicker }}</p>
             <h2 class="heading-display mb-5 text-2xl leading-[1.1]">
@@ -391,7 +391,7 @@ const details = computed(() => [
           </div>
 
           <ul
-            class="divide-y divide-zinc-200 bg-white px-5 py-1 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:px-7.5 sm:py-2"
+            class="divide-y divide-zinc-200 rounded-box bg-white px-5 py-1 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:px-7.5 sm:py-2"
           >
             <li
               v-for="item in details"
@@ -439,7 +439,7 @@ const details = computed(() => [
             </li>
           </ul>
 
-          <div class="bg-ink-900 px-5 py-6 text-white sm:px-7.5">
+          <div class="rounded-box bg-ink-900 px-5 py-6 text-white sm:px-7.5">
             <h3 class="heading-display mb-3.5 text-[13px] tracking-wide">
               {{ page.areasWeCover }}
             </h3>

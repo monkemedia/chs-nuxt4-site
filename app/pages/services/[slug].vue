@@ -136,7 +136,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
             <li
               v-for="(step, i) in service!.process"
               :key="step.title"
-              class="border-t-3 border-primary bg-zinc-100 px-5 py-6"
+              class="rounded-box border-t-3 border-primary bg-zinc-100 px-5 py-6"
             >
               <span
                 class="heading-display text-[28px] text-chs-700"
@@ -172,7 +172,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
           :aria-label="page.getHelp"
         >
           <div
-            class="bg-primary p-6 text-white sm:col-span-2 sm:p-7.5 lg:col-span-1"
+            class="rounded-box bg-primary p-6 text-white sm:col-span-2 sm:p-7.5 lg:col-span-1"
           >
             <p class="kicker mb-3">{{ page.needSorted }}</p>
             <h2 class="heading-display mb-5 text-2xl leading-[1.1]">
@@ -200,7 +200,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
           </div>
 
           <nav
-            class="bg-zinc-100 px-5 py-5 sm:px-7.5 sm:py-6"
+            class="rounded-box bg-zinc-100 px-5 py-5 sm:px-7.5 sm:py-6"
             aria-labelledby="other-services-title"
           >
             <h2
@@ -230,7 +230,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
             </ul>
           </nav>
 
-          <div class="bg-ink-900 px-5 py-6 text-white sm:px-7.5">
+          <div class="rounded-box bg-ink-900 px-5 py-6 text-white sm:px-7.5">
             <h3 class="heading-display mb-3.5 text-[13px] tracking-wide">
               {{ page.areasWeCover }}
             </h3>

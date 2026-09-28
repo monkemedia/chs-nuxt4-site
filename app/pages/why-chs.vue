@@ -48,7 +48,7 @@ const crumbs = computed(() => [
           <li
             v-for="benefit in content.benefits"
             :key="benefit.icon + benefit.title[0]"
-            class="flex gap-5 border-t-3 border-primary bg-zinc-100 p-6 sm:p-8"
+            class="flex gap-5 rounded-box border-t-3 border-primary bg-zinc-100 p-6 sm:p-8"
           >
             <UIcon :name="benefit.icon" class="size-11 shrink-0 text-primary" />
             <div>
@@ -129,7 +129,7 @@ const crumbs = computed(() => [
           <li
             v-for="(step, i) in page.steps"
             :key="step.title"
-            class="relative bg-zinc-100 p-6 pt-7"
+            class="relative rounded-box bg-zinc-100 p-6 pt-7"
           >
             <span
               class="heading-display absolute top-5 right-5 text-3xl text-zinc-300"

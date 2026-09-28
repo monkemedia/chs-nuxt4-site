@@ -132,7 +132,8 @@ public/
   - **Errors use Nuxt UI's `error` / Tailwind `red`**, never the brand scale.
   - `ink-700…950`: near-blacks. The header, hero and dark bands use `ink-950` (`#0D1012`) / `ink-900`.
   - `font-display`: Lato, for headings via `heading-display`.
-- **`--ui-radius` is `0rem`** so Nuxt UI components are square like the design. Nuxt UI defines Tailwind's `rounded-sm…3xl` as multiples of `--ui-radius`, so **those classes do nothing**. Use `rounded-full`, `rounded-none` or arbitrary values like `rounded-[0.5rem]`.
+- **Corners:** boxes and cards (anything with a background panel, card shadow or top border: service cards, review cards, info panels, sidebar boxes, icon badges, framed photos) use **`rounded-box`** (6px, `--radius-box` in `main.css`). Full-width bands stay square. Add `overflow-hidden` when a card has an image edge to edge.
+- **`--ui-radius` is `0.1rem`**, so Nuxt UI buttons and inputs are almost square like the design. Nuxt UI defines Tailwind's `rounded-sm…3xl` as multiples of `--ui-radius`, so **those classes are tiny (≈1.6–2.4px)**. Use `rounded-box`, `rounded-full`, `rounded-none` or arbitrary values like `rounded-[0.5rem]`.
 - Colour mode and web fonts are disabled (`ui.colorMode: false`, `ui.fonts: false`): light-only design, system fonts.
 - Override Nuxt UI components with the `ui` prop or `class` (merged with tailwind-merge), or globally in `app.config.ts`.
 

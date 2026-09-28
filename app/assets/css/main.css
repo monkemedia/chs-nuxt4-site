@@ -2,6 +2,10 @@
 @import "@nuxt/ui";
 
 @theme static {
+  /* Corner radius for boxes and cards: `rounded-box`. Independent of --ui-radius, which Nuxt UI
+     also uses for Tailwind's rounded-sm…3xl (so those are tiny here) and for buttons/inputs. */
+  --radius-box: 0.375rem;
+
   --font-sans: "Roboto", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Lato", "Helvetica Neue", Arial, sans-serif;
 

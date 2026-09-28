@@ -118,7 +118,7 @@ const sectorServices = (slugs: string[]) =>
           </div>
 
           <div
-            class="self-start border-t-3 border-primary bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-7"
+            class="self-start rounded-box border-t-3 border-primary bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-7"
           >
             <h3 class="heading-display mb-4 text-[13px] tracking-wide">
               {{

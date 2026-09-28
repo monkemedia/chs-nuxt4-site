@@ -73,7 +73,7 @@ const formatDate = (date: string) =>
           :class="{ 'md:max-lg:last:odd:col-span-2': items.length > 2 }"
         >
           <figure
-            class="flex w-full flex-col border-t-3 border-primary bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-7"
+            class="flex w-full flex-col rounded-box border-t-3 border-primary bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-7"
           >
             <div class="mb-4 flex items-center justify-between gap-3">
               <StarRating

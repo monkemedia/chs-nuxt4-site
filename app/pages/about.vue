@@ -66,7 +66,7 @@ const crumbs = computed(() => [
           loading="lazy"
           :img-attrs="{
             class:
-              'aspect-[444/250] w-full object-cover shadow-[0_10px_30px_rgba(15,22,26,0.12)]',
+              'aspect-[444/250] w-full rounded-box object-cover shadow-[0_10px_30px_rgba(15,22,26,0.12)]',
           }"
         />
       </UContainer>
@@ -102,7 +102,7 @@ const crumbs = computed(() => [
           <li
             v-for="value in page.values"
             :key="value.title"
-            class="border-t-3 border-primary bg-zinc-100 p-6 sm:p-7"
+            class="rounded-box border-t-3 border-primary bg-zinc-100 p-6 sm:p-7"
           >
             <UIcon :name="value.icon" class="size-9 text-primary" />
             <h3 class="heading-display mt-4 mb-2 text-lg">{{ value.title }}</h3>
@@ -125,9 +125,11 @@ const crumbs = computed(() => [
           <article
             v-for="way in page.ways"
             :key="way.title"
-            class="flex flex-col bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-8"
+            class="flex flex-col rounded-box bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-8"
           >
-            <span class="grid size-14 place-items-center bg-primary text-white">
+            <span
+              class="grid size-14 place-items-center rounded-box bg-primary text-white"
+            >
               <UIcon :name="way.icon" class="size-7" />
             </span>
             <h3 class="heading-display mt-5 mb-3 text-xl">{{ way.title }}</h3>
