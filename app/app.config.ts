@@ -2,8 +2,6 @@
 // Translatable details (location, service area, opening hours) live in app/content/<locale>/.
 // Placeholder values: replace before launch (see README). These must match the
 // Google Business Profile and directory listings exactly (name, address, phone).
-export type BrandVariant = "orange" | "red"
-
 export default defineAppConfig({
   ui: {
     colors: {
@@ -19,20 +17,6 @@ export default defineAppConfig({
           "uppercase text-xs font-extrabold tracking-wide text-highlighted",
       },
     },
-  },
-  // Brand colour A/B test (see AGENTS.md "Brand A/B test"). With `abTest` on, each visitor
-  // is randomly assigned a variant on first visit and keeps it (localStorage). `?brand=red`
-  // or `?brand=orange` forces one. Turn `abTest` off to show everyone `default`.
-  brand: {
-    abTest: true,
-    default: "orange" as BrandVariant,
-    variants: ["orange", "red"] as BrandVariant[],
-    // Images that differ per brand: default src -> variant src. <BrandPicture> swaps them.
-    images: {
-      "/images/chs-logo-white.png": { red: "/images/chs-logo-white-red.png" },
-      "/images/hero.jpg": { red: "/images/hero-red.jpg" },
-      "/images/service-van.png": { red: "/images/service-van-red.png" },
-    } as Record<string, Partial<Record<BrandVariant, string>>>,
   },
   // Features not live yet. Off = hidden everywhere, with replacement copy where needed.
   features: {

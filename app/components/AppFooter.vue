@@ -37,7 +37,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
       class="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-[1.3fr_1.2fr_0.8fr_1fr]"
     >
       <div class="sm:col-span-2 lg:col-span-1">
-        <BrandPicture
+        <NuxtPicture
           src="/images/chs-logo-white.png"
           alt="CHS Hydraulics"
           sizes="130px"

@@ -40,10 +40,6 @@ Add real Google reviews and customer testimonials (with permission) to `app/data
 
 The homepage hero also shows a compact Google rating line once `googleRating` reaches the minimum in `ratingBadgeThreshold` (10+ reviews at 4.5+ stars by default).
 
-## Brand A/B test
-
-Visitors are randomly shown the orange or red branding (colours, logo and brand photos) and keep it on return visits. Add `?brand=red` or `?brand=orange` to any URL to force a version (it's remembered). Settings live in `app/app.config.ts` → `brand`; set `abTest: false` to show everyone the default. In Plausible, add `brand` as a custom property and compare the `Phone Call` / `Enquiry Sent` goals per variant.
-
 ## Analytics
 
 [Plausible](https://plausible.io) (cookie-free, so no consent banner needed), wired up in `app/plugins/analytics.client.ts`. It only runs when the domain is set at build time:

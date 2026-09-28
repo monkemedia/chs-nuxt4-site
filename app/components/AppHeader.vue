@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
     }"
   >
     <template #title>
-      <BrandPicture
+      <NuxtPicture
         src="/images/chs-logo-white.png"
         alt="CHS Hydraulics"
         sizes="120px"

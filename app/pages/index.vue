@@ -18,7 +18,7 @@ const trustIcons = [
       class="relative isolate overflow-hidden bg-ink-950 text-white"
       aria-labelledby="hero-title"
     >
-      <BrandPicture
+      <NuxtPicture
         src="/images/hero.jpg"
         :alt="content.home.heroImageAlt"
         sizes="524px"
@@ -233,7 +233,7 @@ const trustIcons = [
       aria-labelledby="onsite-title"
     >
       <div class="self-stretch md:col-span-2 lg:col-span-1">
-        <BrandPicture
+        <NuxtPicture
           src="/images/service-van.png"
           :alt="content.home.vanAlt"
           sizes="444px"

@@ -8,7 +8,7 @@ defineProps<{ labelledby: string }>()
     :aria-labelledby="labelledby"
   >
     <!-- A real <img> (not a CSS background) so the browser finds and preloads the LCP image early. -->
-    <BrandPicture
+    <NuxtPicture
       src="/images/hero.jpg"
       alt=""
       sizes="524px"

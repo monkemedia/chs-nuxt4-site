@@ -5,7 +5,6 @@ import { init, track as plausibleTrack } from "@plausible-analytics/tracker"
 // previews don't pollute the stats. Exclude your own visits by running
 // `localStorage.plausible_ignore = 'true'` in the browser console on the live site.
 //
-// Every event also carries a `brand` property (orange/red) for the brand A/B test.
 // Custom events sent (add each as a goal in Plausible to see it on the dashboard):
 // - "Phone Call"   click on any tel: link          props: page
 // - "Email Click"  click on any mailto: link       props: page
@@ -22,11 +21,6 @@ export default defineNuxtPlugin(() => {
     init({
       domain,
       outboundLinks: true,
-      // Brand A/B variant on every event (set on <html> by the script in app.vue), so
-      // pageviews and goals can be compared per brand in Plausible.
-      customProperties: () => ({
-        brand: document.documentElement.dataset.brand ?? "orange",
-      }),
     })
 
     document.addEventListener("click", (event) => {
