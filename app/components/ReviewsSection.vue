@@ -46,7 +46,7 @@ const formatDate = (date: string) =>
           <p class="kicker mb-3 text-chs-700">{{ kicker }}</p>
           <h2
             id="reviews-title"
-            class="heading-display max-w-2xl text-[clamp(28px,3.6vw,40px)]"
+            class="heading-display max-w-2xl text-[clamp(28px,3.6vw,40px)] whitespace-pre-line"
           >
             {{ title }}
           </h2>

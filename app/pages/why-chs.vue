@@ -121,7 +121,7 @@ const crumbs = computed(() => [
         <p class="kicker mb-3 text-chs-700">{{ page.stepsKicker }}</p>
         <h2
           id="steps-title"
-          class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"
+          class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)] whitespace-pre-line"
         >
           {{ page.stepsTitle }}
         </h2>

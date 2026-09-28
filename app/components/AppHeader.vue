@@ -35,6 +35,7 @@ const otherLocaleTag = computed(() =>
 
 // Desktop nav indicator: one red bar that sits under the current page's link and glides to
 // whichever link is hovered or focused, returning when the pointer leaves the menu.
+const list = ref<HTMLUListElement>()
 const items = ref<HTMLLIElement[]>([])
 const hovered = ref<number | null>(null)
 const activeIndex = computed(() =>
@@ -56,9 +57,18 @@ function placeBar() {
 // label's width while the current item's index can stay the same).
 watch([target, links], () => nextTick(placeBar))
 
-// Re-measure whenever a link changes size: the nav appearing at the desktop breakpoint,
-// window resizes, text reflow.
+// Re-measure whenever the layout can move a link: the nav reappearing at the desktop
+// breakpoint, the gap widening at xl (moves links without resizing them, so the list itself
+// is observed too), window resizes and text reflow. Moves without any size change (the
+// centred nav shifting as the window resizes) are caught by the window listener.
 let resizeObserver: ResizeObserver | undefined
+function observe() {
+  resizeObserver?.disconnect()
+  if (list.value) resizeObserver?.observe(list.value)
+  items.value.forEach((el) => resizeObserver?.observe(el))
+}
+watch(items, observe, { flush: "post" })
+
 onMounted(() => {
   placeBar()
   measured.value = true
@@ -66,9 +76,13 @@ onMounted(() => {
     animate.value = true
   })
   resizeObserver = new ResizeObserver(placeBar)
-  items.value.forEach((el) => resizeObserver!.observe(el))
+  observe()
+  window.addEventListener("resize", placeBar)
 })
-onBeforeUnmount(() => resizeObserver?.disconnect())
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  window.removeEventListener("resize", placeBar)
+})
 </script>
 
 <template>
@@ -107,6 +121,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
 
     <nav :aria-label="content.common.primaryNav">
       <ul
+        ref="list"
         class="relative flex gap-5 xl:gap-8"
         @mouseleave="hovered = null"
         @focusout="hovered = null"

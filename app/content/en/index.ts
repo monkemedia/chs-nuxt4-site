@@ -290,7 +290,8 @@ export const en = {
     reasonsKicker: "Why choose CHS",
     reasonsTitle: "Four reasons customers come back",
     reviewsKicker: "Customer reviews",
-    reviewsTitle: "Don't just take our word for it",
+    // "\n" = line break in the heading.
+    reviewsTitle: "Don't just\ntake our word for it",
     promiseKicker: "Our promise",
     promiseTitle: "What you get every time",
     promiseText: "However big or small the job, this is how we work.",
@@ -303,7 +304,7 @@ export const en = {
       "Clear pricing with no surprises on the invoice",
     ],
     stepsKicker: "How it works",
-    stepsTitle: "From breakdown to back at work",
+    stepsTitle: "From breakdown\nto back at work",
     steps: [
       {
         icon: "i-lucide-phone-call",

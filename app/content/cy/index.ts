@@ -287,7 +287,7 @@ export const cy: Content = {
     reasonsKicker: "Pam dewis CHS",
     reasonsTitle: "Pedwar rheswm mae cwsmeriaid yn dod yn ôl",
     reviewsKicker: "Adolygiadau cwsmeriaid",
-    reviewsTitle: "Peidiwch â chymryd ein gair ni yn unig",
+    reviewsTitle: "Peidiwch â chymryd\nein gair ni yn unig",
     promiseKicker: "Ein haddewid",
     promiseTitle: "Beth gewch chi bob tro",
     promiseText:
@@ -301,7 +301,7 @@ export const cy: Content = {
       "Prisiau clir heb unrhyw syrpreis ar yr anfoneb",
     ],
     stepsKicker: "Sut mae'n gweithio",
-    stepsTitle: "O dorri i lawr i fod yn ôl yn gweithio",
+    stepsTitle: "O dorri i lawr\ni fod yn ôl yn gweithio",
     steps: [
       {
         icon: "i-lucide-phone-call",
