@@ -5,7 +5,11 @@ const localePath = useLocalePath()
 
 usePageSeo({ ...content.value.home.seo, path: "/" })
 
-const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
+const trustIcons = [
+  "i-lucide-award",
+  "i-lucide-timer",
+  "i-lucide-badge-pound-sterling",
+]
 </script>
 
 <template>
@@ -84,6 +88,7 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
                 {{ content.common.ourServices }}
               </UButton>
             </div>
+            <OpenStatus />
             <GoogleRatingBadge />
           </div>
 
@@ -190,6 +195,9 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
             {{ content.home.whyLink }}
           </UButton>
         </div>
+        <p class="mt-5 max-w-2xl text-base text-zinc-200 sm:text-lg">
+          {{ content.home.whyText }}
+        </p>
         <ul class="mt-12 grid gap-y-8 sm:grid-cols-2 sm:gap-y-9 lg:grid-cols-4">
           <li
             v-for="(item, i) in content.benefits"
@@ -210,6 +218,8 @@ const trustIcons = ["i-lucide-zap", "i-lucide-wrench", "i-lucide-shield-check"]
         </ul>
       </UContainer>
     </section>
+
+    <UptimePromise />
 
     <section
       id="onsite"

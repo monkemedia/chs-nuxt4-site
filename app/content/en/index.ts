@@ -7,8 +7,8 @@ import { services } from "./services"
 
 export const en = {
   locale: "en",
-  // BCP 47 tag for dates and numbers.
-  dateLocale: "en-GB",
+  // dayjs locale for dates and times.
+  dateLocale: "en-gb",
 
   common: {
     skipToContent: "Skip to main content",
@@ -66,7 +66,26 @@ export const en = {
     kicker: "Need hydraulic support?",
     // "\n" = line break in the heading.
     title: "Let's keep\nyour equipment moving.",
-    text: "Call CHS to discuss a repair, service or on-site visit.",
+    text: "Every hour a machine stands idle costs you money. Call now and we'll tell you straight away when we can be with you.",
+  },
+
+  // Live open/closed line next to call buttons (Europe/London time, from app.config openingHours).
+  openStatus: {
+    open: "Open now: call and speak to our team",
+    closed: (opens: string) =>
+      `Closed now, open ${opens}. Machine down? Call anyway.`,
+    today: (time: string) => `today at ${time}`,
+    tomorrow: (time: string) => `tomorrow at ${time}`,
+    on: (day: string, time: string) => `${day} at ${time}`,
+  },
+
+  // The Uptime Promise (shown only when app.config `offer.uptimePromise` is on).
+  uptimePromise: {
+    kicker: "The Uptime Promise",
+    title: "On-site within {hours} hours, or the call-out's free.",
+    text: "If we're not with you within {hours} hours of your call, you don't pay the call-out charge. Simple as that.",
+    terms:
+      "Applies to breakdown call-outs in our core area (Carmarthenshire and Llanelli) during opening hours. Time runs from when we confirm your call-out.",
   },
 
   reviews: {
@@ -95,15 +114,20 @@ export const en = {
     heroImageAlt: "Red hydraulic cylinder with polished ram and hoses",
     keyBenefits: "Key benefits",
     trust: [
-      ["Fast", "turnaround"],
-      ["On-site", "support"],
-      ["Quality", "you can trust"],
+      ["{years} years'", "experience"],
+      ["On-site within", "{hours} hours"],
+      ["Price agreed", "up front"],
     ] as [string, string][],
     servicesTitle: "Complete hydraulic solutions",
     servicesIntro:
       "From emergency hose replacements to full system repairs, we keep your equipment running with minimal downtime.",
     whyKicker: "Why choose CHS",
-    whyTitle: ["Minimum downtime.", "Maximum support."] as [string, string],
+    whyTitle: ["{years} years trusted.", "Fixed fast. Priced honestly."] as [
+      string,
+      string,
+    ],
+    whyText:
+      "Farmers and plant operators across South Wales have trusted us for {years} years. No hidden costs, no upselling: just fixed, fast and honest.",
     whyLink: "Why choose CHS",
     onsiteKicker: "On-site hydraulic service",
     onsiteTitle: "We come to you",
@@ -257,7 +281,7 @@ export const en = {
     seo: {
       title: "Why Choose CHS | Hydraulic Repairs Llanelli & Carmarthenshire",
       description:
-        "Fast response, an experienced team, quality components and a mobile service unit: why businesses across Llanelli and Carmarthenshire choose CHS for hydraulic repairs.",
+        "{years} years' experience, on-site within {hours} hours, prices agreed up front: why farms and plant operators across Llanelli and Carmarthenshire choose CHS.",
     },
     crumb: "Why CHS",
     title: ["Minimum downtime.", "Maximum support."] as [string, string],

@@ -11,6 +11,7 @@ Static marketing site for **CHS Hydraulics**, a hydraulic repair business in Cro
 - **Nuxt 4**, fully prerendered with `nuxt generate` (static output in `.output/public/`, no server at runtime).
 - **Nuxt UI 4** components and **Tailwind CSS v4**. No other UI or CSS framework.
 - **@nuxt/image** for AVIF/WebP images, **@nuxtjs/sitemap** for `sitemap.xml`.
+- **dayjs** for dates and times (`app/utils/date.ts`: auto-imported `dayjs` with UK time zone and English/Welsh locales; never use `Date`/`Intl` formatting directly).
 - **zod** for form validation, **Plausible** (`@plausible-analytics/tracker`) for analytics.
 - TypeScript 5.9 with `vue-tsc` (TypeScript 7 breaks `vue-tsc`; don't upgrade it).
 - `vue-router` 5 is a direct dependency to match Nuxt. Don't add a v4 copy.
@@ -101,6 +102,12 @@ public/
 - The language switcher uses `NuxtLink` + `useSwitchLocalePath()`. **Not `ULink`**, which re-localises the path and sends Welsh visitors back to `/cy/…`.
 - Contact enquiries always send the English urgency label plus a `language` field, so the business knows to reply in Welsh.
 - The Welsh is a drafted translation: have it checked by a fluent speaker (e.g. the Welsh Government's free Helo Blod service) before launch.
+
+### The offer (years, response time, Uptime Promise)
+
+- `app.config.ts` → `offer` holds the numbers the sales copy relies on: `yearsExperience`, `responseHours` and `uptimePromise`. Copy uses `{years}` / `{hours}` tokens, which `useContent()` fills in, so never type the numbers into copy.
+- `<UptimePromise>` ("on-site within {hours} hours or the call-out's free") renders only when `offer.uptimePromise` is true. It's off until CHS can reliably deliver it; a guarantee they can't keep breaches consumer law.
+- `<OpenStatus>` shows a live open/closed line (UK time, from `business.openingHours`) in the hero and CTA band. It renders client-side only because pages are prerendered.
 
 ### Brand A/B test (orange vs red)
 

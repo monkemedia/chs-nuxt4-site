@@ -70,6 +70,7 @@ const enquiryTo = computed(() => localePath(props.enquiryTo ?? "/contact"))
           {{ content.common.sendEnquiry }}
         </UButton>
       </div>
+      <OpenStatus />
     </UContainer>
   </section>
 </template>

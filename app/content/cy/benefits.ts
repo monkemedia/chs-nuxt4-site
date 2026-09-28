@@ -6,30 +6,32 @@ import type { Benefit } from "../types"
 export const benefits: Benefit[] = [
   {
     icon: "i-lucide-timer",
-    title: ["Ymateb", "cyflym"],
-    summary: "Yn ôl ar waith yn gyflym.",
+    title: ["Ar y safle o fewn", "{hours} awr"],
+    summary: "Rydyn ni'n anelu at fod gyda chi o fewn {hours} awr i'ch galwad.",
     detail:
-      "Rydyn ni'n gwybod bod peiriant sydd wedi stopio yn golled ariannol. Mae'r rhan fwyaf o bibellau hydrolig yn cael eu gwneud tra byddwch yn aros yn ein gweithdy yn Cross Hands, a gall ein huned symudol ddod allan pan fydd peiriant wedi torri i lawr fel nad oes rhaid i chi aros am gludiant.",
+      "Mae peiriant sydd wedi stopio yn costio arian i chi bob awr. Ledled Sir Gâr a Llanelli, mae ein huned symudol yn anelu at fod gyda chi o fewn {hours} awr i'ch galwad, fel nad ydych chi'n aros am ddyddiau nac yn talu i gludo'r peiriant i weithdy.",
   },
   {
-    icon: "i-lucide-users",
-    title: ["Tîm", "profiadol"],
-    summary: "Arbenigedd ymarferol ar draws sawl sector.",
+    icon: "i-lucide-award",
+    title: ["{years} mlynedd", "o brofiad"],
+    summary:
+      "Mae ffermwyr a gweithredwyr peiriannau ledled De Cymru yn ymddiried ynom ni.",
     detail:
-      "Mae ein tîm yn gweithio ar systemau hydrolig peiriannau adeiladu, fferm, masnachol a diwydiannol bob dydd. Mae'r ehangder hwnnw'n golygu ein bod yn adnabod namau'n gyflym ac yn gwybod beth sydd ei angen ar beiriant i'w gael yn ôl i weithio.",
+      "Ers {years} mlynedd, rydyn ni wedi cadw tractorau, peiriannau cloddio, dympwyr a pheiriannau ffatri i weithio ledled De Cymru. Rydyn ni wedi gweld y rhan fwyaf o namau o'r blaen, felly rydyn ni'n dod o hyd iddyn nhw'n gyflym ac yn eu trwsio y tro cyntaf.",
   },
   {
-    icon: "i-lucide-shield-check",
-    title: ["Cydrannau", "o ansawdd"],
-    summary: "Rydyn ni'n defnyddio rhannau a deunyddiau dibynadwy sy'n para.",
+    icon: "i-lucide-badge-pound-sterling",
+    title: ["Pris wedi'i gytuno", "ymlaen llaw"],
+    summary: "Dim costau cudd. Dim gwerthu diangen.",
     detail:
-      "Mae pibellau, ffitiadau a seliau'n cael eu dewis i gyd-fynd â'r gwaith a'r pwysedd gweithio, nid dim ond yr hyn sydd rataf. Y rhannau cywir y tro cyntaf yn golygu llai o fethiannau dro ar ôl tro.",
+      "Rydyn ni'n dweud wrthoch chi beth sydd o'i le, beth sydd ei angen a faint fydd y gost cyn i ni ddechrau. Rydych chi'n talu am y gwaith y cytunwyd arno, a dim byd na wnaethoch chi ofyn amdano.",
   },
   {
-    icon: "i-lucide-map-pin",
-    title: ["Ar y safle ledled", "De Cymru"],
-    summary: "Gwasanaeth symudol i'ch safle, eich gweithdy neu'ch fferm.",
+    icon: "i-lucide-wrench",
+    title: ["Pibellau tra", "byddwch yn aros"],
+    summary:
+      "Y rhan fwyaf o bibellau safonol wedi'u gwneud yn y fan a'r lle yn Cross Hands.",
     detail:
-      "Mae ein huned wasanaeth symudol, gyda'r holl offer angenrheidiol, yn dod â'r gweithdy atoch chi, boed hynny'n safle adeiladu, chwarel, cae neu'ch iard.",
+      "Dewch â'r hen bibell i'n gweithdy yn Cross Hands ac fe wnawn ni un newydd i gyd-fynd tra byddwch yn aros, ar gyfer y rhan fwyaf o feintiau safonol. Dim aros dyddiau am rannau.",
   },
 ]

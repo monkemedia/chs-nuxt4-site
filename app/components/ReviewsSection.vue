@@ -17,11 +17,7 @@ const { showSamples, allReviews, summary, readUrl, writeUrl } = useReviews()
 const items = allReviews.slice(0, props.limit)
 
 const formatDate = (date: string) =>
-  new Date(date).toLocaleDateString(content.value.dateLocale, {
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  })
+  dayjs.utc(date).locale(content.value.dateLocale).format("MMMM YYYY")
 </script>
 
 <template>

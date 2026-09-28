@@ -63,6 +63,8 @@ const crumbs = computed(() => [
       </UContainer>
     </section>
 
+    <UptimePromise />
+
     <ReviewsSection
       :kicker="page.reviewsKicker"
       :title="page.reviewsTitle"

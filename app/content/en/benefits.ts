@@ -1,35 +1,36 @@
 import type { Benefit } from "../types"
 
 // "Why choose CHS" points shown on the homepage band and the /why-chs page.
+// Specific, checkable claims rather than generic ones. {years} and {hours} come from app.config `offer`.
 // Check with the business before launch: only publish what CHS can stand behind.
 
 export const benefits: Benefit[] = [
   {
     icon: "i-lucide-timer",
-    title: ["Fast", "response"],
-    summary: "Get back up and running quickly.",
+    title: ["On-site within", "{hours} hours"],
+    summary: "We aim to be with you within {hours} hours of your call.",
     detail:
-      "We know a stopped machine is lost money. Most hydraulic hoses are made up while you wait at our Cross Hands workshop, and our mobile unit can come out to breakdowns so you're not waiting on transport.",
+      "A stopped machine costs you money every hour. Across Carmarthenshire and Llanelli our mobile unit aims to be with you within {hours} hours of your call, so you're not waiting days or paying for transport to a workshop.",
   },
   {
-    icon: "i-lucide-users",
-    title: ["Experienced", "team"],
-    summary: "Real-world expertise across multiple sectors.",
+    icon: "i-lucide-award",
+    title: ["{years} years'", "experience"],
+    summary: "Trusted by farmers and plant operators across South Wales.",
     detail:
-      "Our team works on plant, farm, commercial and industrial hydraulics every day. That breadth means we recognise faults quickly and know what a machine needs to get back to work.",
+      "For {years} years we've kept tractors, diggers, dumpers and factory machinery working across South Wales. We've seen most faults before, so we find them quickly and fix them first time.",
   },
   {
-    icon: "i-lucide-shield-check",
-    title: ["Quality", "components"],
-    summary: "We use trusted, durable parts and materials.",
+    icon: "i-lucide-badge-pound-sterling",
+    title: ["Price agreed", "up front"],
+    summary: "No hidden costs. No upselling.",
     detail:
-      "Hoses, fittings and seals are matched to the job and the working pressure, not just what's cheapest. The right parts first time means fewer repeat failures.",
+      "We tell you what's wrong, what it needs and what it'll cost before we start. You pay for the fix you agreed to, and nothing you didn't ask for.",
   },
   {
-    icon: "i-lucide-map-pin",
-    title: ["On-site across", "South Wales"],
-    summary: "Mobile service to your site, workshop or farm.",
+    icon: "i-lucide-wrench",
+    title: ["Hoses made", "while you wait"],
+    summary: "Most standard hoses made up on the spot at Cross Hands.",
     detail:
-      "Our fully equipped mobile service unit brings the workshop to you, whether that's a building site, a quarry, a field or your yard.",
+      "Bring the old hose to our Cross Hands workshop and we'll make up a matching replacement while you wait, for most standard sizes. No waiting days for parts.",
   },
 ]

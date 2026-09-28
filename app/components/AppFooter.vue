@@ -93,9 +93,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
 
     <UContainer>
       <USeparator :ui="{ border: 'border-white/10' }" />
-      <p class="py-6 text-xs">
-        © {{ new Date().getFullYear() }} {{ business.name }}.
-      </p>
+      <p class="py-6 text-xs">© {{ dayjs().year() }} {{ business.name }}.</p>
     </UContainer>
   </footer>
 </template>

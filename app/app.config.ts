@@ -34,6 +34,17 @@ export default defineAppConfig({
       "/images/service-van.png": { red: "/images/service-van-red.png" },
     } as Record<string, Partial<Record<BrandVariant, string>>>,
   },
+  // The offer. Copy in app/content/ uses {years} and {hours}, filled in by useContent().
+  // Only publish numbers CHS can stand behind (misleading claims breach CMA rules).
+  offer: {
+    // Experience claimed in copy; the LLP was incorporated in 2004, so confirm what the 35 covers.
+    yearsExperience: 35,
+    // Target time on-site after a breakdown call, across the core area.
+    responseHours: 4,
+    // The Uptime Promise ("on-site within {hours} hours or the call-out's free"). Phase 2: only
+    // switch on once a second mechanic and the mobile service can reliably deliver it.
+    uptimePromise: false,
+  },
   business: {
     name: "CHS Hydraulics",
     // Registered name at Companies House (OC308080); confirm it's still the legal entity.

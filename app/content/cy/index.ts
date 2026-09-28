@@ -10,7 +10,7 @@ import { services } from "./services"
 
 export const cy: Content = {
   locale: "cy",
-  dateLocale: "cy-GB",
+  dateLocale: "cy",
 
   common: {
     skipToContent: "Neidio i'r prif gynnwys",
@@ -67,7 +67,26 @@ export const cy: Content = {
   cta: {
     kicker: "Angen cymorth hydrolig?",
     title: "Gadewch i ni gadw'ch\noffer i symud.",
-    text: "Ffoniwch CHS i drafod gwaith atgyweirio, gwasanaeth neu ymweliad ar y safle.",
+    text: "Mae pob awr y mae peiriant yn segur yn costio arian i chi. Ffoniwch nawr ac fe ddywedwn ni wrthoch chi'n syth pryd gallwn ni fod gyda chi.",
+  },
+
+  openStatus: {
+    open: "Ar agor nawr: ffoniwch i siarad â'n tîm",
+    closed: (opens: string) =>
+      `Ar gau nawr, yn agor ${opens}. Peiriant wedi torri? Ffoniwch beth bynnag.`,
+    today: (time: string) => `heddiw am ${time}`,
+    tomorrow: (time: string) => `yfory am ${time}`,
+    // dayjs gives "Dydd Llun"; lower-case "dydd" mid-sentence.
+    on: (day: string, time: string) =>
+      `${day.charAt(0).toLowerCase()}${day.slice(1)} am ${time}`,
+  },
+
+  uptimePromise: {
+    kicker: "Yr Addewid Amser Gweithio",
+    title: "Ar y safle o fewn {hours} awr, neu mae'r alwad allan am ddim.",
+    text: "Os nad ydyn ni gyda chi o fewn {hours} awr i'ch galwad, fyddwch chi ddim yn talu'r tâl galw allan. Mor syml â hynny.",
+    terms:
+      "Yn berthnasol i alwadau allan pan fydd peiriant wedi torri yn ein hardal graidd (Sir Gâr a Llanelli) yn ystod oriau agor. Mae'r amser yn dechrau pan fyddwn ni'n cadarnhau eich galwad allan.",
   },
 
   reviews: {
@@ -96,15 +115,20 @@ export const cy: Content = {
     heroImageAlt: "Silindr hydrolig coch gyda ram gloyw a phibellau",
     keyBenefits: "Manteision allweddol",
     trust: [
-      ["Gwaith", "cyflym"],
-      ["Cymorth", "ar y safle"],
-      ["Ansawdd", "dibynadwy"],
+      ["{years} mlynedd", "o brofiad"],
+      ["Ar y safle o fewn", "{hours} awr"],
+      ["Pris wedi'i gytuno", "ymlaen llaw"],
     ],
     servicesTitle: "Datrysiadau hydrolig cyflawn",
     servicesIntro:
       "O newid pibell ar frys i atgyweirio system gyfan, rydyn ni'n cadw'ch offer i weithio gyda chyn lleied o amser segur â phosib.",
     whyKicker: "Pam dewis CHS",
-    whyTitle: ["Llai o amser segur.", "Mwy o gefnogaeth."],
+    whyTitle: [
+      "{years} mlynedd o ymddiriedaeth.",
+      "Trwsio cyflym. Prisiau gonest.",
+    ],
+    whyText:
+      "Mae ffermwyr a gweithredwyr peiriannau ledled De Cymru wedi ymddiried ynom ers {years} mlynedd. Dim costau cudd, dim gwerthu diangen: dim ond gwaith cyflym a gonest.",
     whyLink: "Pam dewis CHS",
     onsiteKicker: "Gwasanaeth hydrolig ar y safle",
     onsiteTitle: "Rydyn ni'n dod atoch chi",
@@ -254,7 +278,7 @@ export const cy: Content = {
     seo: {
       title: "Pam Dewis CHS | Atgyweirio Hydrolig Llanelli a Sir Gâr",
       description:
-        "Ymateb cyflym, tîm profiadol, cydrannau o ansawdd ac uned wasanaeth symudol: pam mae busnesau ar draws Llanelli a Sir Gâr yn dewis CHS ar gyfer atgyweirio hydrolig.",
+        "{years} mlynedd o brofiad, ar y safle o fewn {hours} awr, prisiau wedi'u cytuno ymlaen llaw: pam mae ffermydd a gweithredwyr peiriannau Llanelli a Sir Gâr yn dewis CHS.",
     },
     crumb: "Pam CHS",
     title: ["Llai o amser segur.", "Mwy o gefnogaeth."],
