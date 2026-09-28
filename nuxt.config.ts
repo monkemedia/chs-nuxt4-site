@@ -20,7 +20,13 @@ export default defineNuxtConfig({
         { name: "theme-color", content: "#0d1012" },
         { name: "color-scheme", content: "light" },
       ],
-      link: [{ rel: "icon", href: "/favicon.png.svg", type: "image/svg+xml" }],
+      // Icons in public/ are generated from favicon.svg (see AGENTS.md "Favicon").
+      link: [
+        { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
+        { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        { rel: "manifest", href: "/site.webmanifest" },
+      ],
     },
   },
   i18n: {
