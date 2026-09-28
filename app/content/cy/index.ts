@@ -128,7 +128,7 @@ export const cy: Content = {
       "Trwsio cyflym. Prisiau gonest.",
     ],
     whyText:
-      "Mae ffermwyr a gweithredwyr peiriannau ledled De Cymru wedi ymddiried ynom ers {years} mlynedd. Dim costau cudd, dim gwerthu diangen: dim ond gwaith cyflym a gonest.",
+      "Wedi'i sefydlu gan {founder1} a {founder2}, ac mae ffermwyr a gweithredwyr peiriannau ledled De Cymru wedi ymddiried ynom ers {years} mlynedd. Dim costau cudd, dim gwerthu diangen: dim ond gwaith cyflym a gonest.",
     whyLink: "Pam dewis CHS",
     onsiteKicker: "Gwasanaeth hydrolig ar y safle",
     onsiteTitle: "Rydyn ni'n dod atoch chi",
@@ -199,9 +199,70 @@ export const cy: Content = {
       "Mae gennym weithdy yn Cross Hands ac uned wasanaeth symudol gyda'r holl offer angenrheidiol, felly gallwn weithio lle bynnag sydd orau i chi a'ch peiriant.",
     ],
     vanAlt: "Fan wasanaeth symudol CHS Hydraulics",
+    storyKicker: "Ein stori",
+    storyTitle: "Wedi'i sefydlu gan {founder1} a {founder2}",
+    story: [
+      "[Sut dechreuodd CHS: pryd a ble sefydlodd {founder1} a {founder2} y busnes, a pham. Er enghraifft, beth roedden nhw'n ei wneud cyn hynny a'r angen a welson nhw am waith atgyweirio hydrolig iawn yn Sir Gâr.]",
+      "[Beth maen nhw wedi'i adeiladu dros y blynyddoedd: y cwsmeriaid, y peiriannau a'r enw da y tu ôl i'r {years} mlynedd, a beth sy'n gwneud CHS yn wahanol.]",
+      "[Ble mae'r busnes nawr: pwy sy'n ei redeg heddiw a sut mae safonau'r sylfaenwyr yn parhau.]",
+    ],
+    foundersCaption: "{founder1} a {founder2}",
+    foundersRole: "Sylfaenwyr, CHS Hydraulics",
+    foundersPhotoAlt: "{founder1} a {founder2}, sylfaenwyr CHS Hydraulics",
+    foundersPhotoPlaceholder: "[Llun o'r sylfaenwyr]",
+    foundersQuote:
+      "[Dyfyniad byr gan y sylfaenwyr am sut maen nhw wedi gweithio erioed, e.e. ei drwsio'n iawn, y tro cyntaf.]",
+    timelineKicker: "Ein hanes",
+    timelineTitle: "Sut gyrhaeddon ni yma",
+    timelineText:
+      "O waith cyntaf y sylfaenwyr i enw newydd, y cerrig milltir y tu ôl i {years} mlynedd o gadw De Cymru i weithio.",
+    timeline: [
+      {
+        date: "[Blwyddyn]",
+        title: "[Ble dechreuodd y sylfaenwyr]",
+        description:
+          "[Cefndir y sylfaenwyr cyn CHS: y profiad y mae'r {years} mlynedd yn seiliedig arno.]",
+        icon: "i-lucide-hard-hat",
+      },
+      {
+        date: "{founded}",
+        title: "Sefydlu Crosshands Hydraulic Services",
+        description:
+          "[Sefydlodd {founder1} a {founder2} y busnes yn Cross Hands: beth oedd ganddyn nhw ar y dechrau a phwy oedd eu cwsmeriaid cyntaf.]",
+        icon: "i-lucide-flag",
+      },
+      {
+        date: "[Blwyddyn]",
+        title: "[Carreg filltir, e.e. gweithdy neu offer newydd]",
+        description:
+          "[Beth newidiodd a beth oedd hynny'n ei olygu i gwsmeriaid.]",
+        icon: "i-lucide-warehouse",
+      },
+      {
+        date: "[Blwyddyn]",
+        title: "[Carreg filltir, e.e. contract mawr neu aelod newydd o'r tîm]",
+        description: "[Brawddeg amdani.]",
+        icon: "i-lucide-handshake",
+      },
+      {
+        date: "2026",
+        title: "Ailfrandio fel CHS Hydraulics",
+        description: "Yr un busnes a'r un safonau, gydag enw a golwg newydd.",
+        icon: "i-lucide-sparkles",
+      },
+      {
+        date: "[Blwyddyn]",
+        title: "Lansio'r gwasanaeth ar y safle",
+        description:
+          "Mae ein huned symudol, gyda'r holl offer angenrheidiol, yn dod â'r gweithdy i'ch safle, eich fferm neu'ch iard.",
+        icon: "i-lucide-truck",
+        upcoming: true,
+        onsite: true,
+      },
+    ],
     factsLabel: "CHS yn gryno",
     facts: [
-      { value: "2004", label: "Sefydlwyd" },
+      { value: "{founded}", label: "Sefydlwyd" },
       { value: "Cross Hands", label: "Gweithdy" },
       { value: "Symudol", label: "Uned wasanaeth ar y safle" },
       { value: "De Cymru", label: "Ein hardal" },

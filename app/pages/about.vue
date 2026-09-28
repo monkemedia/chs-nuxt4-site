@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { business, features } = useAppConfig()
 const content = useContent()
 const localePath = useLocalePath()
 const page = computed(() => content.value.about)
@@ -8,6 +9,28 @@ useBreadcrumbs([
   { name: content.value.common.home, path: "/" },
   { name: page.value.crumb, path: "/about" },
 ])
+
+// [Bracketed] founder names and timeline entries are placeholders: flag them in the build
+// output so they don't reach launch unnoticed.
+if (import.meta.server) {
+  if (business.founders.some((founder) => founder.name.startsWith("[")))
+    console.warn(
+      "[about] Founder names are still placeholders: set business.founders in app.config.ts and the story in app/content/<locale>/index.ts.",
+    )
+  if (page.value.timeline.some((item) => /\[/.test(item.date + item.title)))
+    console.warn(
+      "[about] Timeline has placeholder milestones: edit about.timeline in app/content/<locale>/index.ts.",
+    )
+}
+
+// On-site milestones only while on-site work is live. Past milestones are highlighted up to
+// the last one that isn't `upcoming`.
+const timeline = computed(() =>
+  page.value.timeline.filter((item) => features.onsite || !item.onsite),
+)
+const timelineCurrent = computed(() =>
+  timeline.value.findLastIndex((item) => !item.upcoming),
+)
 
 const crumbs = computed(() => [
   { label: content.value.common.home, to: localePath("/") },
@@ -72,15 +95,105 @@ const crumbs = computed(() => [
       </UContainer>
     </section>
 
-    <section class="bg-ink-900 text-white" :aria-label="page.factsLabel">
+    <section
+      class="bg-ink-900 py-16 text-white sm:py-20"
+      aria-labelledby="story-title"
+    >
+      <UContainer
+        class="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-16"
+      >
+        <div>
+          <p class="kicker mb-3 text-chs-400">{{ page.storyKicker }}</p>
+          <h2
+            id="story-title"
+            class="heading-display mb-6 text-[clamp(28px,3.6vw,40px)]"
+          >
+            {{ page.storyTitle }}
+          </h2>
+          <div class="space-y-4 text-zinc-300">
+            <p v-for="(paragraph, i) in page.story" :key="i">
+              {{ paragraph }}
+            </p>
+          </div>
+        </div>
+        <figure class="self-start">
+          <NuxtPicture
+            v-if="business.foundersPhoto"
+            :src="business.foundersPhoto"
+            :alt="page.foundersPhotoAlt"
+            sizes="560px"
+            width="560"
+            height="420"
+            densities="x1 x2"
+            format="avif,webp"
+            loading="lazy"
+            :img-attrs="{
+              class: 'aspect-4/3 w-full rounded-box object-cover',
+            }"
+          />
+          <div
+            v-else
+            class="grid aspect-4/3 w-full place-items-center rounded-box border-2 border-dashed border-white/20 bg-ink-800 text-zinc-400"
+          >
+            <span class="flex flex-col items-center gap-3 text-sm">
+              <UIcon name="i-lucide-users" class="size-12" />
+              {{ page.foundersPhotoPlaceholder }}
+            </span>
+          </div>
+          <figcaption class="mt-5 border-l-3 border-primary pl-5">
+            <blockquote
+              class="heading-display text-lg leading-snug text-white normal-case sm:text-xl"
+            >
+              &ldquo;{{ page.foundersQuote }}&rdquo;
+            </blockquote>
+            <p class="mt-3 font-bold text-white">{{ page.foundersCaption }}</p>
+            <p class="kicker text-[11px] text-chs-400">
+              {{ page.foundersRole }}
+            </p>
+          </figcaption>
+        </figure>
+      </UContainer>
+    </section>
+
+    <section class="py-16 sm:py-20" aria-labelledby="timeline-title">
+      <UContainer
+        class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-16"
+      >
+        <div
+          class="lg:sticky lg:top-[calc(var(--ui-header-height)+2rem)] lg:self-start"
+        >
+          <p class="kicker mb-3 text-chs-700">{{ page.timelineKicker }}</p>
+          <h2
+            id="timeline-title"
+            class="heading-display mb-4 text-[clamp(28px,3.6vw,40px)]"
+          >
+            {{ page.timelineTitle }}
+          </h2>
+          <p class="text-zinc-600">{{ page.timelineText }}</p>
+        </div>
+        <UTimeline
+          :items="timeline"
+          :default-value="timelineCurrent"
+          size="lg"
+          :ui="{
+            date: 'kicker text-[11px] text-chs-700',
+            title: 'heading-display mt-1 text-lg text-ink-950',
+            description: 'mt-1 text-[15px] text-zinc-600',
+            wrapper: 'pb-9',
+          }"
+        />
+      </UContainer>
+    </section>
+
+    <section class="bg-primary text-white" :aria-label="page.factsLabel">
       <UContainer>
-        <dl class="grid grid-cols-2 divide-white/15 lg:grid-cols-4 lg:divide-x">
+        <dl class="grid grid-cols-2 divide-white/30 lg:grid-cols-4 lg:divide-x">
           <div
             v-for="fact in page.facts"
             :key="fact.label"
             class="px-2 py-8 lg:px-8 lg:first:pl-0"
           >
-            <dt class="kicker text-[11px] text-chs-400">{{ fact.label }}</dt>
+            <dt class="kicker text-[11px] text-white">{{ fact.label }}</dt>
             <dd class="heading-display mt-2 text-2xl sm:text-3xl">
               {{ fact.value }}
             </dd>

@@ -127,7 +127,7 @@ export const en = {
       string,
     ],
     whyText:
-      "Farmers and plant operators across South Wales have trusted us for {years} years. No hidden costs, no upselling: just fixed, fast and honest.",
+      "Founded by {founder1} and {founder2}, and trusted by farmers and plant operators across South Wales for {years} years. No hidden costs, no upselling: just fixed, fast and honest.",
     whyLink: "Why choose CHS",
     onsiteKicker: "On-site hydraulic service",
     onsiteTitle: "We come to you",
@@ -201,10 +201,75 @@ export const en = {
       "We run a workshop at Cross Hands and a fully equipped mobile service unit, so we can work wherever makes most sense for you and your machine.",
     ],
     vanAlt: "CHS Hydraulics mobile service van",
+    // PLACEHOLDER story: replace the [bracketed] prompts with the real history (and cy/index.ts).
+    storyKicker: "Our story",
+    storyTitle: "Founded by {founder1} and {founder2}",
+    story: [
+      "[How CHS started: when and where {founder1} and {founder2} set up, and why. For example, what they did before and the need they saw for proper hydraulic repairs in Carmarthenshire.]",
+      "[What they built over the years: the customers, machines and reputation behind the {years} years, and what makes CHS different.]",
+      "[Where the business is now: who runs it today and how the founders' standards carry on.]",
+    ],
+    foundersCaption: "{founder1} & {founder2}",
+    foundersRole: "Founders, CHS Hydraulics",
+    foundersPhotoAlt: "{founder1} and {founder2}, founders of CHS Hydraulics",
+    foundersPhotoPlaceholder: "[Photo of the founders]",
+    foundersQuote:
+      "[A short quote from the founders about how they've always worked, e.g. fix it properly, first time.]",
+    // PLACEHOLDER milestones: replace [bracketed] entries with real ones (and cy/index.ts); add
+    // or remove entries freely. `upcoming` entries show greyed out as "next"; `onsite` entries
+    // only show when app.config `features.onsite` is on.
+    timelineKicker: "Our history",
+    timelineTitle: "How we got here",
+    timelineText:
+      "From the founders' first jobs to a new name, the milestones behind {years} years of keeping South Wales working.",
+    timeline: [
+      {
+        date: "[Year]",
+        title: "[Where the founders started]",
+        description:
+          "[The founders' background before CHS: the experience the {years} years builds on.]",
+        icon: "i-lucide-hard-hat",
+      },
+      {
+        date: "{founded}",
+        title: "Crosshands Hydraulic Services founded",
+        description:
+          "[{founder1} and {founder2} set up in Cross Hands: what they started with and who their first customers were.]",
+        icon: "i-lucide-flag",
+      },
+      {
+        date: "[Year]",
+        title: "[Milestone, e.g. a new workshop or equipment]",
+        description: "[What changed and what it meant for customers.]",
+        icon: "i-lucide-warehouse",
+      },
+      {
+        date: "[Year]",
+        title: "[Milestone, e.g. a major contract or new team member]",
+        description: "[A sentence about it.]",
+        icon: "i-lucide-handshake",
+      },
+      {
+        date: "2026",
+        title: "Rebranded as CHS Hydraulics",
+        description:
+          "The same business and the same standards, with a new name and a new look.",
+        icon: "i-lucide-sparkles",
+      },
+      {
+        date: "[Year]",
+        title: "On-site service launches",
+        description:
+          "Our fully equipped mobile unit brings the workshop to your site, farm or yard.",
+        icon: "i-lucide-truck",
+        upcoming: true,
+        onsite: true,
+      },
+    ],
     factsLabel: "CHS at a glance",
     // "2004" is the Companies House incorporation date for Crosshands Hydraulic Services LLP; confirm with the business.
     facts: [
-      { value: "2004", label: "Established" },
+      { value: "{founded}", label: "Established" },
       { value: "Cross Hands", label: "Workshop base" },
       { value: "Mobile", label: "On-site service unit" },
       { value: "South Wales", label: "Area we cover" },

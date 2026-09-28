@@ -40,6 +40,16 @@ export default defineAppConfig({
     name: "CHS Hydraulics",
     // Registered name at Companies House (OC308080); confirm it's still the legal entity.
     legalName: "Crosshands Hydraulic Services LLP",
+    // Founding directors, named in the About page story and the homepage "why" band (copy uses
+    // {founder1} and {founder2}). PLACEHOLDERS: names in [brackets] show on the site but are
+    // kept out of structured data, and `npm run generate` warns until they're replaced.
+    // Get their permission before publishing names or photos.
+    founders: [{ name: "[Founder 1]" }, { name: "[Founder 2]" }],
+    // Photo of the founders together for the About story (a /images/ path, ideally 4:3), or ""
+    // for a placeholder panel.
+    foundersPhoto: "",
+    // Companies House incorporation year of the LLP; confirm with the business.
+    foundingYear: "2004",
     // Former trading name: kept in structured data so Google links old listings to the new brand.
     formerName: "Crosshands Hydraulic Services",
     phoneDisplay: "01269 123 456",

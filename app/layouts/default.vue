@@ -3,6 +3,10 @@ const { business } = useAppConfig()
 const { url: siteUrl } = useSiteConfig()
 const { address } = business
 const content = useContent()
+// Placeholder founder names ([bracketed]) stay out of structured data.
+const founders = business.founders.filter(
+  (founder) => !founder.name.startsWith("["),
+)
 
 // <html lang>, canonical, hreflang alternates and og:locale for the current language.
 const localeHead = useLocaleHead({ seo: true })
@@ -41,6 +45,15 @@ useJsonLd("business", {
   openingHours: business.openingHours,
   knowsAbout: content.value.services.map((s) => s.h1),
   knowsLanguage: ["en-GB", "cy-GB"],
+  foundingDate: business.foundingYear,
+  ...(founders.length
+    ? {
+        founder: founders.map((founder) => ({
+          "@type": "Person",
+          name: founder.name,
+        })),
+      }
+    : {}),
   ...(business.sameAs.length ? { sameAs: business.sameAs } : {}),
 })
 </script>
