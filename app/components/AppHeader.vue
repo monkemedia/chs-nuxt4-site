@@ -57,6 +57,53 @@ function placeBar() {
 // label's width while the current item's index can stay the same).
 watch([target, links], () => nextTick(placeBar))
 
+// Hide the header while scrolling down (more room for content) and bring it back as soon as
+// the visitor scrolls up. It always shows near the top, while the mobile menu is open, when
+// something in it has keyboard focus, and after navigating. <html data-header-hidden> lets
+// sticky elements below it move up (--header-offset in main.css).
+const menuOpen = ref(false)
+const headerHidden = ref(false)
+// Past the top of the page the desktop header is compact: shorter, smaller logo, one-line
+// call button (<html data-header-compact> shortens --ui-header-height).
+const headerCompact = ref(false)
+let lastScrollY = 0
+let scrollFrame = 0
+// Resizing the header moves the page, and the browser corrects the scroll position to match
+// (scroll anchoring). Ignore scroll direction until that settles, or it reads as scrolling up.
+let resizingUntil = 0
+
+function updateHeader() {
+  scrollFrame = 0
+  const y = window.scrollY
+  const settling = performance.now() < resizingUntil
+  const delta = y - lastScrollY
+
+  if (y <= 160) headerHidden.value = false
+  // Ignore tiny movements (trackpad jitter, iOS bounce) and the resize correction.
+  else if (!settling && Math.abs(delta) >= 10)
+    headerHidden.value = delta > 0 && !menuOpen.value
+  if (settling || Math.abs(delta) >= 10) lastScrollY = y
+
+  const compact = y > 160
+  if (compact !== headerCompact.value) {
+    headerCompact.value = compact
+    resizingUntil = performance.now() + 400
+  }
+}
+function onScroll() {
+  if (!scrollFrame) scrollFrame = requestAnimationFrame(updateHeader)
+}
+
+watch(headerHidden, (hidden) => {
+  document.documentElement.toggleAttribute("data-header-hidden", hidden)
+})
+watch(headerCompact, (compact) => {
+  document.documentElement.toggleAttribute("data-header-compact", compact)
+})
+watch([menuOpen, () => route.fullPath], () => {
+  headerHidden.value = false
+})
+
 // Re-measure whenever the layout can move a link: the nav reappearing at the desktop
 // breakpoint, the gap widening at xl (moves links without resizing them, so the list itself
 // is observed too), window resizes and text reflow. Moves without any size change (the
@@ -78,16 +125,26 @@ onMounted(() => {
   resizeObserver = new ResizeObserver(placeBar)
   observe()
   window.addEventListener("resize", placeBar)
+  lastScrollY = window.scrollY
+  headerCompact.value = lastScrollY > 160
+  window.addEventListener("scroll", onScroll, { passive: true })
 })
 onBeforeUnmount(() => {
   resizeObserver?.disconnect()
   window.removeEventListener("resize", placeBar)
+  window.removeEventListener("scroll", onScroll)
+  cancelAnimationFrame(scrollFrame)
+  document.documentElement.removeAttribute("data-header-hidden")
+  document.documentElement.removeAttribute("data-header-compact")
 })
 </script>
 
 <template>
   <UHeader
+    v-model:open="menuOpen"
     :to="localePath('/')"
+    :class="headerHidden && '-translate-y-full'"
+    @focusin="headerHidden = false"
     mode="slideover"
     toggle-side="right"
     :toggle="{
@@ -98,7 +155,7 @@ onBeforeUnmount(() => {
     }"
     :menu="{ side: 'right' }"
     :ui="{
-      root: 'bg-ink-950 border-b-0 backdrop-blur-none',
+      root: 'bg-ink-950 border-b-0 backdrop-blur-none transition-[translate,height] duration-300 ease-out motion-reduce:transition-none',
       left: 'lg:flex-none',
       center: 'lg:flex-1 justify-center',
       right: 'lg:flex-none',
@@ -115,7 +172,12 @@ onBeforeUnmount(() => {
         width="120"
         densities="x1 x2"
         format="avif,webp"
-        :img-attrs="{ class: 'h-auto w-[80px] sm:w-[100px] lg:w-[120px]' }"
+        :img-attrs="{
+          class: [
+            'h-auto w-[80px] transition-[width] duration-300 motion-reduce:transition-none sm:w-[100px]',
+            headerCompact ? 'lg:w-[90px]' : 'lg:w-[120px]',
+          ],
+        }"
       />
     </template>
 
@@ -177,12 +239,15 @@ onBeforeUnmount(() => {
         icon="i-lucide-phone"
         size="xl"
         :aria-label="content.common.callChs"
-        class="h-10 lg:h-14 px-2 sm:px-5"
+        class="h-10 px-2 sm:px-5"
+        :class="headerCompact ? 'lg:h-11' : 'lg:h-14'"
       >
         <span class="hidden flex-col text-left leading-tight sm:flex">
-          <span class="text-[13px] tracking-[2px] lg:text-[17px]">{{
-            content.common.callNow
-          }}</span>
+          <span
+            class="text-[13px] tracking-[2px] lg:text-[17px]"
+            :class="headerCompact && 'lg:hidden'"
+            >{{ content.common.callNow }}</span
+          >
           <span class="text-xs tracking-[1.5px] lg:text-sm">{{
             business.phoneDisplay
           }}</span>

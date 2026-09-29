@@ -134,6 +134,7 @@ public/
 - `ULink` highlights links that match the current route. Use `raw` for links outside the header nav so they don't turn red.
 - Outline `UButton` has a white background by default; add `bg-transparent` on dark or grey backgrounds.
 - `UHeader` handles the mobile slide-over menu and closes it on navigation.
+- The header hides while scrolling down and returns on scroll up (`AppHeader.vue`), and on desktop turns compact (64px, smaller logo, one-line call button) once 160px down the page via `<html data-header-compact>`, which shortens `--ui-header-height`. Resizing shifts the page and the browser corrects the scroll position, so scroll direction is ignored for 400ms after a resize; it always shows near the top, with the menu open, on keyboard focus and after navigating. **Sticky elements below it use `top-(--header-offset)`, not `--ui-header-height`**: the offset drops to 0 while the header is hidden (`<html data-header-hidden>`), so they move up with it. `scroll-margin` still uses the full header height.
 
 ### Images
 

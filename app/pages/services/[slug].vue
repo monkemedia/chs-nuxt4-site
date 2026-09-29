@@ -168,7 +168,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
         </article>
 
         <aside
-          class="grid gap-5 sm:grid-cols-2 lg:sticky lg:top-[calc(var(--ui-header-height)+1.5rem)] lg:grid-cols-1"
+          class="grid gap-5 sm:grid-cols-2 lg:sticky lg:top-[calc(var(--header-offset)+1.5rem)] lg:transition-[top] lg:duration-300 lg:grid-cols-1"
           :aria-label="page.getHelp"
         >
           <div

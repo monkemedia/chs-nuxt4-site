@@ -165,7 +165,7 @@ const crumbs = computed(() => [
         class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-16"
       >
         <div
-          class="lg:sticky lg:top-[calc(var(--ui-header-height)+2rem)] lg:self-start"
+          class="lg:sticky lg:top-[calc(var(--header-offset)+2rem)] lg:transition-[top] lg:duration-300 lg:self-start"
         >
           <p class="kicker mb-3 text-chs-700">{{ page.timelineKicker }}</p>
           <h2

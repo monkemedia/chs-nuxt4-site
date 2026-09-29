@@ -39,7 +39,7 @@ const sectorServices = (slugs: string[]) =>
     </PageHero>
 
     <nav
-      class="sticky top-(--ui-header-height) z-40 border-b border-zinc-200 bg-white/95 backdrop-blur-sm"
+      class="sticky top-(--header-offset) z-40 transition-[top] duration-300 ease-out motion-reduce:transition-none border-b border-zinc-200 bg-white/95 backdrop-blur-sm"
       :aria-label="page.navLabel"
     >
       <UContainer>

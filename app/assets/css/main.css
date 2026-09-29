@@ -35,6 +35,9 @@
   --ui-radius: 0.1rem;
   --ui-container: 78rem;
   --ui-header-height: 4.25rem;
+  /* How much of the top is covered by the header: 0 while it's hidden on scroll down
+     (<html data-header-hidden>, set by AppHeader). Use for sticky elements below it. */
+  --header-offset: var(--ui-header-height);
   /* Near-black body/heading text instead of Nuxt UI's default neutral-700. */
   --ui-text: #1a1f22;
   --ui-text-highlighted: var(--color-ink-950);
@@ -42,9 +45,21 @@
   --ui-text-dimmed: var(--ui-color-neutral-500);
 }
 
+:root[data-header-hidden] {
+  --header-offset: 0px;
+}
+
 @media (min-width: 64rem) {
   :root {
     --ui-header-height: 5.75rem;
+  }
+}
+
+/* Compact desktop header once scrolled down the page (<html data-header-compact>, set by
+   AppHeader). Everything sized from --ui-header-height follows. */
+@media (min-width: 64rem) {
+  :root[data-header-compact] {
+    --ui-header-height: 4rem;
   }
 }
 
