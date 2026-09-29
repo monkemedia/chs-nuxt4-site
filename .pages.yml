@@ -1,0 +1,134 @@
+# Pages CMS (https://pagescms.org): lets CHS staff add and edit Recent work in the browser.
+# Each job is saved as app/data/jobs/<slug>.json and committed to GitHub; the host then
+# rebuilds the site. Validation lives in app/data/jobs-schema.ts; keep the two in step.
+media:
+  input: public/images/jobs
+  output: /images/jobs
+  extensions: [jpg, jpeg, png, webp]
+
+content:
+  - name: jobs
+    label: Recent work
+    type: collection
+    path: app/data/jobs
+    format: json
+    filename: "{fields.slug}.json"
+    view:
+      fields: [en.title, date, published]
+      primary: en.title
+      sort: [date]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: published
+        label: Published
+        type: boolean
+        default: false
+        description: Tick when the job is ready. It only appears on the site once the Welsh below is filled in too.
+      - name: slug
+        label: Web address
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9]+(-[a-z0-9]+)*$"
+          message: Lower-case letters, numbers and hyphens only, e.g. jcb-3cx-boom-ram-rebuild
+        description: Becomes chshydraulics.co.uk/work/<this>. Never change it after publishing.
+      - name: date
+        label: Date finished
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: service
+        label: Service
+        type: select
+        required: true
+        options:
+          values:
+            - { value: hydraulic-hoses, label: Hydraulic Hoses }
+            - { value: ram-repairs, label: Ram Repairs }
+            - { value: hydraulic-system-repairs, label: System Repairs }
+            - { value: on-site-hydraulic-service, label: On-site Service }
+      - name: image
+        label: Photo
+        type: image
+        required: true
+        description: Your own photo of this job, landscape, at least 800 × 500. No stock photos.
+      - name: en
+        label: English
+        type: object
+        fields:
+          - name: title
+            label: Title
+            type: string
+            required: true
+            description: What was done, to what, e.g. "Boom ram rebuilt for a JCB 3CX". Aim for under 45 characters.
+          - name: summary
+            label: Summary
+            type: text
+            required: true
+            description: One or two sentences for the card and Google (under 160 characters).
+          - name: machine
+            label: Machine
+            type: string
+            required: true
+          - name: location
+            label: Location
+            type: string
+            required: true
+            description: Town or area only. Name the customer only with their permission.
+          - name: problem
+            label: The problem
+            type: text
+            required: true
+          - name: work
+            label: What we did
+            type: string
+            list: true
+            required: true
+            description: One step per line.
+          - name: result
+            label: The result
+            type: text
+            required: true
+          - name: imageAlt
+            label: Photo description
+            type: string
+            required: true
+            description: What the photo shows, for people who can't see it.
+      - name: cy
+        label: Welsh (Cymraeg)
+        type: object
+        description: Filled in by the translator. The job stays hidden until this is complete.
+        fields:
+          - name: title
+            label: Title
+            type: string
+            description: What was done, to what, e.g. "Boom ram rebuilt for a JCB 3CX". Aim for under 45 characters.
+          - name: summary
+            label: Summary
+            type: text
+            description: One or two sentences for the card and Google (under 160 characters).
+          - name: machine
+            label: Machine
+            type: string
+          - name: location
+            label: Location
+            type: string
+            description: Town or area only. Name the customer only with their permission.
+          - name: problem
+            label: The problem
+            type: text
+          - name: work
+            label: What we did
+            type: string
+            list: true
+            description: One step per line.
+          - name: result
+            label: The result
+            type: text
+          - name: imageAlt
+            label: Photo description
+            type: string
+            description: What the photo shows, for people who can't see it.

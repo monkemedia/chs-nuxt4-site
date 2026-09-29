@@ -32,6 +32,7 @@ export const en = {
     about: "About",
     sectors: "Sectors",
     whyChs: "Why CHS",
+    jobs: "Recent work",
     contact: "Contact",
   },
 
@@ -187,6 +188,50 @@ export const en = {
     talkToTeam: "Talk to our team",
     otherServices: "Other services",
     areasWeCover: "Areas we cover",
+    ctaKicker: "Based in Cross Hands, Carmarthenshire",
+    ctaText:
+      "Serving Llanelli, Carmarthen, Ammanford, Swansea and across South Wales.",
+  },
+
+  recentJobs: {
+    kicker: "Recent work",
+    title: "Jobs we've done lately",
+    moreKicker: "More recent work",
+    moreTitle: "Other work we've done",
+    serviceKicker: "Recent work",
+    serviceTitle: "Jobs like this",
+    viewAll: "View all our work",
+    listLabel: "Recent work",
+  },
+
+  jobsPage: {
+    seo: {
+      title: "Recent Hydraulic Repairs Llanelli & Carmarthenshire | CHS",
+      description:
+        "Real hydraulic repair jobs from our Cross Hands workshop: the machine, the fault and how we fixed it, for customers across Llanelli and Carmarthenshire.",
+    },
+    crumb: "Recent work",
+    title: ["Recent", "work"] as [string, string],
+    intro:
+      "Real work from our Cross Hands workshop: the machine, what had gone wrong and how we got it back to work.",
+    cta: {
+      kicker: "Got a job for us?",
+      title: "Tell us what's happening.",
+      text: "Describe the problem and we'll tell you how we can help.",
+    },
+  },
+
+  jobPage: {
+    notFound: "Job not found",
+    details: "Job details",
+    machine: "Machine",
+    location: "Location",
+    completed: "Completed",
+    service: "Service",
+    problem: "The problem",
+    whatWeDid: "What we did",
+    result: "The result",
+    similarProblem: "Similar problem?",
     ctaKicker: "Based in Cross Hands, Carmarthenshire",
     ctaText:
       "Serving Llanelli, Carmarthen, Ammanford, Swansea and across South Wales.",

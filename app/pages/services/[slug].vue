@@ -250,6 +250,13 @@ const enquiryTo = computed(() => localePath(enquiryPath))
       </UContainer>
     </section>
 
+    <RecentJobs
+      :kicker="content.recentJobs.serviceKicker"
+      :title="content.recentJobs.serviceTitle"
+      :service="service!.slug"
+      muted
+    />
+
     <CtaBand
       :kicker="page.ctaKicker"
       :text="page.ctaText"

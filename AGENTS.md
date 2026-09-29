@@ -59,6 +59,7 @@ app/
     <locale>/sectors.ts   -> /sectors and the homepage sectors band
     <locale>/benefits.ts  -> /why-chs and the homepage "why" band
   data/reviews.ts         Real Google reviews/testimonials (not translated)
+  data/jobs/              Recent work, one JSON file per job (edited in Pages CMS)
   pages/                  index, about, sectors, why-chs, contact, services/index, services/[slug]
   plugins/analytics.client.ts  Plausible init + tel:/mailto: click events, provides $track
   data/reviews.ts         Real Google reviews/testimonials (empty until they exist); reviews.sample.ts is dev-only
@@ -161,6 +162,15 @@ public/
 - **Only real reviews**, copied exactly (Google) or collected with permission (testimonials). Never write, edit or pad reviews: it breaches UK consumer law (CMA) and Google policy.
 - With `reviews` empty the section renders nothing in production. `npm run dev` shows labelled samples from `reviews.sample.ts` instead. The dev check (`import.meta.dev`) is written out in each expression so production builds drop the samples; keep it that way, and keep the sample badge inside `<DevOnly>`.
 - **No `Review` / `AggregateRating` JSON-LD for the business itself.** Google treats reviews a business shows about itself as self-serving and won't give them star rich results.
+
+### Recent work (case studies)
+
+- Staff add and edit jobs in **Pages CMS** (pagescms.org, configured by `.pages.yml`). Each job is `app/data/jobs/<slug>.json`, photos go to `public/images/jobs/`; saving commits to GitHub and the host rebuilds. Invite staff from Pages CMS's settings (by email; no GitHub account needed).
+- `app/data/jobs-schema.ts` validates every file with zod. A job is live only when **Published** is ticked and the Welsh (`cy`) is complete; anything else is skipped with a `[jobs] Skipped …` build warning, so a half-finished entry never breaks a deploy. Keep `.pages.yml` fields in step with the schema (including the service list when services change).
+- The page title and meta description come from the job's title and summary. `useJobs()` returns live jobs in the current language, newest first, and fails the build on a duplicate slug or unknown service.
+- Shown at `/work` and `/work/<slug>` (`Article` JSON-LD), in `<RecentJobs>` on the homepage, the matching service page and under other jobs, and as a footer link.
+- With no live job, production shows nothing and `/work` is kept out of the prerender and sitemap (`nuxt.config.ts`). `npm run dev` shows labelled samples from `jobs.sample.ts` (same `import.meta.dev` pattern as reviews).
+- **Only real jobs**, with CHS's own photos. Name a customer only with their permission. Add a header nav link once there are a few jobs.
 
 ### Analytics
 

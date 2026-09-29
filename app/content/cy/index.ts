@@ -35,6 +35,7 @@ export const cy: Content = {
     sectors: "Sectorau",
     whyChs: "Pam CHS",
     contact: "Cysylltu",
+    jobs: "Gwaith diweddar",
   },
 
   footer: {
@@ -184,6 +185,50 @@ export const cy: Content = {
     talkToTeam: "Siaradwch â'n tîm",
     otherServices: "Gwasanaethau eraill",
     areasWeCover: "Ardaloedd rydyn ni'n eu gwasanaethu",
+    ctaKicker: "Wedi'n lleoli yn Cross Hands, Sir Gâr",
+    ctaText:
+      "Yn gwasanaethu Llanelli, Caerfyrddin, Rhydaman, Abertawe a ledled De Cymru.",
+  },
+
+  recentJobs: {
+    kicker: "Gwaith diweddar",
+    title: "Gwaith rydyn ni wedi'i wneud yn ddiweddar",
+    moreKicker: "Rhagor o waith diweddar",
+    moreTitle: "Gwaith arall rydyn ni wedi'i wneud",
+    serviceKicker: "Gwaith diweddar",
+    serviceTitle: "Swyddi tebyg",
+    viewAll: "Gweld pob swydd",
+    listLabel: "Gwaith diweddar",
+  },
+
+  jobsPage: {
+    seo: {
+      title: "Atgyweiriadau Hydrolig Diweddar Llanelli a Sir Gâr | CHS",
+      description:
+        "Swyddi atgyweirio hydrolig go iawn o'n gweithdy yn Cross Hands: y peiriant, y nam a sut y gwnaethon ni ei drwsio, i gwsmeriaid ar draws Llanelli a Sir Gâr.",
+    },
+    crumb: "Gwaith diweddar",
+    title: ["Gwaith", "diweddar"] as [string, string],
+    intro:
+      "Gwaith go iawn o'n gweithdy yn Cross Hands: y peiriant, beth aeth o'i le a sut y cawson ni ef yn ôl i weithio.",
+    cta: {
+      kicker: "Oes gennych chi swydd i ni?",
+      title: "Dywedwch wrthon ni beth sy'n digwydd.",
+      text: "Disgrifiwch y broblem a byddwn ni'n dweud sut gallwn ni helpu.",
+    },
+  },
+
+  jobPage: {
+    notFound: "Heb ddod o hyd i'r swydd",
+    details: "Manylion y swydd",
+    machine: "Peiriant",
+    location: "Lleoliad",
+    completed: "Cwblhawyd",
+    service: "Gwasanaeth",
+    problem: "Y broblem",
+    whatWeDid: "Beth wnaethon ni",
+    result: "Y canlyniad",
+    similarProblem: "Problem debyg?",
     ctaKicker: "Wedi'n lleoli yn Cross Hands, Sir Gâr",
     ctaText:
       "Yn gwasanaethu Llanelli, Caerfyrddin, Rhydaman, Abertawe a ledled De Cymru.",

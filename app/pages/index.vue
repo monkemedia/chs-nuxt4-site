@@ -333,6 +333,8 @@ const trustIcons = [
       </ul>
     </section>
 
+    <RecentJobs muted />
+
     <ReviewsSection />
 
     <CtaBand />

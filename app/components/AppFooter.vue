@@ -2,6 +2,7 @@
 const { business } = useAppConfig()
 const content = useContent()
 const localePath = useLocalePath()
+const { jobs } = useJobs()
 
 const columns = computed(() => {
   const { footer, nav, services } = content.value
@@ -22,6 +23,10 @@ const columns = computed(() => {
         { label: footer.aboutUs, to: localePath("/about") },
         { label: nav.sectors, to: localePath("/sectors") },
         { label: nav.whyChs, to: localePath("/why-chs") },
+        // Only once there are jobs to show (the page 404s without them).
+        ...(jobs.value.length
+          ? [{ label: nav.jobs, to: localePath("/work") }]
+          : []),
         { label: nav.contact, to: localePath("/contact") },
       ],
     },

@@ -1,3 +1,15 @@
+import { readdirSync, readFileSync } from "node:fs"
+import { parseJob } from "./app/data/jobs-schema"
+
+// Whether any job in app/data/jobs/ is live (import.meta.glob isn't available here).
+const hasJobs = readdirSync("app/data/jobs")
+  .filter((file) => file.endsWith(".json"))
+  .some(
+    (file) =>
+      "job" in
+      parseJob(file, JSON.parse(readFileSync(`app/data/jobs/${file}`, "utf8"))),
+  )
+
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-01",
   devtools: { enabled: false },
@@ -49,6 +61,11 @@ export default defineNuxtConfig({
       plausibleDomain: "",
     },
   },
+  // /work 404s until a job is live (app/data/jobs/), so leave it out of the
+  // prerender (Nuxt adds every static page) and the sitemap until then.
+  sitemap: {
+    exclude: hasJobs ? [] : ["/work", "/cy/work"],
+  },
   site: {
     url: "https://www.chshydraulics.co.uk",
     name: "CHS Hydraulics",
@@ -66,6 +83,7 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       routes: ["/", "/cy", "/services", "/contact", "/sitemap_index.xml"],
+      ignore: hasJobs ? [] : ["/work", "/cy/work"],
     },
   },
 })
