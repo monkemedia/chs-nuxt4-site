@@ -193,6 +193,24 @@ export const en = {
       "Serving Llanelli, Carmarthen, Ammanford, Swansea and across South Wales.",
   },
 
+  errorPage: {
+    notFound: {
+      kicker: "Error 404",
+      title: ["Pressure", "lost."] as [string, string],
+      text: "This page has sprung a leak. It may have moved, or it never existed. Let's get you back to something that works.",
+    },
+    server: {
+      kicker: "Something went wrong",
+      title: ["Blown", "a seal."] as [string, string],
+      text: "Something failed on our side. Try again in a minute, or give us a call and we'll help straight away.",
+    },
+    home: "Back to the homepage",
+    tryThese: "Try one of these",
+    gaugeUnit: "bar",
+    gaugeLabel: (code: number) =>
+      `Pressure gauge reading zero, showing error ${code}`,
+  },
+
   recentJobs: {
     kicker: "Recent work",
     title: "Jobs we've done lately",

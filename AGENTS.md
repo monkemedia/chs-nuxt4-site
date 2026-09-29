@@ -39,6 +39,7 @@ Build-time environment variables (both optional). Copy `.env.example` to `.env` 
 ```
 app/
   app.vue                 <UApp> wrapper
+  error.vue               404/500 page (pressure gauge <ErrorGauge>, copy in `errorPage`); `nuxt generate` writes it to 404.html
   app.config.ts           Nuxt UI theme (colour aliases, component defaults) + `business` details
   assets/css/main.css     Tailwind + Nuxt UI imports, theme tokens, custom utilities
   assets/icons/           Custom SVG icons, used as `i-chs-<name>`

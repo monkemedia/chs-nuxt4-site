@@ -190,6 +190,24 @@ export const cy: Content = {
       "Yn gwasanaethu Llanelli, Caerfyrddin, Rhydaman, Abertawe a ledled De Cymru.",
   },
 
+  errorPage: {
+    notFound: {
+      kicker: "Gwall 404",
+      title: ["Dim", "pwysau."] as [string, string],
+      text: "Mae'r dudalen hon wedi gollwng. Efallai ei bod wedi symud, neu nad oedd hi erioed yn bodoli. Gadewch i ni fynd â chi'n ôl i rywle sy'n gweithio.",
+    },
+    server: {
+      kicker: "Aeth rhywbeth o'i le",
+      title: ["Sêl wedi", "chwythu."] as [string, string],
+      text: "Methodd rhywbeth ar ein hochr ni. Rhowch gynnig arall arni mewn munud, neu ffoniwch ni a byddwn ni'n helpu ar unwaith.",
+    },
+    home: "Yn ôl i'r hafan",
+    tryThese: "Rhowch gynnig ar un o'r rhain",
+    gaugeUnit: "bar",
+    gaugeLabel: (code: number) =>
+      `Medrydd pwysau yn darllen sero, yn dangos gwall ${code}`,
+  },
+
   recentJobs: {
     kicker: "Gwaith diweddar",
     title: "Gwaith rydyn ni wedi'i wneud yn ddiweddar",

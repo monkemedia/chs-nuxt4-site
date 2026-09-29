@@ -29,6 +29,36 @@
   --color-ink-800: #1c2124;
   --color-ink-900: #15191b;
   --color-ink-950: #0d1012;
+
+  /* Error page gauge (<ErrorGauge>): the needle falls from high pressure to zero, overshoots,
+     settles, then keeps quivering. The needle's resting angle is its SVG transform. */
+  --animate-needle-drop:
+    needle-drop 1.6s cubic-bezier(0.3, 0, 0.2, 1) both,
+    needle-quiver 2.4s ease-in-out 1.6s infinite;
+
+  @keyframes needle-drop {
+    0% {
+      rotate: 230deg;
+    }
+    70% {
+      rotate: -8deg;
+    }
+    85% {
+      rotate: 4deg;
+    }
+    100% {
+      rotate: 0deg;
+    }
+  }
+  @keyframes needle-quiver {
+    0%,
+    100% {
+      rotate: 0deg;
+    }
+    50% {
+      rotate: 2.5deg;
+    }
+  }
 }
 
 :root {
