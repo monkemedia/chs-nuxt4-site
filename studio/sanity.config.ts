@@ -5,11 +5,11 @@ import { job } from "./schemas/job"
 import { review } from "./schemas/review"
 
 // The CHS admin area: Sanity Studio, built into the site at /admin (see AGENTS.md "Admin").
+// The /admin path is set once, in sanity.cli.ts: setting it here too doubles it (/admin/admin).
 // Staff log in with the email or Google account they were invited with.
 export default defineConfig({
   name: "chs",
   title: "CHS Hydraulics",
-  basePath: "/admin",
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || "missing-project-id",
   dataset: process.env.SANITY_STUDIO_DATASET || "production",
   plugins: [

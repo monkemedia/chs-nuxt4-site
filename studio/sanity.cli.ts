@@ -10,6 +10,7 @@ export default defineCliConfig({
     projectId: process.env.SANITY_STUDIO_PROJECT_ID,
     dataset: process.env.SANITY_STUDIO_DATASET || "production",
   },
-  // Served from the site's /admin (asset URLs too), matching basePath in sanity.config.ts.
+  // Served from the site's /admin: page and asset URLs. Don't also set basePath in
+  // sanity.config.ts; the two add up to /admin/admin.
   project: { basePath: "/admin" },
 })
