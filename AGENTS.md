@@ -33,6 +33,7 @@ Build-time environment variables (both optional). Copy `.env.example` to `.env` 
 | ----------------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
 | `NUXT_PUBLIC_CONTACT_FORM_ENDPOINT` | Form service URL (Formspree-style, FormData POST, 2xx = success) | Form shows an error asking visitors to call |
 | `NUXT_PUBLIC_PLAUSIBLE_DOMAIN`      | Site domain as added in Plausible                                | No analytics                                |
+| `NUXT_PUBLIC_SHOW_DRAFTS`           | `true` on the drafts preview deployment only (see Recent work)   | Drafts left out (live site)                 |
 
 ## Project structure
 
@@ -167,10 +168,11 @@ public/
 ### Recent work (case studies)
 
 - Staff add and edit jobs in **Pages CMS** (pagescms.org, configured by `.pages.yml`). Each job is `app/data/jobs/<slug>.json`; the file name, made from the English title when the job is first saved, is its URL (renaming the file changes the URL), photos go to `public/images/jobs/`; saving commits to GitHub and the host rebuilds. Invite staff from Pages CMS's settings (by email; no GitHub account needed).
-- `app/data/jobs-schema.ts` validates every file with zod. A job is live only when **Published** is ticked and the Welsh (`cy`) is complete; anything else is skipped with a `[jobs] Skipped …` build warning, so a half-finished entry never breaks a deploy. Keep `.pages.yml` fields in step with the schema (including the service list when services change).
+- `modules/jobs.ts` loads the files at build time (validated by `app/data/jobs-schema.ts` with zod) and serves them as `#jobs`. A job is live only when **Published** is ticked and the Welsh (`cy`) is complete; otherwise it's a draft. Invalid files are skipped with a `[jobs] Skipped …` build warning, so a half-finished entry never breaks a deploy. Keep `.pages.yml` fields in step with the schema (including the service list when services change).
+- **Drafts** are bundled only in `npm run dev` and in a preview build with `NUXT_PUBLIC_SHOW_DRAFTS=true`, so the live site's HTML and JS never contain them. Staff check drafts on a second deployment of the same repo with that variable set: drafts get a "Draft" badge and banner, their Welsh pages show the English, and every page is `noindex`. Never set it on the live site.
 - The page title and meta description come from the job's title and summary. `useJobs()` returns live jobs in the current language, newest first, and fails the build on a duplicate slug or unknown service.
 - Shown at `/work` and `/work/<slug>` (`Article` JSON-LD), in `<RecentJobs>` on the homepage, the matching service page and under other jobs, and as a footer link.
-- With no live job, production shows nothing and `/work` is kept out of the prerender and sitemap (`nuxt.config.ts`). `npm run dev` shows labelled samples from `jobs.sample.ts` (same `import.meta.dev` pattern as reviews).
+- With no job to show, the build shows nothing and `/work` is kept out of the prerender and sitemap (`modules/jobs.ts`). `npm run dev` shows labelled samples from `jobs.sample.ts` (same `import.meta.dev` pattern as reviews).
 - **Only real jobs**, with CHS's own photos. Name a customer only with their permission. Add a header nav link once there are a few jobs.
 
 ### Analytics

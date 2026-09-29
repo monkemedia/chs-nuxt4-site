@@ -15,6 +15,7 @@ export function usePageSeo({
   image = "/images/hero.jpg",
 }: PageSeo) {
   const { url: siteUrl, name: siteName } = useSiteConfig()
+  const runtimeConfig = useRuntimeConfig()
   const localePath = useLocalePath()
   const url = new URL(localePath(path), siteUrl).href
 
@@ -28,7 +29,10 @@ export function usePageSeo({
     ogImage: new URL(image, siteUrl).href,
     ogSiteName: siteName,
     twitterCard: "summary_large_image",
-    robots: "index, follow",
+    // The drafts preview build must never be indexed.
+    robots: runtimeConfig.public.showDrafts
+      ? "noindex, nofollow"
+      : "index, follow",
   })
 }
 

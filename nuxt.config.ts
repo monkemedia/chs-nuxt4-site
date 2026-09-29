@@ -1,15 +1,3 @@
-import { readdirSync, readFileSync } from "node:fs"
-import { parseJob } from "./app/data/jobs-schema"
-
-// Whether any job in app/data/jobs/ is live (import.meta.glob isn't available here).
-const hasJobs = readdirSync("app/data/jobs")
-  .filter((file) => file.endsWith(".json"))
-  .some(
-    (file) =>
-      "job" in
-      parseJob(file, JSON.parse(readFileSync(`app/data/jobs/${file}`, "utf8"))),
-  )
-
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-01",
   devtools: { enabled: false },
@@ -59,12 +47,10 @@ export default defineNuxtConfig({
       contactFormEndpoint: "",
       // Site domain as added in Plausible (e.g. www.chshydraulics.co.uk), set via NUXT_PUBLIC_PLAUSIBLE_DOMAIN at build time. Empty = no analytics.
       plausibleDomain: "",
+      // Preview build only: include draft jobs and keep every page out of search engines.
+      // Set NUXT_PUBLIC_SHOW_DRAFTS=true on the preview deployment, never on the live site.
+      showDrafts: false,
     },
-  },
-  // /work 404s until a job is live (app/data/jobs/), so leave it out of the
-  // prerender (Nuxt adds every static page) and the sitemap until then.
-  sitemap: {
-    exclude: hasJobs ? [] : ["/work", "/cy/work"],
   },
   site: {
     url: "https://www.chshydraulics.co.uk",
@@ -83,7 +69,6 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       routes: ["/", "/cy", "/services", "/contact", "/sitemap_index.xml"],
-      ignore: hasJobs ? [] : ["/work", "/cy/work"],
     },
   },
 })

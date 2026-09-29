@@ -79,6 +79,17 @@ const enquiryTo = computed(() => localePath(enquiryPath))
 
 <template>
   <div>
+    <div
+      v-if="job!.draft"
+      class="bg-amber-300 py-3 text-sm font-bold text-ink-950"
+      role="status"
+    >
+      <UContainer class="flex items-center gap-2.5">
+        <UIcon name="i-lucide-pencil-line" class="size-5 shrink-0" />
+        {{ page.draft }}: {{ page.draftNote[job!.draft] }}
+      </UContainer>
+    </div>
+
     <PageHero labelledby="job-title">
       <UBreadcrumb
         :items="crumbs"

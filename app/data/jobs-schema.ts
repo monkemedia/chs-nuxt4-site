@@ -33,6 +33,8 @@ export type JobText = z.infer<typeof text>
 export interface Job extends Omit<z.infer<typeof jobFileSchema>, "cy"> {
   slug: string
   cy: JobText
+  // Why it isn't live yet. Drafts only reach the preview build (NUXT_PUBLIC_SHOW_DRAFTS).
+  draft?: "unpublished" | "welsh"
 }
 
 // The URL slug is the file name, which Pages CMS makes from the English title when the job
@@ -47,8 +49,9 @@ const slugFromFile = (file: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
 
-// A job goes live once it's marked published and its Welsh is complete. Anything else is
-// skipped with a reason, so a half-finished CMS entry never breaks the build.
+// A job goes live once it's marked published and its Welsh is complete; until then it's a
+// draft (its Welsh pages show the English). Invalid files are skipped with a reason, so a
+// half-finished CMS entry never breaks the build.
 export function parseJob(
   file: string,
   data: unknown,
@@ -56,12 +59,21 @@ export function parseJob(
   const parsed = jobFileSchema.safeParse(data)
   if (!parsed.success)
     return { skipped: `${file}: ${z.prettifyError(parsed.error)}` }
-  if (!parsed.data.published) return { skipped: `${file}: not published` }
-  const cy = text.safeParse(parsed.data.cy)
-  if (!cy.success)
-    return { skipped: `${file}: published but the Welsh isn't complete` }
   const slug = slugFromFile(file)
   if (!slug)
     return { skipped: `${file}: can't make a web address from the file name` }
-  return { job: { ...parsed.data, slug, cy: cy.data } }
+  const cy = text.safeParse(parsed.data.cy)
+  const draft = !parsed.data.published
+    ? "unpublished"
+    : !cy.success
+      ? "welsh"
+      : undefined
+  return {
+    job: {
+      ...parsed.data,
+      slug,
+      cy: cy.success ? cy.data : parsed.data.en,
+      ...(draft ? { draft } : {}),
+    },
+  }
 }

@@ -24,7 +24,15 @@ const formatDate = (date: string) =>
   <article
     class="group relative flex flex-col overflow-hidden rounded-box bg-white shadow-[0_10px_30px_rgba(15,22,26,0.09)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_38px_rgba(15,22,26,0.15)]"
   >
-    <div class="aspect-8/5 bg-ink-950">
+    <div class="relative aspect-8/5 bg-ink-950">
+      <UBadge
+        v-if="job.draft"
+        color="warning"
+        variant="solid"
+        icon="i-lucide-pencil-line"
+        :label="content.jobPage.draft"
+        class="absolute top-3 left-3 z-10"
+      />
       <NuxtPicture
         :src="photo.src"
         :alt="photo.alt"
