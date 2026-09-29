@@ -27,7 +27,7 @@ export default defineAppConfig({
   // The offer. Copy in app/content/ uses {years} and {hours}, filled in by useContent().
   // Only publish numbers CHS can stand behind (misleading claims breach CMA rules).
   offer: {
-    // Experience claimed in copy; the LLP was incorporated in 2004, so confirm what the 35 covers.
+    // Experience claimed in copy: 35 years, from founding in 1991 (business.foundingYear).
     yearsExperience: 35,
     // Target time on-site after a breakdown call, across the core area.
     responseHours: 4,
@@ -64,7 +64,7 @@ export default defineAppConfig({
       mark: "",
     },
     // Companies House incorporation year of the LLP; confirm with the business.
-    foundingYear: "2004",
+    foundingYear: "1991",
     // Former trading name: kept in structured data so Google links old listings to the new brand.
     formerName: "Crosshands Hydraulic Services",
     phoneDisplay: "01269 831491",

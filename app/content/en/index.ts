@@ -344,7 +344,7 @@ export const en = {
       },
     ],
     factsLabel: "CHS at a glance",
-    // "2004" is the Companies House incorporation date for Crosshands Hydraulic Services LLP; confirm with the business.
+    // {founded} is 1991 (35 years). The LLP was only incorporated at Companies House in 2004, which is fine: the business predates it.
     facts: [
       { value: "{founded}", label: "Established" },
       { value: "Cross Hands", label: "Workshop base" },
