@@ -65,11 +65,9 @@ content:
           - name: machine
             label: Machine
             type: string
-            required: true
           - name: location
             label: Location
             type: string
-            required: true
             description: Town or area only. Name the customer only with their permission.
           - name: problem
             label: The problem

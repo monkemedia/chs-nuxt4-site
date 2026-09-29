@@ -8,8 +8,9 @@ const text = z.object({
   title: z.string().trim().min(1),
   // One or two sentences for the card, the page intro and the meta description.
   summary: z.string().trim().min(1),
-  machine: z.string().trim().min(1),
-  location: z.string().trim().min(1),
+  // Optional: left out of the page and card when empty.
+  machine: z.string().trim().optional(),
+  location: z.string().trim().optional(),
   problem: z.string().trim().min(1),
   work: z.array(z.string().trim().min(1)).min(1),
   result: z.string().trim().min(1),

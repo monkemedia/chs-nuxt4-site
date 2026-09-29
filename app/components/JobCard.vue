@@ -30,7 +30,7 @@ const formatDate = (date: string) =>
     <div class="relative flex-1 px-5 pt-5 pb-6 pr-12">
       <p class="kicker mb-2 text-[11px] text-chs-700">
         <time :datetime="job.date">{{ formatDate(job.date) }}</time>
-        · {{ job.location }}
+        <template v-if="job.location"> · {{ job.location }}</template>
       </p>
       <component
         :is="headingLevel ?? 'h3'"

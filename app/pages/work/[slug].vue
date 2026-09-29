@@ -50,26 +50,28 @@ const crumbs = computed(() => [
   { label: content.value.jobsPage.crumb, to: localePath("/work") },
   { label: job.value!.title, class: "text-white" },
 ])
-const facts = computed(() => [
-  {
-    icon: "i-lucide-tractor",
-    label: page.value.machine,
-    value: job.value!.machine,
-  },
-  {
-    icon: "i-lucide-map-pin",
-    label: page.value.location,
-    value: job.value!.location,
-  },
-  {
-    icon: "i-lucide-calendar-check",
-    label: page.value.completed,
-    value: dayjs
-      .utc(job.value!.date)
-      .locale(content.value.dateLocale)
-      .format("MMMM YYYY"),
-  },
-])
+const facts = computed(() =>
+  [
+    {
+      icon: "i-lucide-tractor",
+      label: page.value.machine,
+      value: job.value!.machine,
+    },
+    {
+      icon: "i-lucide-map-pin",
+      label: page.value.location,
+      value: job.value!.location,
+    },
+    {
+      icon: "i-lucide-calendar-check",
+      label: page.value.completed,
+      value: dayjs
+        .utc(job.value!.date)
+        .locale(content.value.dateLocale)
+        .format("MMMM YYYY"),
+    },
+  ].filter((fact) => fact.value),
+)
 // English path; CtaBand localises it itself.
 const enquiryPath = `/contact?service=${job.value.service}`
 const enquiryTo = computed(() => localePath(enquiryPath))
