@@ -26,7 +26,7 @@ content:
         label: Published
         type: boolean
         default: false
-        description: Tick when the job is ready. It only appears on the site once the Welsh below is filled in too.
+        description: Tick when the job is ready to go on the site. Until then, it only shows on the preview site.
       - name: date
         label: Date finished
         type: date
@@ -89,7 +89,7 @@ content:
       - name: cy
         label: Welsh (Cymraeg)
         type: object
-        description: Filled in by the translator. The job stays hidden until this is complete.
+        description: Optional. Without it, the Welsh site shows the English with a note that it's only available in English.
         fields:
           - name: title
             label: Title

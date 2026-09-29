@@ -9,10 +9,9 @@
 // Made-up case studies mislead customers and breach UK consumer law (CMA), like fake reviews.
 //
 // While no job is live the section, pages and links are hidden on the live site. Drafts
-// (unpublished, or Welsh incomplete) show only in dev and the preview build.
-// `npm run dev` shows labelled samples instead (see jobs.sample.ts).
+// (unpublished) show only in dev and the preview build.
 
 export type { Job, JobText } from "./jobs-schema"
 
 // Loaded and filtered at build time by modules/jobs.ts.
-export { jobs } from "#jobs"
+export { jobs } from "virtual:chs-jobs"

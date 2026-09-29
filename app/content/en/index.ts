@@ -252,11 +252,9 @@ export const en = {
     similarProblem: "Similar problem?",
     // Preview build only (NUXT_PUBLIC_SHOW_DRAFTS): shown on jobs that aren't live yet.
     draft: "Draft",
-    draftNote: {
-      unpublished: "Not live yet: tick Published in the CMS when it's ready.",
-      welsh:
-        "Not live yet: waiting for the Welsh. The Welsh page shows the English until then.",
-    },
+    draftNote: "Not live yet: tick Published in the CMS when it's ready.",
+    // Only shown on the Welsh site, for jobs without a Welsh version.
+    englishOnly: "Only available in English",
     ctaKicker: "Based in Cross Hands, Carmarthenshire",
     ctaText:
       "Serving Llanelli, Carmarthen, Ammanford, Swansea and across South Wales.",

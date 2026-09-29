@@ -17,7 +17,7 @@ const props = withDefaults(
 
 const content = useContent()
 const localePath = useLocalePath()
-const { showSamples, jobs } = useJobs()
+const { jobs } = useJobs()
 
 const items = computed(() =>
   jobs.value
@@ -40,17 +40,6 @@ const title = computed(() => props.title ?? content.value.recentJobs.title)
     aria-labelledby="recent-jobs-title"
   >
     <UContainer>
-      <DevOnly>
-        <UBadge
-          v-if="showSamples"
-          color="warning"
-          variant="subtle"
-          icon="i-lucide-flask-conical"
-          label="Sample jobs: dev preview only, hidden in production"
-          class="mb-6"
-        />
-      </DevOnly>
-
       <div
         class="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
       >

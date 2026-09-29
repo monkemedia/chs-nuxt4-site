@@ -25,16 +25,17 @@ export const jobFileSchema = z.object({
   // Optional: cards fall back to the service's image; the job page shows no photo.
   image: z.string().trim().optional(),
   en: text,
-  // Optional while drafting; the job stays hidden until the Welsh is complete.
+  // Optional: without a complete Welsh version the Welsh site shows the English.
   cy: z.unknown().optional(),
 })
 
 export type JobText = z.infer<typeof text>
 export interface Job extends Omit<z.infer<typeof jobFileSchema>, "cy"> {
   slug: string
-  cy: JobText
-  // Why it isn't live yet. Drafts only reach the preview build (NUXT_PUBLIC_SHOW_DRAFTS).
-  draft?: "unpublished" | "welsh"
+  // Null when there's no complete Welsh version.
+  cy: JobText | null
+  // Not published yet. Drafts only reach the preview build (NUXT_PUBLIC_SHOW_DRAFTS).
+  draft?: true
 }
 
 // The URL slug is the file name, which Pages CMS makes from the English title when the job
@@ -49,9 +50,8 @@ const slugFromFile = (file: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
 
-// A job goes live once it's marked published and its Welsh is complete; until then it's a
-// draft (its Welsh pages show the English). Invalid files are skipped with a reason, so a
-// half-finished CMS entry never breaks the build.
+// A job goes live once it's marked published; until then it's a draft. Invalid files are
+// skipped with a reason, so a half-finished CMS entry never breaks the build.
 export function parseJob(
   file: string,
   data: unknown,
@@ -63,17 +63,12 @@ export function parseJob(
   if (!slug)
     return { skipped: `${file}: can't make a web address from the file name` }
   const cy = text.safeParse(parsed.data.cy)
-  const draft = !parsed.data.published
-    ? "unpublished"
-    : !cy.success
-      ? "welsh"
-      : undefined
   return {
     job: {
       ...parsed.data,
       slug,
-      cy: cy.success ? cy.data : parsed.data.en,
-      ...(draft ? { draft } : {}),
+      cy: cy.success ? cy.data : null,
+      ...(parsed.data.published ? {} : { draft: true as const }),
     },
   }
 }

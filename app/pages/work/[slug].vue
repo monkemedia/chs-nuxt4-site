@@ -56,11 +56,13 @@ const facts = computed(() =>
       icon: "i-lucide-tractor",
       label: page.value.machine,
       value: job.value!.machine,
+      lang: job.value!.lang,
     },
     {
       icon: "i-lucide-map-pin",
       label: page.value.location,
       value: job.value!.location,
+      lang: job.value!.lang,
     },
     {
       icon: "i-lucide-calendar-check",
@@ -86,7 +88,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
     >
       <UContainer class="flex items-center gap-2.5">
         <UIcon name="i-lucide-pencil-line" class="size-5 shrink-0" />
-        {{ page.draft }}: {{ page.draftNote[job!.draft] }}
+        {{ page.draft }}: {{ page.draftNote }}
       </UContainer>
     </div>
 
@@ -96,13 +98,24 @@ const enquiryTo = computed(() => localePath(enquiryPath))
         separator-icon="i-lucide-slash"
         :ui="heroBreadcrumbUi"
       />
+      <p
+        v-if="job!.lang"
+        class="mb-4 inline-flex items-center gap-2 text-sm font-bold text-zinc-300"
+      >
+        <UIcon name="i-lucide-languages" class="size-4.5 text-chs-400" />
+        {{ page.englishOnly }}
+      </p>
       <h1
         id="job-title"
+        :lang="job!.lang"
         class="heading-display max-w-4xl text-[clamp(36px,5vw,64px)] leading-[0.95] tracking-tight"
       >
         {{ job!.title }}
       </h1>
-      <p class="mt-5 max-w-xl text-base text-zinc-200 sm:text-lg">
+      <p
+        class="mt-5 max-w-xl text-base text-zinc-200 sm:text-lg"
+        :lang="job!.lang"
+      >
         {{ job!.summary }}
       </p>
     </PageHero>
@@ -111,7 +124,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
       <UContainer
         class="grid items-start gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-14"
       >
-        <article class="max-w-3xl">
+        <article class="max-w-3xl" :lang="job!.lang">
           <NuxtPicture
             v-if="job!.image"
             :src="job!.image"
@@ -177,7 +190,9 @@ const enquiryTo = computed(() => localePath(enquiryPath))
               >
                 <UIcon :name="fact.icon" class="size-5 shrink-0 text-primary" />
                 <dt class="font-bold">{{ fact.label }}</dt>
-                <dd class="ms-auto text-end text-zinc-600">{{ fact.value }}</dd>
+                <dd class="ms-auto text-end text-zinc-600" :lang="fact.lang">
+                  {{ fact.value }}
+                </dd>
               </div>
             </dl>
             <ULink

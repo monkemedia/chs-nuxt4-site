@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const content = useContent()
 const localePath = useLocalePath()
-const { showSamples, jobs } = useJobs()
+const { jobs } = useJobs()
 const page = computed(() => content.value.jobsPage)
 
 // Nothing links here until real jobs exist, so it isn't prerendered; guard direct visits.
@@ -46,16 +46,6 @@ const crumbs = computed(() => [
 
     <section class="py-16 sm:py-20" :aria-label="content.recentJobs.listLabel">
       <UContainer>
-        <DevOnly>
-          <UBadge
-            v-if="showSamples"
-            color="warning"
-            variant="subtle"
-            icon="i-lucide-flask-conical"
-            label="Sample jobs: dev preview only, hidden in production"
-            class="mb-6"
-          />
-        </DevOnly>
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <JobCard
             v-for="job in jobs"

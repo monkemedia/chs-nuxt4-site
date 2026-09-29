@@ -53,6 +53,7 @@ const formatDate = (date: string) =>
       <component
         :is="headingLevel ?? 'h3'"
         class="heading-display mb-2.5 text-lg leading-tight"
+        :lang="job.lang"
       >
         <NuxtLink
           :to="localePath(`/work/${job.slug}`)"
@@ -60,7 +61,14 @@ const formatDate = (date: string) =>
           >{{ job.title }}</NuxtLink
         >
       </component>
-      <p class="text-sm text-zinc-600">{{ job.summary }}</p>
+      <p class="text-sm text-zinc-600" :lang="job.lang">{{ job.summary }}</p>
+      <p
+        v-if="job.lang"
+        class="mt-3 flex items-center gap-1.5 text-xs font-bold text-zinc-500"
+      >
+        <UIcon name="i-lucide-languages" class="size-4 text-primary" />
+        {{ content.jobPage.englishOnly }}
+      </p>
       <UIcon
         name="i-lucide-chevron-right"
         class="absolute right-4 bottom-6 size-5 text-primary transition-transform group-hover:translate-x-1"

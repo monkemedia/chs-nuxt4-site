@@ -248,12 +248,8 @@ export const cy: Content = {
     result: "Y canlyniad",
     similarProblem: "Problem debyg?",
     draft: "Drafft",
-    draftNote: {
-      unpublished:
-        "Ddim yn fyw eto: ticiwch Published yn y CMS pan fydd yn barod.",
-      welsh:
-        "Ddim yn fyw eto: yn aros am y Gymraeg. Mae'r dudalen Gymraeg yn dangos y Saesneg tan hynny.",
-    },
+    draftNote: "Ddim yn fyw eto: ticiwch Published yn y CMS pan fydd yn barod.",
+    englishOnly: "Dim ond yn Saesneg mae hwn ar gael",
     ctaKicker: "Wedi'n lleoli yn Cross Hands, Sir Gâr",
     ctaText:
       "Yn gwasanaethu Llanelli, Caerfyrddin, Rhydaman, Abertawe a ledled De Cymru.",

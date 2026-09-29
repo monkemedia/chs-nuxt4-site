@@ -3,7 +3,7 @@ import { join } from "node:path"
 import { addTypeTemplate, addVitePlugin, defineNuxtModule } from "nuxt/kit"
 import { parseJob, type Job } from "../app/data/jobs-schema"
 
-// Loads Recent work from app/data/jobs/*.json at build time and serves it as `#jobs`.
+// Loads Recent work from app/data/jobs/*.json at build time and serves it as `virtual:chs-jobs`.
 // Only the jobs a build should show are bundled: live ones, plus drafts in dev and in the
 // preview build (NUXT_PUBLIC_SHOW_DRAFTS=true), so unpublished jobs never reach the live
 // site's HTML or JavaScript. /work is left out of the prerender and sitemap while empty.
@@ -28,10 +28,7 @@ export default defineNuxtModule({
         if ("skipped" in result) {
           if (warn) console.warn(`[jobs] Skipped ${result.skipped}`)
         } else if (result.job.draft && !drafts) {
-          if (warn)
-            console.warn(
-              `[jobs] Not live: ${file} (${result.job.draft === "welsh" ? "the Welsh isn't complete" : "not published"})`,
-            )
+          if (warn) console.warn(`[jobs] Not live: ${file} (not published)`)
         } else jobs.push(result.job)
       }
       return jobs
@@ -52,7 +49,8 @@ export default defineNuxtModule({
       }
     }
 
-    const id = "#jobs"
+    // No "#" in the id: in dev it becomes part of a URL, where "#" starts the fragment.
+    const id = "virtual:chs-jobs"
     addVitePlugin({
       name: "chs-jobs",
       resolveId: (source) => (source === id ? `\0${id}` : undefined),
@@ -66,7 +64,7 @@ export default defineNuxtModule({
     addTypeTemplate({
       filename: "types/jobs.d.ts",
       getContents: () =>
-        `declare module "#jobs" {\n  export const jobs: import("${join(nuxt.options.rootDir, "app/data/jobs-schema")}").Job[]\n}\n`,
+        `declare module "virtual:chs-jobs" {\n  export const jobs: import("${join(nuxt.options.rootDir, "app/data/jobs-schema")}").Job[]\n}\n`,
     })
   },
 })
