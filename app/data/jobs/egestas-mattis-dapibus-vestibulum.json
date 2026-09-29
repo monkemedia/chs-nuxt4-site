@@ -1,0 +1,16 @@
+{
+  "published": false,
+  "date": "2026-09-29",
+  "service": "hydraulic-hoses",
+  "en": {
+    "title": "Egestas mattis dapibus vestibulum",
+    "summary": "Sapien magnis turpis donec convallis tempor curabitur auctor habitant, elementum penatibus aliquam proin suspendisse erat fames, torquent mi consequat sem vestibulum aenean nullam.",
+    "machine": "George",
+    "location": "Swansea",
+    "problem": "Sapien magnis turpis donec convallis tempor curabitur auctor habitant, elementum penatibus aliquam proin suspendisse erat fames, torquent mi consequat sem vestibulum aenean nullam.",
+    "work": [
+      "Hose"
+    ],
+    "result": "Sapien magnis turpis donec convallis tempor curabitur auctor habitant, elementum penatibus aliquam proin suspendisse erat fames, torquent mi consequat sem vestibulum aenean nullam."
+  }
+}
