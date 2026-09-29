@@ -12,7 +12,8 @@ content:
     type: collection
     path: app/data/jobs
     format: json
-    filename: "{fields.slug}.json"
+    # The file name (from the English title) becomes the job's web address: /work/<file name>.
+    filename: "{primary}.json"
     view:
       fields: [en.title, date, published]
       primary: en.title
@@ -26,14 +27,6 @@ content:
         type: boolean
         default: false
         description: Tick when the job is ready. It only appears on the site once the Welsh below is filled in too.
-      - name: slug
-        label: Web address
-        type: string
-        required: true
-        pattern:
-          regex: "^[a-z0-9]+(-[a-z0-9]+)*$"
-          message: Lower-case letters, numbers and hyphens only, e.g. jcb-3cx-boom-ram-rebuild
-        description: Becomes chshydraulics.co.uk/work/<this>. Never change it after publishing.
       - name: date
         label: Date finished
         type: date

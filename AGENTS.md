@@ -165,7 +165,7 @@ public/
 
 ### Recent work (case studies)
 
-- Staff add and edit jobs in **Pages CMS** (pagescms.org, configured by `.pages.yml`). Each job is `app/data/jobs/<slug>.json`, photos go to `public/images/jobs/`; saving commits to GitHub and the host rebuilds. Invite staff from Pages CMS's settings (by email; no GitHub account needed).
+- Staff add and edit jobs in **Pages CMS** (pagescms.org, configured by `.pages.yml`). Each job is `app/data/jobs/<slug>.json`; the file name, made from the English title when the job is first saved, is its URL (renaming the file changes the URL), photos go to `public/images/jobs/`; saving commits to GitHub and the host rebuilds. Invite staff from Pages CMS's settings (by email; no GitHub account needed).
 - `app/data/jobs-schema.ts` validates every file with zod. A job is live only when **Published** is ticked and the Welsh (`cy`) is complete; anything else is skipped with a `[jobs] Skipped …` build warning, so a half-finished entry never breaks a deploy. Keep `.pages.yml` fields in step with the schema (including the service list when services change).
 - The page title and meta description come from the job's title and summary. `useJobs()` returns live jobs in the current language, newest first, and fails the build on a duplicate slug or unknown service.
 - Shown at `/work` and `/work/<slug>` (`Article` JSON-LD), in `<RecentJobs>` on the homepage, the matching service page and under other jobs, and as a footer link.

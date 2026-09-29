@@ -17,7 +17,6 @@ const text = z.object({
 })
 
 export const jobFileSchema = z.object({
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   published: z.boolean().default(false),
   date: z.iso.date(),
   service: z.string(),
@@ -29,8 +28,21 @@ export const jobFileSchema = z.object({
 
 export type JobText = z.infer<typeof text>
 export interface Job extends Omit<z.infer<typeof jobFileSchema>, "cy"> {
+  slug: string
   cy: JobText
 }
+
+// The URL slug is the file name, which Pages CMS makes from the English title when the job
+// is first saved. It doesn't follow later title edits, so published links never break.
+const slugFromFile = (file: string) =>
+  file
+    .replace(/^.*\//, "")
+    .replace(/\.json$/, "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
 
 // A job goes live once it's marked published and its Welsh is complete. Anything else is
 // skipped with a reason, so a half-finished CMS entry never breaks the build.
@@ -45,5 +57,8 @@ export function parseJob(
   const cy = text.safeParse(parsed.data.cy)
   if (!cy.success)
     return { skipped: `${file}: published but the Welsh isn't complete` }
-  return { job: { ...parsed.data, cy: cy.data } }
+  const slug = slugFromFile(file)
+  if (!slug)
+    return { skipped: `${file}: can't make a web address from the file name` }
+  return { job: { ...parsed.data, slug, cy: cy.data } }
 }
