@@ -13,7 +13,7 @@ const content = useContent()
 const kicker = computed(() => props.kicker ?? content.value.reviews.kicker)
 const title = computed(() => props.title ?? content.value.reviews.title)
 
-const { showSamples, allReviews, summary, readUrl, writeUrl } = useReviews()
+const { allReviews, summary, readUrl, writeUrl } = useReviews()
 const items = allReviews.slice(0, props.limit)
 
 const formatDate = (date: string) =>
@@ -28,17 +28,6 @@ const formatDate = (date: string) =>
     aria-labelledby="reviews-title"
   >
     <UContainer>
-      <DevOnly>
-        <UBadge
-          v-if="showSamples"
-          color="warning"
-          variant="subtle"
-          icon="i-lucide-flask-conical"
-          label="Sample reviews: dev preview only, hidden in production"
-          class="mb-6"
-        />
-      </DevOnly>
-
       <div
         class="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
       >

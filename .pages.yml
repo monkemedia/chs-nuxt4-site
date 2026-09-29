@@ -121,3 +121,77 @@ content:
             label: Photo description
             type: string
             description: What the photo shows, for people who can't see it.
+
+  - name: reviews
+    label: Reviews
+    type: collection
+    path: app/data/reviews
+    format: json
+    # Only REAL reviews, copied exactly. Fake or edited reviews breach UK consumer law (CMA)
+    # and Google's policies. Checked at build time by modules/reviews.ts.
+    filename: "{year}-{month}-{day}-{primary}.json"
+    view:
+      fields: [author, source, date]
+      primary: author
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: source
+        label: Type
+        type: select
+        required: true
+        default: google
+        options:
+          values:
+            - { value: google, label: Google review }
+            - { value: testimonial, label: Testimonial (sent to us directly) }
+      - name: author
+        label: Name
+        type: string
+        required: true
+        description: Exactly as shown on Google. For testimonials, only with the customer's permission.
+      - name: company
+        label: Company or role
+        type: string
+        description: Testimonials only, e.g. "Site manager, Jones Groundworks". Leave empty for Google reviews.
+      - name: rating
+        label: Stars (1–5)
+        type: number
+        options:
+          min: 1
+          max: 5
+        description: The reviewer's star rating on Google. Leave empty for testimonials without one.
+      - name: text
+        label: Review
+        type: text
+        required: true
+        description: Copy it word for word. Never edit, shorten or tidy up a review.
+      - name: date
+        label: Date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+        description: The date on the review. Shown on the site as month and year.
+
+  - name: google-rating
+    label: Google rating
+    type: file
+    path: app/data/google-rating.json
+    format: json
+    fields:
+      - name: rating
+        label: Overall rating
+        type: number
+        options:
+          min: 1
+          max: 5
+          step: 0.1
+        description: As shown on the Google Business Profile, e.g. 4.8. Update when it changes.
+      - name: count
+        label: Number of reviews
+        type: number
+        options:
+          min: 1
+        description: Leave both empty to hide the rating summary.

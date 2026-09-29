@@ -7,26 +7,16 @@
 //   their name (and company).
 // Fake or edited reviews breach UK consumer law (CMA) and Google's policies.
 //
-// While `reviews` is empty the sections are hidden on the live site. `npm run dev` shows
-// labelled samples instead (see reviews.sample.ts) so the design can be previewed.
+// Staff add reviews in Pages CMS (.pages.yml): one JSON file per review in app/data/reviews/,
+// and the overall rating in app/data/google-rating.json. modules/reviews.ts checks them at build time;
+// an invalid one is skipped with a build warning rather than breaking the deploy.
+//
+// While `reviews` is empty the sections are hidden.
 
-export interface Review {
-  author: string
-  // Company or role, for testimonials (e.g. "Site manager, Jones Groundworks").
-  company?: string
-  // 1–5 stars. Testimonials without a star rating can omit it.
-  rating?: number
-  text: string
-  // ISO date (YYYY-MM-DD), shown as month and year.
-  date: string
-  source: "google" | "testimonial"
-}
+export type { Review } from "./reviews-schema"
 
-export const reviews: Review[] = []
-
-// Overall rating from the Google Business Profile. Update by hand when it changes
-// (or null to hide the summary).
-export const googleRating: { rating: number; count: number } | null = null
+// Newest first. Null rating (hiding the summary) until both numbers are filled in.
+export { googleRating, reviews } from "virtual:chs-reviews"
 
 // The homepage hero rating badge only appears once the Google rating is convincing:
 // "5.0 from 2 reviews" looks thin and can put people off.

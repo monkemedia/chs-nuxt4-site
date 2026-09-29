@@ -3,7 +3,7 @@ import { ratingBadgeThreshold } from "~/data/reviews"
 
 // Compact "★★★★★ 4.8 on Google · 23 reviews" line for the dark homepage hero.
 // Hidden until the Google rating meets ratingBadgeThreshold.
-const { showSamples, summary, readUrl } = useReviews()
+const { summary, readUrl } = useReviews()
 const content = useContent()
 
 const visible =
@@ -32,8 +32,5 @@ const visible =
         content.reviews.reviewCount(summary.count)
       }}</span>
     </span>
-    <DevOnly>
-      <span v-if="showSamples" class="text-xs text-amber-300">(sample)</span>
-    </DevOnly>
   </component>
 </template>

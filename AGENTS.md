@@ -60,11 +60,10 @@ app/
     <locale>/services.ts  -> /services and /services/[slug], footer, contact form dropdown
     <locale>/sectors.ts   -> /sectors and the homepage sectors band
     <locale>/benefits.ts  -> /why-chs and the homepage "why" band
-  data/reviews.ts         Real Google reviews/testimonials (not translated)
+  data/reviews/           Real Google reviews/testimonials, one JSON file each (Pages CMS; not translated)
   data/jobs/              Recent work, one JSON file per job (edited in Pages CMS)
   pages/                  index, about, sectors, why-chs, contact, services/index, services/[slug]
   plugins/analytics.client.ts  Plausible init + tel:/mailto: click events, provides $track
-  data/reviews.ts         Real Google reviews/testimonials (empty until they exist); reviews.sample.ts is dev-only
   utils/ui.ts             Shared `ui` prop overrides (e.g. heroBreadcrumbUi)
 public/
   images/                 Site images (small, cropped from the design mockup; replace with real photos)
@@ -159,10 +158,11 @@ public/
 
 ### Reviews and testimonials
 
-- `<ReviewsSection>` (homepage and `/why-chs`) renders `app/data/reviews.ts`: Google reviews and testimonials in one list, plus the overall `googleRating`. With `business.googlePlaceId` set in `app.config.ts`, it also shows "Read all reviews on Google" and "Leave us a review" links.
-- `<GoogleRatingBadge>` shows "★★★★★ 4.8 on Google · 23 reviews" under the homepage hero buttons, but only once `googleRating` meets `ratingBadgeThreshold` in `reviews.ts` (10+ reviews, 4.5+ stars). Shared logic (dev samples, rating, Google links) lives in `composables/useReviews.ts`.
+- Staff add reviews in **Pages CMS** ("Reviews" and "Google rating" in `.pages.yml`): one file per review in `app/data/reviews/`, the overall rating in `app/data/google-rating.json`. `modules/reviews.ts` validates them at build time (`app/data/reviews-schema.ts`, zod, kept out of the browser bundle) and serves them as `virtual:chs-reviews`; invalid files are skipped with a `[reviews] Skipped …` warning.
+- `<ReviewsSection>` (homepage and `/why-chs`) renders them via `app/data/reviews.ts`: Google reviews and testimonials in one list, newest first, plus the overall `googleRating`. With `business.googlePlaceId` set in `app.config.ts`, it also shows "Read all reviews on Google" and "Leave us a review" links.
+- `<GoogleRatingBadge>` shows "★★★★★ 4.8 on Google · 23 reviews" under the homepage hero buttons, but only once `googleRating` meets `ratingBadgeThreshold` in `reviews.ts` (10+ reviews, 4.5+ stars). Shared logic (rating, Google links) lives in `composables/useReviews.ts`.
 - **Only real reviews**, copied exactly (Google) or collected with permission (testimonials). Never write, edit or pad reviews: it breaches UK consumer law (CMA) and Google policy.
-- With `reviews` empty the section renders nothing in production. `npm run dev` shows labelled samples from `reviews.sample.ts` instead. The dev check (`import.meta.dev`) is written out in each expression so production builds drop the samples; keep it that way, and keep the sample badge inside `<DevOnly>`.
+- With no reviews the section and badge render nothing, in dev and production alike. To preview the design, add a review in the CMS (or a file in `app/data/reviews/`) locally and don't commit it.
 - **No `Review` / `AggregateRating` JSON-LD for the business itself.** Google treats reviews a business shows about itself as self-serving and won't give them star rich results.
 
 ### Recent work (case studies)
@@ -195,7 +195,7 @@ public/
 - **The About timeline is placeholders too:** `about.timeline` in `app/content/<locale>/index.ts` (only 2004 and the 2026 rebrand are real). Entries are free to add or remove; `upcoming: true` shows an entry greyed out as next, and `onsite: true` hides it while `features.onsite` is off. The build warns while any date or title is in [brackets].
 - **Contact map:** `<ContactMap>` shows a static preview (`public/images/map-cross-hands.jpg`, OpenStreetMap tiles, greyscale with a red pin, drawn around `business.geo`) and only loads the live Google map when the visitor clicks, so the site stays cookie-free (no consent banner) and fast. Keep the OpenStreetMap credit on the preview. `business.geo` is currently the approximate postcode point: set the exact coordinates and regenerate the image. The "Finding us" directions (`contact.map.findingUsText`) are a placeholder; the build warns.
 - The address is shown on the contact page (with a Google Maps link) and in the footer via `addressLines()` (`app/utils/address.ts`), and output in JSON-LD. The street address is only output in JSON-LD while `address.street` and `address.postcode` are set.
-- **Service, sector, benefit and About content was drafted, not supplied by the business.** Claims (e.g. "Established 2004", "while you wait" turnaround, machine lists) must be checked with CHS. Never invent reviews or testimonials; `app/data/reviews.ts` is empty until real ones exist.
+- **Service, sector, benefit and About content was drafted, not supplied by the business.** Claims (e.g. "Established 2004", "while you wait" turnaround, machine lists) must be checked with CHS. Never invent reviews or testimonials; `app/data/reviews/` is empty until real ones exist.
 - `public/images/` are low-resolution crops from the design mockup; replace them with real photography. `hero-hydraulic.jpg`, `industrial-bg.jpg`, `service-van.png` and `chs-logo-source.jpg` are unused originals kept as sources.
 
 ## Before finishing a change
