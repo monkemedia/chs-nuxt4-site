@@ -270,19 +270,19 @@ export const cy: Content = {
     valuesTitle: "Beth allwch chi ei ddisgwyl gennym",
     values: [
       {
-        icon: "i-lucide-message-square-text",
-        title: "Atebion syml",
-        text: "Rydyn ni'n dweud wrthych beth sydd o'i le, beth sydd ei angen a faint fydd y gost cyn dechrau, heb unrhyw syrpreis.",
+        icon: "i-lucide-badge-pound-sterling",
+        title: "Pris wedi'i gytuno ymlaen llaw",
+        text: "Rydyn ni'n dweud wrthych beth sydd o'i le a faint fydd y gost cyn i ni ddechrau. Dim costau cudd, dim gwerthu diangen.",
       },
       {
-        icon: "i-lucide-hard-hat",
-        title: "Profiad ymarferol",
-        text: "Gwaith hydrolig ymarferol bob dydd ar beiriannau adeiladu, fferm, masnachol a diwydiannol.",
+        icon: "i-lucide-circle-check-big",
+        title: "Wedi'i drwsio'n iawn, y tro cyntaf",
+        text: "Mae {years} mlynedd o waith hydrolig ymarferol yn golygu ein bod yn dod o hyd i'r gwir nam, nid y symptom yn unig.",
       },
       {
-        icon: "i-lucide-map-pinned",
-        title: "Lleol a hawdd cael gafael arnom",
-        text: "Wedi'n lleoli yn Cross Hands, felly rydyn ni'n agos at Lanelli, Caerfyrddin, Rhydaman ac Abertawe pan fyddwch ein hangen.",
+        icon: "i-lucide-gauge",
+        title: "{tagline}",
+        text: "Mae peiriant sydd wedi stopio yn costio arian i chi, felly rydyn ni'n trin pob swydd fel un frys, boed yn un bibell neu'n ailadeiladu llawn.",
       },
     ],
     waysKicker: "Yn y gweithdy neu ar y safle",

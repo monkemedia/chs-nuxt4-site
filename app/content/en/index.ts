@@ -277,19 +277,19 @@ export const en = {
     valuesTitle: "What you can expect from us",
     values: [
       {
-        icon: "i-lucide-message-square-text",
-        title: "Straight answers",
-        text: "We tell you what's wrong, what it needs and what it'll cost before we start, with no surprises.",
+        icon: "i-lucide-badge-pound-sterling",
+        title: "Price agreed up front",
+        text: "We tell you what's wrong and what it'll cost before we start. No hidden costs, no upselling.",
       },
       {
-        icon: "i-lucide-hard-hat",
-        title: "Practical experience",
-        text: "Hands-on hydraulic work every day across plant, farm, commercial and industrial machinery.",
+        icon: "i-lucide-circle-check-big",
+        title: "Fixed properly, first time",
+        text: "{years} years of hands-on hydraulic work means we find the real fault, not just the symptom.",
       },
       {
-        icon: "i-lucide-map-pinned",
-        title: "Local and reachable",
-        text: "Based in Cross Hands, so we're close to Llanelli, Carmarthen, Ammanford and Swansea when you need us.",
+        icon: "i-lucide-gauge",
+        title: "{tagline}",
+        text: "A stopped machine costs you money, so we treat every job as urgent, whether it's a single hose or a full rebuild.",
       },
     ],
     waysKicker: "Workshop or on-site",
