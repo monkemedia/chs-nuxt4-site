@@ -1,8 +1,8 @@
 import * as z from "zod"
 
-// Shape of the review files Pages CMS saves (.pages.yml): app/data/reviews/*.json and
-// app/data/google-rating.json. Checked at build time by modules/reviews.ts, so zod never
-// reaches the browser. Kept free of Nuxt/Vite imports.
+// Shape of reviews and the Google rating as fetched from Sanity (edited in the admin area:
+// studio/schemas/review.ts, googleRating.ts). Checked at build time by modules/reviews.ts,
+// so zod never reaches the browser. Kept free of Nuxt/Vite imports.
 
 export interface Review {
   author: string
@@ -16,7 +16,7 @@ export interface Review {
   source: "google" | "testimonial"
 }
 
-// The CMS saves empty fields as "" or null, so those count as missing.
+// Sanity returns null for empty fields, and the studio can save "", so both count as missing.
 const empty = (value: unknown) =>
   value === "" || value === null ? undefined : value
 

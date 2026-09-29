@@ -22,7 +22,7 @@ const service = computed(() =>
   content.value.services.find((s) => s.slug === job.value!.service),
 )
 
-// Staff don't write SEO fields in the CMS: the title and summary double as them.
+// Staff don't write SEO fields in the admin area: the title and summary double as them.
 usePageSeo({
   title: `${job.value.title} | CHS Hydraulics`,
   description: job.value.summary,

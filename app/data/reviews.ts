@@ -7,9 +7,9 @@
 //   their name (and company).
 // Fake or edited reviews breach UK consumer law (CMA) and Google's policies.
 //
-// Staff add reviews in Pages CMS (.pages.yml): one JSON file per review in app/data/reviews/,
-// and the overall rating in app/data/google-rating.json. modules/reviews.ts checks them at build time;
-// an invalid one is skipped with a build warning rather than breaking the deploy.
+// Staff add reviews and the overall Google rating in the admin area (/admin, Sanity).
+// modules/reviews.ts fetches and checks them at build time; an invalid one is skipped with a
+// build warning rather than breaking the deploy.
 //
 // While `reviews` is empty the sections are hidden.
 

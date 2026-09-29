@@ -23,3 +23,7 @@ dist
 .vscode/*
 !.vscode/extensions.json
 .vercel
+
+# Sanity Studio (admin area)
+studio/.sanity
+studio/dist

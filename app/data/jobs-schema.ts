@@ -1,7 +1,14 @@
 import * as z from "zod"
 
-// Shape of one job file in app/data/jobs/<slug>.json, as saved by Pages CMS (.pages.yml).
-// Kept free of Nuxt/Vite imports: nuxt.config.ts uses it too.
+// Shape of a Recent work job as fetched from Sanity (modules/lib/sanity.ts, edited in the
+// admin area: studio/schemas/job.ts). Checked at build time by modules/jobs.ts, so zod
+// never reaches the browser. Kept free of Nuxt/Vite imports.
+
+// Sanity returns null for empty fields, and the studio can save "", so both count as missing.
+const empty = (value: unknown) =>
+  value === "" || value === null ? undefined : value
+const optional = <T extends z.ZodType>(schema: T) =>
+  z.preprocess(empty, schema.optional())
 
 const text = z.object({
   // Page heading and card title, e.g. "Boom ram rebuilt for a JCB 3CX".
@@ -9,66 +16,51 @@ const text = z.object({
   // One or two sentences for the card, the page intro and the meta description.
   summary: z.string().trim().min(1),
   // Optional: left out of the page and card when empty.
-  machine: z.string().trim().optional(),
-  location: z.string().trim().optional(),
+  machine: optional(z.string().trim()),
+  location: optional(z.string().trim()),
   problem: z.string().trim().min(1),
   work: z.array(z.string().trim().min(1)).min(1),
   result: z.string().trim().min(1),
   // Optional: the job title is used when it's empty.
-  imageAlt: z.string().trim().optional(),
+  imageAlt: optional(z.string().trim()),
 })
 
-export const jobFileSchema = z.object({
-  published: z.boolean().default(false),
+export const jobInputSchema = z.object({
+  draft: z.boolean().default(false),
+  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   date: z.iso.date(),
   service: z.string(),
   // Optional: cards fall back to the service's image; the job page shows no photo.
-  image: z.string().trim().optional(),
+  image: optional(z.string().trim()),
   en: text,
   // Optional: without a complete Welsh version the Welsh site shows the English.
   cy: z.unknown().optional(),
 })
 
 export type JobText = z.infer<typeof text>
-export interface Job extends Omit<z.infer<typeof jobFileSchema>, "cy"> {
-  slug: string
+export interface Job extends Omit<
+  z.infer<typeof jobInputSchema>,
+  "cy" | "draft"
+> {
   // Null when there's no complete Welsh version.
   cy: JobText | null
   // Not published yet. Drafts only reach the preview build (NUXT_PUBLIC_SHOW_DRAFTS).
   draft?: true
 }
 
-// The URL slug is the file name, which Pages CMS makes from the English title when the job
-// is first saved. It doesn't follow later title edits, so published links never break.
-const slugFromFile = (file: string) =>
-  file
-    .replace(/^.*\//, "")
-    .replace(/\.json$/, "")
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-
-// A job goes live once it's marked published; until then it's a draft. Invalid files are
-// skipped with a reason, so a half-finished CMS entry never breaks the build.
-export function parseJob(
-  file: string,
-  data: unknown,
-): { job: Job } | { skipped: string } {
-  const parsed = jobFileSchema.safeParse(data)
+// Invalid jobs are skipped with a reason, so a half-finished entry never breaks the build.
+export function parseJob(data: unknown): { job: Job } | { skipped: string } {
+  const parsed = jobInputSchema.safeParse(data)
+  const label = (data as { slug?: string } | null)?.slug ?? "(no web address)"
   if (!parsed.success)
-    return { skipped: `${file}: ${z.prettifyError(parsed.error)}` }
-  const slug = slugFromFile(file)
-  if (!slug)
-    return { skipped: `${file}: can't make a web address from the file name` }
-  const cy = text.safeParse(parsed.data.cy)
+    return { skipped: `${label}: ${z.prettifyError(parsed.error)}` }
+  const { draft, cy, ...job } = parsed.data
+  const welsh = text.safeParse(cy)
   return {
     job: {
-      ...parsed.data,
-      slug,
-      cy: cy.success ? cy.data : null,
-      ...(parsed.data.published ? {} : { draft: true as const }),
+      ...job,
+      cy: welsh.success ? welsh.data : null,
+      ...(draft ? { draft: true as const } : {}),
     },
   }
 }

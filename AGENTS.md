@@ -33,7 +33,10 @@ Build-time environment variables (both optional). Copy `.env.example` to `.env` 
 | ----------------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
 | `NUXT_PUBLIC_CONTACT_FORM_ENDPOINT` | Form service URL (Formspree-style, FormData POST, 2xx = success) | Form shows an error asking visitors to call |
 | `NUXT_PUBLIC_PLAUSIBLE_DOMAIN`      | Site domain as added in Plausible                                | No analytics                                |
-| `NUXT_PUBLIC_SHOW_DRAFTS`           | `true` on the drafts preview deployment only (see Recent work)   | Drafts left out (live site)                 |
+| `NUXT_PUBLIC_SHOW_DRAFTS`           | `true` on the drafts preview deployment only (see Admin area)    | Drafts left out (live site)                 |
+| `SANITY_STUDIO_PROJECT_ID`          | Sanity project for the admin area (jobs, reviews)                | Builds with no jobs or reviews (warns)      |
+| `SANITY_STUDIO_DATASET`             | Sanity dataset                                                   | `production`                                |
+| `SANITY_READ_TOKEN`                 | **Secret.** Preview deployment only: reads drafts from Sanity    | Preview shows published content only        |
 
 ## Project structure
 
@@ -60,8 +63,7 @@ app/
     <locale>/services.ts  -> /services and /services/[slug], footer, contact form dropdown
     <locale>/sectors.ts   -> /sectors and the homepage sectors band
     <locale>/benefits.ts  -> /why-chs and the homepage "why" band
-  data/reviews/           Real Google reviews/testimonials, one JSON file each (Pages CMS; not translated)
-  data/jobs/              Recent work, one JSON file per job (edited in Pages CMS)
+  data/jobs.ts, reviews.ts  Recent work and reviews, fetched from Sanity at build time (modules/)
   pages/                  index, about, sectors, why-chs, contact, services/index, services/[slug]
   plugins/analytics.client.ts  Plausible init + tel:/mailto: click events, provides $track
   utils/ui.ts             Shared `ui` prop overrides (e.g. heroBreadcrumbUi)
@@ -158,22 +160,30 @@ public/
 
 ### Reviews and testimonials
 
-- Staff add reviews in **Pages CMS** ("Reviews" and "Google rating" in `.pages.yml`): one file per review in `app/data/reviews/`, the overall rating in `app/data/google-rating.json`. `modules/reviews.ts` validates them at build time (`app/data/reviews-schema.ts`, zod, kept out of the browser bundle) and serves them as `virtual:chs-reviews`; invalid files are skipped with a `[reviews] Skipped …` warning.
+- Staff add reviews and the overall Google rating in the **admin area** (see below). `modules/reviews.ts` fetches and validates them at build time (`app/data/reviews-schema.ts`, zod, kept out of the browser bundle) and serves them as `virtual:chs-reviews`; invalid entries are skipped with a `[reviews] Skipped …` warning.
 - `<ReviewsSection>` (homepage and `/why-chs`) renders them via `app/data/reviews.ts`: Google reviews and testimonials in one list, newest first, plus the overall `googleRating`. With `business.googlePlaceId` set in `app.config.ts`, it also shows "Read all reviews on Google" and "Leave us a review" links.
 - `<GoogleRatingBadge>` shows "★★★★★ 4.8 on Google · 23 reviews" under the homepage hero buttons, but only once `googleRating` meets `ratingBadgeThreshold` in `reviews.ts` (10+ reviews, 4.5+ stars). Shared logic (rating, Google links) lives in `composables/useReviews.ts`.
 - **Only real reviews**, copied exactly (Google) or collected with permission (testimonials). Never write, edit or pad reviews: it breaches UK consumer law (CMA) and Google policy.
-- With no reviews the section and badge render nothing, in dev and production alike. To preview the design, add a review in the CMS (or a file in `app/data/reviews/`) locally and don't commit it.
+- With no reviews the section and badge render nothing, in dev and production alike. To preview the design, add a review in the admin area.
 - **No `Review` / `AggregateRating` JSON-LD for the business itself.** Google treats reviews a business shows about itself as self-serving and won't give them star rich results.
 
 ### Recent work (case studies)
 
-- Staff add and edit jobs in **Pages CMS** (pagescms.org, configured by `.pages.yml`). Each job is `app/data/jobs/<slug>.json`; the file name, made from the English title when the job is first saved, is its URL (renaming the file changes the URL), photos go to `public/images/jobs/`; saving commits to GitHub and the host rebuilds. Invite staff from Pages CMS's settings (by email; no GitHub account needed).
-- `modules/jobs.ts` loads the files at build time (validated by `app/data/jobs-schema.ts` with zod) and serves them as `virtual:chs-jobs`. A job is live once **Published** is ticked; otherwise it's a draft. The Welsh (`cy`) is optional: without a complete Welsh version the Welsh site shows the English, marked `lang="en"`, with an "only available in English" note (the one exception to "every string in both languages", because staff can't write Welsh). Invalid files are skipped with a `[jobs] Skipped …` build warning, so a half-finished entry never breaks a deploy. Keep `.pages.yml` fields in step with the schema (including the service list when services change).
-- **Drafts** are bundled only in `npm run dev` and in a preview build with `NUXT_PUBLIC_SHOW_DRAFTS=true`, so the live site's HTML and JS never contain them. Staff check drafts on a second deployment of the same repo with that variable set: drafts get a "Draft" badge and banner, and every page is `noindex`. Never set it on the live site.
+- Staff add and edit jobs in the **admin area** (see below). The "Web address" (Sanity slug, generated from the English title) is the URL; changing it breaks old links.
+- `modules/jobs.ts` fetches them at build time (validated by `app/data/jobs-schema.ts` with zod) and serves them as `virtual:chs-jobs`. A job is live once it's published in the admin area; unpublished changes are drafts. The Welsh (`cy`) is optional: without a complete Welsh version the Welsh site shows the English, marked `lang="en"`, with an "only available in English" note (the one exception to "every string in both languages", because staff can't write Welsh). Invalid entries are skipped with a `[jobs] Skipped …` build warning, so a half-finished entry never breaks a deploy. Keep `studio/schemas/job.ts` in step with the zod schema (the studio's service list is read from `app/content/en/services.ts`).
+- **Drafts** are fetched only in `npm run dev` and in a preview build with `NUXT_PUBLIC_SHOW_DRAFTS=true` plus `SANITY_READ_TOKEN`, so the live site's HTML and JS never contain them. Staff check drafts on a second deployment of the same repo with that variable set: drafts get a "Draft" badge and banner, and every page is `noindex`. Never set it on the live site.
 - The page title and meta description come from the job's title and summary. `useJobs()` returns live jobs in the current language, newest first, and fails the build on a duplicate slug or unknown service.
 - Shown at `/work` and `/work/<slug>` (`Article` JSON-LD), in `<RecentJobs>` on the homepage, the matching service page and under other jobs, and as a footer link.
 - With no job to show, the build shows nothing and `/work` is kept out of the prerender and sitemap (`modules/jobs.ts`).
 - **Only real jobs**, with CHS's own photos. Name a customer only with their permission. Add a header nav link once there are a few jobs.
+
+### Admin area (Sanity)
+
+- Staff manage **Recent work**, **Reviews** and the **Google rating** at `/admin`: Sanity Studio, in `studio/` (own `package.json`; schemas in `studio/schemas/`). Staff log in with the email or Google account they were invited with (sanity.io/manage → project → Members). Content lives in Sanity, not the repo, so staff edits never touch git.
+- The site stays fully static. `modules/lib/sanity.ts` fetches everything in one GROQ query at build time (published content from the API CDN; drafts, for the preview build, with `SANITY_READ_TOKEN`). Photos are served from `cdn.sanity.io` and resized by `@nuxt/image` at build time. A Sanity API error fails the build rather than publishing a site with the content missing.
+- **Publishing rebuilds the site:** a Sanity webhook (sanity.io/manage → API → Webhooks, on create/update/delete of `job`, `review`, `googleRating`) calls the Vercel deploy hook. The preview deployment gets its own webhook with drafts included.
+- **Building:** `npm run generate` builds the site, then `npm run build:admin` builds the studio into `.output/public/admin` (Vercel's `buildCommand` runs both; `vercel.json` rewrites `/admin/*` to the studio and marks it `noindex`). Locally, `npm run admin` runs the studio at http://localhost:3333/admin.
+- Add the site's domains (and http://localhost:3333) as CORS origins with credentials in sanity.io/manage → API, or the studio can't log in.
 
 ### Analytics
 
@@ -195,7 +205,7 @@ public/
 - **The About timeline is placeholders too:** `about.timeline` in `app/content/<locale>/index.ts` (only 2004 and the 2026 rebrand are real). Entries are free to add or remove; `upcoming: true` shows an entry greyed out as next, and `onsite: true` hides it while `features.onsite` is off. The build warns while any date or title is in [brackets].
 - **Contact map:** `<ContactMap>` shows a static preview (`public/images/map-cross-hands.jpg`, OpenStreetMap tiles, greyscale with a red pin, drawn around `business.geo`) and only loads the live Google map when the visitor clicks, so the site stays cookie-free (no consent banner) and fast. Keep the OpenStreetMap credit on the preview. `business.geo` is currently the approximate postcode point: set the exact coordinates and regenerate the image. The "Finding us" directions (`contact.map.findingUsText`) are a placeholder; the build warns.
 - The address is shown on the contact page (with a Google Maps link) and in the footer via `addressLines()` (`app/utils/address.ts`), and output in JSON-LD. The street address is only output in JSON-LD while `address.street` and `address.postcode` are set.
-- **Service, sector, benefit and About content was drafted, not supplied by the business.** Claims (e.g. "Established 2004", "while you wait" turnaround, machine lists) must be checked with CHS. Never invent reviews or testimonials; `app/data/reviews/` is empty until real ones exist.
+- **Service, sector, benefit and About content was drafted, not supplied by the business.** Claims (e.g. "Established 2004", "while you wait" turnaround, machine lists) must be checked with CHS. Never invent reviews or testimonials; the admin area has none until real ones exist.
 - `public/images/` are low-resolution crops from the design mockup; replace them with real photography. `hero-hydraulic.jpg`, `industrial-bg.jpg`, `service-van.png` and `chs-logo-source.jpg` are unused originals kept as sources.
 
 ## Before finishing a change

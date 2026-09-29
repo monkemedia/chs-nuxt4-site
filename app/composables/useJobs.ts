@@ -1,22 +1,5 @@
-import { en } from "~/content/en"
 import { onsiteServiceSlug, type LocaleCode } from "~/content"
 import { jobs } from "~/data/jobs"
-
-// Fail the build on a duplicate slug or an unknown service rather than ship a broken
-// link (the CMS offers only valid services, so this means a hand edit went wrong).
-if (import.meta.server) {
-  const serviceSlugs = en.services.map((s) => s.slug)
-  const seen = new Set<string>()
-  for (const job of jobs) {
-    if (seen.has(job.slug))
-      throw new Error(`[jobs] Duplicate job slug "${job.slug}".`)
-    seen.add(job.slug)
-    if (!serviceSlugs.includes(job.service))
-      throw new Error(
-        `[jobs] "${job.slug}" has unknown service "${job.service}".`,
-      )
-  }
-}
 
 // Recent jobs in the current language, newest first. With none, every jobs section, page
 // and link hides. Jobs for the On-site Service hide while `features.onsite` is off.

@@ -248,7 +248,8 @@ export const cy: Content = {
     result: "Y canlyniad",
     similarProblem: "Problem debyg?",
     draft: "Drafft",
-    draftNote: "Ddim yn fyw eto: ticiwch Published yn y CMS pan fydd yn barod.",
+    draftNote:
+      "Ddim yn fyw eto: pwyswch Publish yn yr ardal weinyddu pan fydd yn barod.",
     englishOnly: "Dim ond yn Saesneg mae hwn ar gael",
     ctaKicker: "Wedi'n lleoli yn Cross Hands, Sir Gâr",
     ctaText:

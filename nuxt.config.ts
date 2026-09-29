@@ -59,6 +59,8 @@ export default defineNuxtConfig({
   image: {
     quality: 78,
     format: ["avif", "webp"],
+    // Job photos uploaded in the admin area are served from Sanity's CDN.
+    domains: ["cdn.sanity.io"],
   },
   routeRules: {
     "/": { prerender: true },

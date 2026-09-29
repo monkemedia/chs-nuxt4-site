@@ -6,6 +6,8 @@
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate": "nuxt generate",
+    "admin": "npm --prefix studio run dev",
+    "build:admin": "npm --prefix studio install --no-audit --no-fund && npm --prefix studio run build",
     "preview": "npx serve .output/public",
     "postinstall": "nuxt prepare",
     "format": "prettier --write .",

@@ -1,6 +1,6 @@
 // Recent work (case studies) shown at /work, /work/<slug>, on the homepage and on the
-// matching service page. Each job is a JSON file in app/data/jobs/, edited by staff in
-// Pages CMS (see .pages.yml and AGENTS.md "Recent work").
+// matching service page. Staff add and edit jobs in the admin area (/admin, Sanity; see
+// AGENTS.md "Admin area").
 //
 // Only ever publish REAL jobs CHS has done:
 // - Name a customer only with their permission; otherwise describe them ("a Carmarthenshire
@@ -13,5 +13,5 @@
 
 export type { Job, JobText } from "./jobs-schema"
 
-// Loaded and filtered at build time by modules/jobs.ts.
+// Fetched from Sanity and filtered at build time by modules/jobs.ts.
 export { jobs } from "virtual:chs-jobs"
