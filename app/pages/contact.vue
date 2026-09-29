@@ -114,6 +114,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   result.value?.focus()
 }
 
+// "Finding us" directions are a [placeholder] until the business supplies them.
+if (import.meta.server && page.value.map.findingUsText.startsWith("["))
+  console.warn(
+    '[contact] "Finding us" directions are a placeholder: edit contact.map.findingUsText in app/content/<locale>/index.ts.',
+  )
+
 const details = computed(() => [
   {
     icon: "i-lucide-phone",
@@ -129,8 +135,10 @@ const details = computed(() => [
   },
   {
     icon: "i-lucide-map-pin",
-    title: page.value.basedIn,
-    label: content.value.business.location,
+    title: page.value.address,
+    label: addressLines(business.address).join("\n"),
+    href: mapsUrl(business.address),
+    external: true,
   },
 ])
 </script>
@@ -409,7 +417,9 @@ const details = computed(() => [
                 <a
                   v-if="item.href"
                   :href="item.href"
-                  class="font-bold wrap-anywhere hover:text-chs-700"
+                  :target="item.external ? '_blank' : undefined"
+                  :rel="item.external ? 'noopener' : undefined"
+                  class="font-bold wrap-anywhere whitespace-pre-line hover:text-chs-700"
                   >{{ item.label }}</a
                 >
                 <p v-else>{{ item.label }}</p>
@@ -456,6 +466,42 @@ const details = computed(() => [
             </ul>
           </div>
         </aside>
+      </UContainer>
+    </section>
+
+    <section class="py-16 sm:py-20" aria-labelledby="map-title">
+      <UContainer
+        class="grid items-start gap-10 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-14"
+      >
+        <ContactMap />
+        <div>
+          <p class="kicker mb-3 text-chs-700">{{ page.map.kicker }}</p>
+          <h2
+            id="map-title"
+            class="heading-display mb-5 text-[clamp(28px,3.6vw,40px)]"
+          >
+            {{ page.map.title }}
+          </h2>
+          <address class="mb-6 text-lg font-bold not-italic">
+            <template
+              v-for="(line, i) in addressLines(business.address)"
+              :key="line"
+              ><br v-if="i" />{{ line }}</template
+            >
+          </address>
+          <UButton
+            :to="directionsUrl(business.address)"
+            target="_blank"
+            icon="i-lucide-navigation"
+            size="xl"
+          >
+            {{ page.map.directions }}
+          </UButton>
+          <h3 class="heading-display mt-8 mb-2 text-[13px] tracking-wide">
+            {{ page.map.findingUs }}
+          </h3>
+          <p class="text-zinc-600">{{ page.map.findingUsText }}</p>
+        </div>
       </UContainer>
     </section>
   </div>

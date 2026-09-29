@@ -70,6 +70,15 @@ export const cy: Content = {
     text: "Mae pob awr y mae peiriant yn segur yn costio arian i chi. Ffoniwch nawr ac fe ddywedwn ni wrthoch chi'n syth pryd gallwn ni fod gyda chi.",
   },
 
+  certification: {
+    certified: (standard: string) => `Ardystiedig ${standard}`,
+    by: (body: string, accreditation: string) =>
+      `Wedi'i ardystio gan ${body}, corff ardystio sydd wedi'i achredu gan ${accreditation}`,
+    number: (number: string) => `Rhif tystysgrif ${number}`,
+    markAlt: (standard: string, body: string, accreditation: string) =>
+      `Ardystiedig ${standard} gan ${body}, achrededig ${accreditation}`,
+  },
+
   openStatus: {
     open: "Ar agor nawr: ffoniwch i siarad â'n tîm",
     closed: (opens: string) =>
@@ -265,6 +274,7 @@ export const cy: Content = {
       { value: "Cross Hands", label: "Gweithdy" },
       { value: "Symudol", label: "Uned wasanaeth ar y safle" },
       { value: "De Cymru", label: "Ein hardal" },
+      { value: "{standard}", label: "Ansawdd ardystiedig" },
     ],
     valuesKicker: "Sut rydyn ni'n gweithio",
     valuesTitle: "Beth allwch chi ei ddisgwyl gennym",
@@ -359,6 +369,7 @@ export const cy: Content = {
       "Pibellau wedi'u gwneud tra byddwch yn aros ar gyfer y rhan fwyaf o feintiau safonol",
       "Yn y gweithdy neu ar y safle, pa un bynnag sy'n eich cael yn ôl i weithio gyntaf",
       "Prisiau clir heb unrhyw syrpreis ar yr anfoneb",
+      "Prosesau ansawdd ardystiedig {standard}, wedi'u harchwilio bob blwyddyn",
     ],
     stepsKicker: "Sut mae'n gweithio",
     stepsTitle: "O dorri i lawr\ni fod yn ôl yn gweithio",
@@ -450,9 +461,22 @@ export const cy: Content = {
     emergencyTitle: "Ffoniwch am alwadau brys",
     phone: "Ffôn",
     email: "E-bost",
-    basedIn: "Wedi'n lleoli yn",
+    address: "Cyfeiriad",
     openingHours: "Oriau agor",
     areasWeCover: "Ardaloedd rydyn ni'n eu gwasanaethu",
+    map: {
+      kicker: "Dewch i'r gweithdy",
+      title: "Dod o hyd i ni",
+      previewAlt: "Map o Cross Hands yn dangos lle mae CHS Hydraulics",
+      show: "Dangos map rhyngweithiol",
+      note: "Mae'n llwytho Google Maps, a allai osod cwcis.",
+      iframeTitle: "Map Google yn dangos CHS Hydraulics, 3 Acer Court",
+      directions: "Cyfarwyddiadau",
+      findingUs: "Sut i'n cyrraedd",
+      findingUsText:
+        "[Sut i ddod o hyd i'r uned: e.e. pa gyffordd neu gylchfan i droi arni, lle mae Acer Court ar yr ystâd, a lle i barcio.]",
+      attribution: "© Cyfranwyr OpenStreetMap",
+    },
   },
 
   services,

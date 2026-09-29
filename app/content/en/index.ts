@@ -69,6 +69,16 @@ export const en = {
     text: "Every hour a machine stands idle costs you money. Call now and we'll tell you straight away when we can be with you.",
   },
 
+  // Certification badge (footer). Details come from app.config `business.certification`.
+  certification: {
+    certified: (standard: string) => `${standard} certified`,
+    by: (body: string, accreditation: string) =>
+      `Certified by ${body}, a ${accreditation}-accredited certification body`,
+    number: (number: string) => `Certificate no. ${number}`,
+    markAlt: (standard: string, body: string, accreditation: string) =>
+      `${body} ${standard} certified, ${accreditation} accredited`,
+  },
+
   // Live open/closed line next to call buttons (Europe/London time, from app.config openingHours).
   openStatus: {
     open: "Open now: call and speak to our team",
@@ -272,6 +282,7 @@ export const en = {
       { value: "Cross Hands", label: "Workshop base" },
       { value: "Mobile", label: "On-site service unit" },
       { value: "South Wales", label: "Area we cover" },
+      { value: "{standard}", label: "Quality certified" },
     ],
     valuesKicker: "How we work",
     valuesTitle: "What you can expect from us",
@@ -366,6 +377,7 @@ export const en = {
       "Hoses made up while you wait for most standard sizes",
       "Workshop or on-site, whichever gets you working sooner",
       "Clear pricing with no surprises on the invoice",
+      "{standard} certified quality processes, audited every year",
     ],
     stepsKicker: "How it works",
     stepsTitle: "From breakdown\nto back at work",
@@ -452,9 +464,24 @@ export const en = {
     emergencyTitle: "Call for emergency call‑outs",
     phone: "Phone",
     email: "Email",
-    basedIn: "Based in",
+    address: "Address",
     openingHours: "Opening hours",
     areasWeCover: "Areas we cover",
+    map: {
+      kicker: "Visit the workshop",
+      title: "Find us",
+      previewAlt: "Map of Cross Hands showing where CHS Hydraulics is",
+      show: "Show interactive map",
+      // Shown under the button: the live map comes from Google.
+      note: "Loads Google Maps, which may set cookies.",
+      iframeTitle: "Google map showing CHS Hydraulics, 3 Acer Court",
+      directions: "Get directions",
+      findingUs: "Finding us",
+      // PLACEHOLDER: real directions from the main road (and cy/index.ts).
+      findingUsText:
+        "[How to find the unit: e.g. which junction or roundabout to turn at, where Acer Court is on the estate, and where to park.]",
+      attribution: "© OpenStreetMap contributors",
+    },
   },
 
   services,

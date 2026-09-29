@@ -8,7 +8,8 @@ import { applyOverrides } from "~/content/overrides"
 
 // Copy for the current language (see app/content/). Use in templates as content.home.heroCopy.
 // {years} and {hours} in any string are filled in from app.config `offer`, and {founder1},
-// {founder2}, {founded} and {tagline} from `business`, so they stay the same in every language.
+// {founder2}, {founded}, {tagline} and {standard} (the ISO standard's full reference, which ISO
+// asks for) from `business`, so they stay the same in every language.
 // While app.config `features.onsite` is off, the workshop-only copy (app/content/<locale>/
 // workshop.ts) replaces anything that mentions on-site work, and the On-site Service is
 // removed everywhere services are listed (so its page isn't linked, prerendered or mapped).
@@ -23,11 +24,12 @@ export function useContent() {
     founder2: business.founders[1]?.name ?? "",
     founded: business.foundingYear,
     tagline: business.tagline,
+    standard: business.certification.standard,
   }
   const fill = <T>(value: T): T => {
     if (typeof value === "string")
       return value.replace(
-        /\{(years|hours|founder1|founder2|founded|tagline)\}/g,
+        /\{(years|hours|founder1|founder2|founded|tagline|standard)\}/g,
         (_, key: string) => tokens[key]!,
       ) as T
     if (Array.isArray(value)) return value.map(fill) as T

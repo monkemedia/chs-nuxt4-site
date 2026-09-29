@@ -51,22 +51,39 @@ export default defineAppConfig({
     // Photo of the founders together for the About story (a /images/ path, ideally 4:3), or ""
     // for a placeholder panel.
     foundersPhoto: "",
+    // Quality certification: footer badge, About facts, Why CHS promise and structured data.
+    // PLACEHOLDERS: set the real certificate number, and `mark` to the official URS/UKAS
+    // certification mark from URS's logo pack (e.g. "/images/urs-iso-9001.png"); until then a
+    // text badge shows. Never use the UKAS or ISO logos on their own, or a mark copied from the
+    // web. Only claim it while the certificate is current and for the activities in its scope.
+    certification: {
+      standard: "ISO 9001:2015",
+      body: "URS",
+      accreditation: "UKAS",
+      certificateNumber: "[Certificate no.]",
+      mark: "",
+    },
     // Companies House incorporation year of the LLP; confirm with the business.
     foundingYear: "2004",
     // Former trading name: kept in structured data so Google links old listings to the new brand.
     formerName: "Crosshands Hydraulic Services",
-    phoneDisplay: "01269 123 456",
-    phoneHref: "tel:+441269123456",
-    phoneIntl: "+44 1269 123456",
+    phoneDisplay: "01269 831491",
+    phoneHref: "tel:+441269831491",
+    phoneIntl: "+44 1269 831491",
     email: "info@chshydraulics.co.uk",
-    // Leave street/postcode empty until confirmed; the address is only added to structured data once both are set.
+    // Must match the Google Business Profile exactly.
     address: {
-      street: "",
+      street: "3 Acer Court",
       locality: "Cross Hands",
       town: "Llanelli",
       region: "Carmarthenshire",
-      postcode: "",
+      postcode: "SA14 6RB",
     },
+    // Map pin and structured data `geo`. APPROXIMATE: the SA14 6RB postcode point (Acer Court
+    // isn't in OpenStreetMap); Google places the unit on Heol Parc Mawr, a little away. Replace
+    // with the exact point (right-click the unit in Google Maps, click the coordinates to copy
+    // them), then regenerate the preview image (public/images/map-cross-hands.jpg) around it.
+    geo: { latitude: 51.793761, longitude: -4.076576 },
     // Towns named in structured data (areaServed).
     towns: [
       "Cross Hands",

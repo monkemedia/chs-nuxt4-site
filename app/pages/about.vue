@@ -21,6 +21,11 @@ if (import.meta.server) {
     console.warn(
       "[about] Timeline has placeholder milestones: edit about.timeline in app/content/<locale>/index.ts.",
     )
+  const { certification } = business
+  if (certification.certificateNumber.startsWith("[") || !certification.mark)
+    console.warn(
+      "[about] Certification is incomplete: set business.certification.certificateNumber and mark (official URS artwork) in app.config.ts.",
+    )
 }
 
 // On-site milestones only while on-site work is live. Past milestones are highlighted up to
@@ -187,14 +192,14 @@ const crumbs = computed(() => [
 
     <section class="bg-primary text-white" :aria-label="page.factsLabel">
       <UContainer>
-        <dl class="grid grid-cols-2 divide-white/30 lg:grid-cols-4 lg:divide-x">
+        <dl class="grid grid-cols-2 divide-white/30 lg:grid-cols-5 lg:divide-x">
           <div
             v-for="fact in page.facts"
             :key="fact.label"
-            class="px-2 py-8 lg:px-8 lg:first:pl-0"
+            class="px-2 py-8 last:col-span-2 lg:px-8 lg:first:pl-0 lg:last:col-span-1"
           >
             <dt class="kicker text-[11px] text-white">{{ fact.label }}</dt>
-            <dd class="heading-display mt-2 text-2xl sm:text-3xl">
+            <dd class="heading-display mt-2 text-2xl sm:text-3xl lg:text-2xl">
               {{ fact.value }}
             </dd>
           </div>

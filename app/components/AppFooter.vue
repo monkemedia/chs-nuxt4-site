@@ -52,6 +52,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
           {{ business.tagline }}
         </p>
         <p class="mt-3 max-w-xs">{{ content.footer.blurb }}</p>
+        <CertificationBadge class="mt-6 max-w-xs" />
       </div>
 
       <nav
@@ -89,7 +90,15 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
               business.email
             }}</a>
           </li>
-          <li>{{ content.business.location }}</li>
+          <li>
+            <address class="not-italic">
+              <template
+                v-for="(line, i) in addressLines(business.address)"
+                :key="line"
+                ><br v-if="i" />{{ line }}</template
+              >
+            </address>
+          </li>
         </ul>
       </div>
     </UContainer>

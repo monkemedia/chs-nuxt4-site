@@ -34,7 +34,9 @@ useJsonLd("business", {
     ? {
         address: {
           "@type": "PostalAddress",
-          streetAddress: address.street,
+          streetAddress: [address.street, address.locality]
+            .filter(Boolean)
+            .join(", "),
           addressLocality: address.town,
           addressRegion: address.region,
           postalCode: address.postcode,
@@ -42,11 +44,28 @@ useJsonLd("business", {
         },
       }
     : {}),
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: business.geo.latitude,
+    longitude: business.geo.longitude,
+  },
   areaServed: business.towns.map((name) => ({ "@type": "City", name })),
   openingHours: business.openingHours,
   knowsAbout: content.value.services.map((s) => s.h1),
   knowsLanguage: ["en-GB", "cy-GB"],
   foundingDate: business.foundingYear,
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    credentialCategory: "certification",
+    name: business.certification.standard,
+    recognizedBy: {
+      "@type": "Organization",
+      name: business.certification.body,
+    },
+    ...(business.certification.certificateNumber.startsWith("[")
+      ? {}
+      : { identifier: business.certification.certificateNumber }),
+  },
   ...(founders.length
     ? {
         founder: founders.map((founder) => ({
