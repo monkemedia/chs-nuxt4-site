@@ -46,8 +46,7 @@ content:
       - name: image
         label: Photo
         type: image
-        required: true
-        description: Your own photo of this job, landscape, at least 800 × 500. No stock photos.
+        description: Your own photo of this job, landscape, at least 800 × 500. No stock photos. Optional; without one, cards show the service's photo.
       - name: en
         label: English
         type: object
@@ -86,7 +85,6 @@ content:
           - name: imageAlt
             label: Photo description
             type: string
-            required: true
             description: What the photo shows, for people who can't see it.
       - name: cy
         label: Welsh (Cymraeg)

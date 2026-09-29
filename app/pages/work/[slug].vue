@@ -27,7 +27,7 @@ usePageSeo({
   title: `${job.value.title} | CHS Hydraulics`,
   description: job.value.summary,
   path,
-  image: job.value.image,
+  ...(job.value.image ? { image: job.value.image } : {}),
 })
 useBreadcrumbs([
   { name: content.value.common.home, path: "/" },
@@ -38,7 +38,7 @@ useJsonLd("article", {
   "@type": "Article",
   headline: job.value.title,
   description: job.value.summary,
-  image: new URL(job.value.image, siteUrl).href,
+  ...(job.value.image ? { image: new URL(job.value.image, siteUrl).href } : {}),
   datePublished: job.value.date,
   url: new URL(localePath(path), siteUrl).href,
   author: { "@id": useBusinessId() },
@@ -102,8 +102,9 @@ const enquiryTo = computed(() => localePath(enquiryPath))
       >
         <article class="max-w-3xl">
           <NuxtPicture
+            v-if="job!.image"
             :src="job!.image"
-            :alt="job!.imageAlt"
+            :alt="job!.imageAlt || job!.title"
             sizes="800px"
             width="800"
             height="500"
@@ -114,7 +115,9 @@ const enquiryTo = computed(() => localePath(enquiryPath))
             }"
           />
 
-          <h2 class="heading-display mt-12 mb-4 text-[clamp(24px,3vw,32px)]">
+          <h2
+            class="heading-display mt-12 mb-4 text-[clamp(24px,3vw,32px)] first:mt-0"
+          >
             {{ page.problem }}
           </h2>
           <p class="text-[17px] text-zinc-700">{{ job!.problem }}</p>

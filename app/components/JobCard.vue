@@ -1,10 +1,20 @@
 <script setup lang="ts">
 import type { LocalJob } from "~/composables/useJobs"
 
-defineProps<{ job: LocalJob; headingLevel?: "h2" | "h3" }>()
+const props = defineProps<{ job: LocalJob; headingLevel?: "h2" | "h3" }>()
 
 const content = useContent()
 const localePath = useLocalePath()
+
+// Jobs without their own photo use the service's image so the cards stay even.
+const photo = computed(() => {
+  if (props.job.image)
+    return { src: props.job.image, alt: props.job.imageAlt || props.job.title }
+  const service = content.value.services.find(
+    (s) => s.slug === props.job.service,
+  )
+  return { src: service?.image ?? "/images/hero.jpg", alt: "" }
+})
 
 const formatDate = (date: string) =>
   dayjs.utc(date).locale(content.value.dateLocale).format("MMMM YYYY")
@@ -16,8 +26,8 @@ const formatDate = (date: string) =>
   >
     <div class="aspect-8/5 bg-ink-950">
       <NuxtPicture
-        :src="job.image"
-        :alt="job.imageAlt"
+        :src="photo.src"
+        :alt="photo.alt"
         sizes="400px"
         width="400"
         height="250"

@@ -14,14 +14,16 @@ const text = z.object({
   problem: z.string().trim().min(1),
   work: z.array(z.string().trim().min(1)).min(1),
   result: z.string().trim().min(1),
-  imageAlt: z.string().trim().min(1),
+  // Optional: the job title is used when it's empty.
+  imageAlt: z.string().trim().optional(),
 })
 
 export const jobFileSchema = z.object({
   published: z.boolean().default(false),
   date: z.iso.date(),
   service: z.string(),
-  image: z.string().min(1),
+  // Optional: cards fall back to the service's image; the job page shows no photo.
+  image: z.string().trim().optional(),
   en: text,
   // Optional while drafting; the job stays hidden until the Welsh is complete.
   cy: z.unknown().optional(),
