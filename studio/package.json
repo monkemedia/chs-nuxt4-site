@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "sanity dev --port 3333",
-    "build": "sanity build ../.output/public/admin --yes"
+    "build": "node build.mjs"
   },
   "dependencies": {
     "react": "^19.3.0",

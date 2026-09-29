@@ -68,6 +68,23 @@ export default defineNuxtConfig({
     "/contact": { prerender: true },
   },
   nitro: {
+    // On Vercel the build uses the Build Output API, which ignores vercel.json's rewrites and
+    // headers, so the admin area's (studio/, built into /admin) routing lives here. These run
+    // before static files: every /admin page path (no file extension) serves the studio's
+    // index.html, and nothing under /admin is indexed.
+    vercel: {
+      config: {
+        routes: [
+          {
+            src: "^/admin(?:/.*)?$",
+            headers: { "X-Robots-Tag": "noindex, nofollow" },
+            continue: true,
+          },
+          { src: "^/admin(?:/[^.]*)?$", dest: "/admin/index.html" },
+          // Nitro types routes too narrowly (only cache-control headers); Vercel accepts any.
+        ] as never,
+      },
+    },
     prerender: {
       crawlLinks: true,
       routes: ["/", "/cy", "/services", "/contact", "/sitemap_index.xml"],
