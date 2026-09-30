@@ -50,6 +50,10 @@ export default defineNuxtConfig({
       // Preview build only: include draft jobs and keep every page out of search engines.
       // Set NUXT_PUBLIC_SHOW_DRAFTS=true on the preview deployment, never on the live site.
       showDrafts: false,
+      // Year of the build, for {years} of experience (from app.config `foundingYear`). Taken
+      // at build time, not from the visitor's clock, so prerendered pages and hydration agree;
+      // the first rebuild of the year moves it on.
+      buildYear: new Date().getFullYear(),
     },
   },
   site: {

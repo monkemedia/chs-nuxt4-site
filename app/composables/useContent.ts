@@ -7,18 +7,21 @@ import {
 import { applyOverrides } from "~/content/overrides"
 
 // Copy for the current language (see app/content/). Use in templates as content.home.heroCopy.
-// {years} and {hours} in any string are filled in from app.config `offer`, and {founder1},
-// {founder2}, {founded}, {tagline} and {standard} (the ISO standard's full reference, which ISO
-// asks for) from `business`, so they stay the same in every language.
+// {years} (of experience: the build year minus `business.foundingYear`) and {hours} (from
+// app.config `offer`), plus {founder1}, {founder2}, {founded}, {tagline} and {standard} (the
+// ISO standard's full reference, which ISO asks for) from `business`, are filled in here, so
+// they stay the same in every language.
 // While app.config `features.onsite` is off, the workshop-only copy (app/content/<locale>/
 // workshop.ts) replaces anything that mentions on-site work, and the On-site Service is
 // removed everywhere services are listed (so its page isn't linked, prerendered or mapped).
 export function useContent() {
   const { locale } = useI18n()
   const { business, features, offer } = useAppConfig()
+  const runtimeConfig = useRuntimeConfig()
+  const buildYear = Number(runtimeConfig.public.buildYear)
 
   const tokens: Record<string, string> = {
-    years: String(offer.yearsExperience),
+    years: String(buildYear - Number(business.foundingYear)),
     hours: String(offer.responseHours),
     founder1: business.founders[0]?.name ?? "",
     founder2: business.founders[1]?.name ?? "",

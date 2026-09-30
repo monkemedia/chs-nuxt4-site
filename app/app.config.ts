@@ -24,11 +24,10 @@ export default defineAppConfig({
     // on-site claims and the Uptime Promise. Off uses app/content/<locale>/workshop.ts.
     onsite: false,
   },
-  // The offer. Copy in app/content/ uses {years} and {hours}, filled in by useContent().
+  // The offer. Copy in app/content/ uses {hours}, filled in by useContent(), and {years} of
+  // experience, worked out from `business.foundingYear` (35 in 2026, going up each year).
   // Only publish numbers CHS can stand behind (misleading claims breach CMA rules).
   offer: {
-    // Experience claimed in copy: 35 years, from founding in 1991 (business.foundingYear).
-    yearsExperience: 35,
     // Target time on-site after a breakdown call, across the core area.
     responseHours: 4,
     // The Uptime Promise ("on-site within {hours} hours or the call-out's free"). Phase 2: only
@@ -63,8 +62,8 @@ export default defineAppConfig({
       certificateNumber: "[Certificate no.]",
       mark: "",
     },
-    // Year the business started (the "35 years"); the LLP was only incorporated in 2004.
-    // Confirm with the business.
+    // Year the business started: "Established", structured data and {years} of experience.
+    // The LLP was only incorporated in 2004. Confirm with the business.
     foundingYear: "1991",
     // Former trading name: kept in structured data so Google links old listings to the new brand.
     formerName: "Crosshands Hydraulic Services",

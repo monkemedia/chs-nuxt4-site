@@ -115,7 +115,7 @@ public/
 
 ### The offer (years, response time, Uptime Promise)
 
-- `app.config.ts` → `offer` holds the numbers the sales copy relies on: `yearsExperience`, `responseHours` and `uptimePromise`. Copy uses `{years}` / `{hours}` tokens, which `useContent()` fills in, so never type the numbers into copy.
+- `app.config.ts` → `offer` holds the numbers the sales copy relies on: `responseHours` and `uptimePromise`. Copy uses `{years}` / `{hours}` tokens, which `useContent()` fills in, so never type the numbers into copy. `{years}` of experience is worked out from `business.foundingYear` and the build year (`runtimeConfig.public.buildYear`, not the visitor's clock, so hydration matches), so it goes up by itself at the first rebuild of each year.
 - `<UptimePromise>` ("on-site within {hours} hours or the call-out's free") renders only when `offer.uptimePromise` is true. It's off until CHS can reliably deliver it; a guarantee they can't keep breaches consumer law.
 - `<OpenStatus>` shows a live open/closed line (UK time, from `business.openingHours`) in the hero and CTA band. It renders client-side only because pages are prerendered.
 
