@@ -102,8 +102,10 @@ export const en = {
     closedFor: (reason: string, opens: string) =>
       `Closed for ${reason}, open ${opens}. Machine down? Call anyway.`,
     // A closure coming up in the next week, under the open/closed line.
-    closingSoon: (dates: string, reason: string) =>
+    closureNotice: (dates: string, reason: string) =>
       `Closed ${dates} for ${reason}.`,
+    // Open, but closing within the hour.
+    closesSoon: (time: string) => `Closing soon: closes at ${time}. Call now`,
   },
 
   // The Uptime Promise (shown only when app.config `offer.uptimePromise` is on).

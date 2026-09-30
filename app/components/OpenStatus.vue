@@ -8,11 +8,14 @@ const { week: schedule, closures } = useOpeningHours()
 const closureOn = (date: string) =>
   closures.value.find((c) => date >= c.from && date <= c.to)
 
+// "Closing soon" for the last hour before closing time.
+const closingSoonMinutes = 60
 // A closure starting within this many days is mentioned in advance.
 const noticeDays = 7
 
 const status = ref<{
   open: boolean
+  closingSoon?: boolean
   text: string
   notice?: string
 } | null>(null)
@@ -33,11 +36,22 @@ function update() {
       c.from <= now.add(noticeDays, "day").format("YYYY-MM-DD"),
   )
   const notice = soon
-    ? openStatus.closingSoon(soon.dates, soon.reason)
+    ? openStatus.closureNotice(soon.dates, soon.reason)
     : undefined
 
   if (!closure && hours && minute >= hours.open && minute < hours.close) {
-    status.value = { open: true, text: openStatus.open, notice }
+    // In the last hour: "Closing soon: closes at 17:00", in amber.
+    const closingSoon = hours.close - minute <= closingSoonMinutes
+    status.value = {
+      open: true,
+      closingSoon,
+      text: closingSoon
+        ? openStatus.closesSoon(
+            now.startOf("day").add(hours.close, "minute").format("HH:mm"),
+          )
+        : openStatus.open,
+      notice,
+    }
     return
   }
 
@@ -89,11 +103,14 @@ watch(content, update)
     <span class="relative flex size-2.5 shrink-0" aria-hidden="true">
       <span
         v-if="status.open"
-        class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75 motion-reduce:hidden"
+        class="absolute inline-flex size-full animate-ping rounded-full opacity-75 motion-reduce:hidden"
+        :class="status.closingSoon ? 'bg-amber-400' : 'bg-emerald-400'"
       />
       <span
         class="relative inline-flex size-2.5 rounded-full"
-        :class="status.open ? 'bg-emerald-400' : 'bg-amber-400'"
+        :class="
+          status.open && !status.closingSoon ? 'bg-emerald-400' : 'bg-amber-400'
+        "
       />
     </span>
     <span>

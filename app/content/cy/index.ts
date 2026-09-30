@@ -94,8 +94,10 @@ export const cy: Content = {
       `${day.charAt(0).toLowerCase()}${day.slice(1)} am ${time}`,
     closedFor: (reason: string, opens: string) =>
       `Ar gau: ${reason}. Yn agor ${opens}. Peiriant wedi torri? Ffoniwch beth bynnag.`,
-    closingSoon: (dates: string, reason: string) =>
+    closureNotice: (dates: string, reason: string) =>
       `Ar gau ${dates}: ${reason}.`,
+    closesSoon: (time: string) =>
+      `Yn cau cyn bo hir: yn cau am ${time}. Ffoniwch nawr`,
   },
 
   uptimePromise: {
