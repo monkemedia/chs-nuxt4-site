@@ -58,9 +58,11 @@ export const en = {
       "Pembrokeshire",
       "Wider South Wales",
     ],
-    hours: [
-      { days: "Monday – Friday", time: "8am – 5.30pm" },
-      { days: "Saturday", time: "8am – 12pm" },
+    // Opening days and times come from app.config `openingHours`; these are the words
+    // around them ("8am – 5.30pm") and extra rows shown after them on the contact page.
+    am: "am",
+    pm: "pm",
+    hoursNotes: [
       { days: "Emergency call-outs", time: "Call for availability" },
     ],
   },

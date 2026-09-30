@@ -4,22 +4,13 @@
 const { business } = useAppConfig()
 const content = useContent()
 
-const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
-
-// "Mo-Fr 08:00-17:30" -> one { open, close } (minutes) per weekday, Monday first.
+// One { open, close } (minutes) per weekday, Monday first.
 const schedule = computed(() => {
-  const week: ({ open: number; close: number } | null)[] = days.map(() => null)
-  const minutes = (time: string) => {
-    const [h, m] = time.split(":").map(Number)
-    return h! * 60 + m!
-  }
-  for (const spec of business.openingHours) {
-    const [dayPart, timePart] = spec.split(" ")
-    const [from, to = from] = dayPart!.split("-")
-    const [open, close] = timePart!.split("-")
-    for (let d = days.indexOf(from!); d <= days.indexOf(to!); d++)
-      week[d] = { open: minutes(open!), close: minutes(close!) }
-  }
+  const week: ({ open: number; close: number } | null)[] = Array(7).fill(null)
+  for (const { from, to, open, close } of parseOpeningHours(
+    business.openingHours,
+  ))
+    for (let d = from; d <= to; d++) week[d] = { open, close }
   return week
 })
 

@@ -14,7 +14,7 @@ export const workshop: Overrides<Content> = {
   },
   business: {
     // Drop the "Emergency call-outs" row.
-    hours: { 2: null },
+    hoursNotes: { 0: null },
   },
   cta: {
     text: "Every hour a machine stands idle costs you money. Call now and we'll tell you straight away how quickly we can fix it.",

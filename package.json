@@ -11,7 +11,9 @@
     "preview": "npx serve .output/public",
     "postinstall": "nuxt prepare",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "translations:export": "jiti scripts/translations.ts export",
+    "translations:import": "jiti scripts/translations.ts import"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.136",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@iconify-json/circle-flags": "^1.2.11",
+    "exceljs": "^4.4.0",
     "prettier": "^3.9.9",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.11"

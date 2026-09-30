@@ -63,7 +63,8 @@ export default defineAppConfig({
       certificateNumber: "[Certificate no.]",
       mark: "",
     },
-    // Companies House incorporation year of the LLP; confirm with the business.
+    // Year the business started (the "35 years"); the LLP was only incorporated in 2004.
+    // Confirm with the business.
     foundingYear: "1991",
     // Former trading name: kept in structured data so Google links old listings to the new brand.
     formerName: "Crosshands Hydraulic Services",
@@ -96,7 +97,8 @@ export default defineAppConfig({
       "Neath",
       "Port Talbot",
     ],
-    // Opening hours in schema.org format; keep in step with `business.hours` in app/content/<locale>/index.ts.
+    // Opening hours in schema.org format: the one source for the contact page list, the live
+    // open/closed line and structured data (app/utils/hours.ts). Must match Google.
     openingHours: ["Mo-Fr 08:00-17:30", "Sa 08:00-12:00"],
     // Profile URLs (Google Business Profile, Facebook, Yell…) for structured data.
     sameAs: [] as string[],

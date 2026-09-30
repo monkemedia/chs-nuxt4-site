@@ -27,3 +27,6 @@ dist
 # Sanity Studio (admin area)
 studio/.sanity
 studio/dist
+
+# Translation spreadsheets (translations/checked.json is committed)
+translations/*.xlsx

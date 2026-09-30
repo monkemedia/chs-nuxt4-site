@@ -105,6 +105,7 @@ public/
 - The language switcher uses `NuxtLink` + `useSwitchLocalePath()`. **Not `ULink`**, which re-localises the path and sends Welsh visitors back to `/cy/…`.
 - Contact enquiries always send the English urgency label plus a `language` field, so the business knows to reply in Welsh.
 - The Welsh is a drafted translation: have it checked by a fluent speaker (e.g. the Welsh Government's free Helo Blod service) before launch.
+- **Translators work in Excel, not the code.** `npm run translations:export` writes `translations/chs-welsh-<date>.xlsx`: one row per string, with a friendly "where on the website" label, character limits for Google titles/descriptions, placeholder warnings, and a status (not checked / new / English changed / checked). Only the Welsh and Comments columns are editable. `npm run translations:import <file>` writes the Welsh back into `app/content/cy/` in place (`scripts/translations.ts`, via the TypeScript AST), refuses rows whose `{placeholders}` don't match or whose English changed since export, prints translator comments, and records what was checked in `translations/checked.json` (commit it). Functions that just fill a sentence (e.g. `call: (phone) => \`Call ${phone}\``) are editable like any string and written back as template literals; ones with logic (the pay range) are shown greyed out and changed by hand. Sanity content (jobs, vacancies) isn't included; staff handle that Welsh in the admin area.
 
 ### Feature flags (on-site work)
 

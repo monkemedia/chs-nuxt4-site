@@ -120,6 +120,24 @@ if (import.meta.server && page.value.map.findingUsText.startsWith("["))
     '[contact] "Finding us" directions are a placeholder: edit contact.map.findingUsText in app/content/<locale>/index.ts.',
   )
 
+// Opening hours from app.config `openingHours`, in the page's language ("Monday – Friday",
+// "8am – 5.30pm"), then any notes such as emergency call-outs.
+const hours = computed(() => {
+  const { dateLocale, business: text } = content.value
+  const day = (i: number) =>
+    dayjs()
+      .locale(dateLocale)
+      .day((i + 1) % 7)
+      .format("dddd")
+  return [
+    ...parseOpeningHours(business.openingHours).map((p) => ({
+      days: p.from === p.to ? day(p.from) : `${day(p.from)} – ${day(p.to)}`,
+      time: `${formatHour(p.open, text)} – ${formatHour(p.close, text)}`,
+    })),
+    ...text.hoursNotes,
+  ]
+})
+
 const details = computed(() => [
   {
     icon: "i-lucide-phone",
@@ -437,10 +455,7 @@ const details = computed(() => [
                 <dl
                   class="mt-1.5 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-sm"
                 >
-                  <template
-                    v-for="row in content.business.hours"
-                    :key="row.days"
-                  >
+                  <template v-for="row in hours" :key="row.days">
                     <dt class="text-zinc-600">{{ row.days }}</dt>
                     <dd class="font-bold">{{ row.time }}</dd>
                   </template>

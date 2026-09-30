@@ -60,11 +60,9 @@ export const cy: Content = {
       "Sir Benfro",
       "De Cymru",
     ],
-    hours: [
-      { days: "Dydd Llun – Dydd Gwener", time: "8yb – 5.30yh" },
-      { days: "Dydd Sadwrn", time: "8yb – 12yh" },
-      { days: "Galwadau brys", time: "Ffoniwch i holi" },
-    ],
+    am: "yb",
+    pm: "yh",
+    hoursNotes: [{ days: "Galwadau brys", time: "Ffoniwch i holi" }],
   },
 
   cta: {

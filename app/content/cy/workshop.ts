@@ -10,7 +10,7 @@ export const workshop: Overrides<Content> = {
       "Atgyweirio hydrolig a chyflenwi pibellau o'n gweithdy yn Cross Hands, ar draws Llanelli, Sir Gâr a De Cymru.",
   },
   business: {
-    hours: { 2: null },
+    hoursNotes: { 0: null },
   },
   cta: {
     text: "Mae pob awr y mae peiriant yn segur yn costio arian i chi. Ffoniwch nawr ac fe ddywedwn ni wrthoch chi'n syth pa mor gyflym y gallwn ni ei drwsio.",
