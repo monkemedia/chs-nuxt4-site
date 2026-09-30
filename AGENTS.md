@@ -117,7 +117,8 @@ public/
 
 - `app.config.ts` → `offer` holds the numbers the sales copy relies on: `responseHours` and `uptimePromise`. Copy uses `{years}` / `{hours}` tokens, which `useContent()` fills in, so never type the numbers into copy. `{years}` of experience is worked out from `business.foundingYear` and the build year (`runtimeConfig.public.buildYear`, not the visitor's clock, so hydration matches), so it goes up by itself at the first rebuild of each year.
 - `<UptimePromise>` ("on-site within {hours} hours or the call-out's free") renders only when `offer.uptimePromise` is true. It's off until CHS can reliably deliver it; a guarantee they can't keep breaches consumer law.
-- `<OpenStatus>` shows a live open/closed line (UK time, from `business.openingHours`) in the hero and CTA band. It renders client-side only because pages are prerendered.
+- **Opening hours** are set by staff in the admin area (**Opening hours**: a normal week plus **holiday closures**). `modules/hours.ts` validates them at build time (`app/data/hours-schema.ts`) and serves them as `virtual:chs-hours`; until they're published, or if they're invalid (build warning), `business.openingHours` in `app.config.ts` is used. Always read them through `useOpeningHours()`. They drive the contact page list (day names and "8am – 5.30pm" formatted per language; content only has the am/pm words, extra notes and closure wording), the open/closed line and the LocalBusiness `openingHours` / `openingHoursSpecification` (closures). Closures that have ended drop off at the next rebuild.
+- `<OpenStatus>` shows a live open/closed line (UK time, skipping holiday closures: "Closed for Christmas, open Friday 2 January at 08:00") in the hero and CTA band. It renders client-side only because pages are prerendered.
 
 ### Styling
 
@@ -188,9 +189,9 @@ public/
 
 ### Admin area (Sanity)
 
-- Staff manage **Recent work**, **Reviews**, **Vacancies** and the **Google rating** at `/admin`: Sanity Studio, in `studio/` (own `package.json`; schemas in `studio/schemas/`). Staff log in with the email or Google account they were invited with (sanity.io/manage → project → Members). Content lives in Sanity, not the repo, so staff edits never touch git.
+- Staff manage **Recent work**, **Reviews**, **Vacancies**, **Opening hours** and the **Google rating** at `/admin`: Sanity Studio, in `studio/` (own `package.json`; schemas in `studio/schemas/`). Staff log in with the email or Google account they were invited with (sanity.io/manage → project → Members). Content lives in Sanity, not the repo, so staff edits never touch git.
 - The site stays fully static. `modules/lib/sanity.ts` fetches everything in one GROQ query at build time (published content from the API CDN; drafts, for the preview build, with `SANITY_READ_TOKEN`). Photos are served from `cdn.sanity.io` and resized by `@nuxt/image` at build time. A Sanity API error fails the build rather than publishing a site with the content missing.
-- **Publishing rebuilds the site:** a Sanity webhook (sanity.io/manage → API → Webhooks, on create/update/delete of `job`, `review`, `googleRating`, `vacancy`) calls the Vercel deploy hook. The preview deployment gets its own webhook with drafts included.
+- **Publishing rebuilds the site:** a Sanity webhook (sanity.io/manage → API → Webhooks, on create/update/delete of `job`, `review`, `googleRating`, `vacancy`, `openingHours`) calls the Vercel deploy hook. The preview deployment gets its own webhook with drafts included.
 - **Building:** `npm run generate` builds the site, then `npm run build:admin` builds the studio into its `/admin` (Vercel's `buildCommand` runs both). On Vercel the site builds to `.vercel/output/static` (Build Output API), not `.output/public`; `studio/build.mjs` picks whichever exists. That output ignores `vercel.json` rewrites and headers, so the `/admin` routing (page paths serve the studio's `index.html`) and its `noindex` header are in `nitro.vercel.config.routes` in `nuxt.config.ts`. Locally, `npm run admin` runs the studio at http://localhost:3333/admin/.
 - Add the site's domains (and http://localhost:3333) as CORS origins with credentials in sanity.io/manage → API, or the studio can't log in.
 

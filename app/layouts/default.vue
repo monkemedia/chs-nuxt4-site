@@ -3,6 +3,7 @@ const { business } = useAppConfig()
 const { url: siteUrl } = useSiteConfig()
 const { address } = business
 const content = useContent()
+const { specs: openingHours, closures } = useOpeningHours()
 // Placeholder founder names ([bracketed]) stay out of structured data.
 const founders = business.founders.filter(
   (founder) => !founder.name.startsWith("["),
@@ -50,7 +51,19 @@ useJsonLd("business", {
     longitude: business.geo.longitude,
   },
   areaServed: business.towns.map((name) => ({ "@type": "City", name })),
-  openingHours: business.openingHours,
+  openingHours,
+  // Holiday closures, as Google's special opening hours (closed all day).
+  ...(closures.value.length
+    ? {
+        openingHoursSpecification: closures.value.map((c) => ({
+          "@type": "OpeningHoursSpecification",
+          opens: "00:00",
+          closes: "00:00",
+          validFrom: c.from,
+          validThrough: c.to,
+        })),
+      }
+    : {}),
   knowsAbout: content.value.services.map((s) => s.h1),
   knowsLanguage: ["en-GB", "cy-GB"],
   foundingDate: business.foundingYear,

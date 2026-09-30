@@ -62,6 +62,8 @@ export const en = {
     // around them ("8am – 5.30pm") and extra rows shown after them on the contact page.
     am: "am",
     pm: "pm",
+    // Holiday closure dates on the contact page, e.g. "Closed 24 Dec – 2 Jan".
+    closedDates: (dates: string) => `Closed ${dates}`,
     hoursNotes: [
       { days: "Emergency call-outs", time: "Call for availability" },
     ],
@@ -92,6 +94,9 @@ export const en = {
     today: (time: string) => `today at ${time}`,
     tomorrow: (time: string) => `tomorrow at ${time}`,
     on: (day: string, time: string) => `${day} at ${time}`,
+    // During a holiday closure; `reason` is set in the admin area, e.g. "Christmas".
+    closedFor: (reason: string, opens: string) =>
+      `Closed for ${reason}, open ${opens}. Machine down? Call anyway.`,
   },
 
   // The Uptime Promise (shown only when app.config `offer.uptimePromise` is on).

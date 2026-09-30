@@ -12,6 +12,7 @@ export interface SanityContent {
   reviews: unknown[]
   googleRating: unknown
   vacancies: unknown[]
+  openingHours: unknown
 }
 
 const apiVersion = "v2025-02-19"
@@ -28,6 +29,9 @@ const query = `{
   },
   "reviews": *[_type == "review"] { author, company, rating, text, date, source },
   "googleRating": *[_id == "googleRating"][0] { rating, count },
+  "openingHours": *[_id == "openingHours"][0] {
+    monday, tuesday, wednesday, thursday, friday, saturday, sunday, closures
+  },
   "vacancies": *[_type == "vacancy"] {
     "draft": _originalId in path("drafts.**"),
     "slug": slug.current,
@@ -50,7 +54,13 @@ export function fetchSanityContent(drafts: boolean): Promise<SanityContent> {
 }
 
 async function load(drafts: boolean): Promise<SanityContent> {
-  const empty = { jobs: [], reviews: [], googleRating: null, vacancies: [] }
+  const empty = {
+    jobs: [],
+    reviews: [],
+    googleRating: null,
+    vacancies: [],
+    openingHours: null,
+  }
   const projectId = process.env.SANITY_STUDIO_PROJECT_ID
   const dataset = process.env.SANITY_STUDIO_DATASET || "production"
   if (!projectId) {

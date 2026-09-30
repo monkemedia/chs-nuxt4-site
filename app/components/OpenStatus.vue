@@ -1,18 +1,17 @@
 <script setup lang="ts">
-// "Open now" / "Closed, opens Monday at 08:00" line for dark backgrounds, from app.config
-// `openingHours` in UK time. Rendered in the browser only, since the pages are prerendered.
-const { business } = useAppConfig()
+// "Open now" / "Closed, opens Monday at 08:00" line for dark backgrounds, from the opening
+// hours and holiday closures (useOpeningHours) in UK time. Rendered in the browser only,
+// since the pages are prerendered.
 const content = useContent()
+const { periods, closures } = useOpeningHours()
 
 // One { open, close } (minutes) per weekday, Monday first.
-const schedule = computed(() => {
-  const week: ({ open: number; close: number } | null)[] = Array(7).fill(null)
-  for (const { from, to, open, close } of parseOpeningHours(
-    business.openingHours,
-  ))
-    for (let d = from; d <= to; d++) week[d] = { open, close }
-  return week
-})
+const schedule: ({ open: number; close: number } | null)[] = Array(7).fill(null)
+for (const { from, to, open, close } of periods)
+  for (let d = from; d <= to; d++) schedule[d] = { open, close }
+
+const closureOn = (date: string) =>
+  closures.value.find((c) => date >= c.from && date <= c.to)
 
 const status = ref<{ open: boolean; text: string } | null>(null)
 
@@ -20,27 +19,40 @@ function update() {
   const { dateLocale, openStatus } = content.value
   const now = dayjs().tz(businessTimeZone).locale(dateLocale)
   // dayjs weeks start on Sunday (0); the schedule starts on Monday.
-  const today = (now.day() + 6) % 7
+  const weekday = (date: typeof now) => (date.day() + 6) % 7
   const minute = now.hour() * 60 + now.minute()
-  const hours = schedule.value[today]
+  const closure = closureOn(now.format("YYYY-MM-DD"))
+  const hours = schedule[weekday(now)]
 
-  if (hours && minute >= hours.open && minute < hours.close) {
+  if (!closure && hours && minute >= hours.open && minute < hours.close) {
     status.value = { open: true, text: openStatus.open }
     return
   }
 
-  for (let ahead = 0; ahead < 7; ahead++) {
-    const next = schedule.value[(today + ahead) % 7]
-    if (!next || (ahead === 0 && minute >= next.open)) continue
-    const opens = now.add(ahead, "day").startOf("day").add(next.open, "minute")
+  // The next opening, skipping holiday closures (up to a couple of months ahead).
+  for (let ahead = 0; ahead < 62; ahead++) {
+    const date = now.add(ahead, "day")
+    const next = schedule[weekday(date)]
+    if (!next || closureOn(date.format("YYYY-MM-DD"))) continue
+    if (ahead === 0 && minute >= next.open) continue
+    const opens = date.startOf("day").add(next.open, "minute")
     const time = opens.format("HH:mm")
     const when =
       ahead === 0
         ? openStatus.today(time)
         : ahead === 1
           ? openStatus.tomorrow(time)
-          : openStatus.on(opens.format("dddd"), time)
-    status.value = { open: false, text: openStatus.closed(when) }
+          : // Beyond this week, give the date too ("Monday 5 January").
+            openStatus.on(
+              opens.format(ahead < 7 ? "dddd" : "dddd D MMMM"),
+              time,
+            )
+    status.value = {
+      open: false,
+      text: closure
+        ? openStatus.closedFor(closure.reason, when)
+        : openStatus.closed(when),
+    }
     return
   }
 }

@@ -62,6 +62,7 @@ export const cy: Content = {
     ],
     am: "yb",
     pm: "yh",
+    closedDates: (dates: string) => `Ar gau ${dates}`,
     hoursNotes: [{ days: "Galwadau brys", time: "Ffoniwch i holi" }],
   },
 
@@ -89,6 +90,8 @@ export const cy: Content = {
     // dayjs gives "Dydd Llun"; lower-case "dydd" mid-sentence.
     on: (day: string, time: string) =>
       `${day.charAt(0).toLowerCase()}${day.slice(1)} am ${time}`,
+    closedFor: (reason: string, opens: string) =>
+      `Ar gau: ${reason}. Yn agor ${opens}. Peiriant wedi torri? Ffoniwch beth bynnag.`,
   },
 
   uptimePromise: {

@@ -9,6 +9,7 @@ const { $track } = useNuxtApp()
 const content = useContent()
 const page = computed(() => content.value.contact)
 const { locale } = useI18n()
+const { periods, closures } = useOpeningHours()
 
 usePageSeo({ ...page.value.seo, path: "/contact" })
 
@@ -120,21 +121,30 @@ if (import.meta.server && page.value.map.findingUsText.startsWith("["))
     '[contact] "Finding us" directions are a placeholder: edit contact.map.findingUsText in app/content/<locale>/index.ts.',
   )
 
-// Opening hours from app.config `openingHours`, in the page's language ("Monday – Friday",
-// "8am – 5.30pm"), then any notes such as emergency call-outs.
-const hours = computed(() => {
+// Opening hours (admin area, else app.config) in the page's language ("Monday – Friday",
+// "8am – 5.30pm"), then notes such as emergency call-outs, then upcoming holiday closures.
+const hours = computed((): { days: string; time: string; lang?: string }[] => {
   const { dateLocale, business: text } = content.value
   const day = (i: number) =>
     dayjs()
       .locale(dateLocale)
       .day((i + 1) % 7)
       .format("dddd")
+  const date = (d: string) => dayjs(d).locale(dateLocale).format("D MMM")
   return [
-    ...parseOpeningHours(business.openingHours).map((p) => ({
+    ...periods.map((p) => ({
       days: p.from === p.to ? day(p.from) : `${day(p.from)} – ${day(p.to)}`,
       time: `${formatHour(p.open, text)} – ${formatHour(p.close, text)}`,
     })),
     ...text.hoursNotes,
+    ...closures.value.map((c) => ({
+      // Reasons finish "Closed for …" ("staff training"), so capitalise them as a label.
+      days: c.reason.charAt(0).toUpperCase() + c.reason.slice(1),
+      time: text.closedDates(
+        c.from === c.to ? date(c.from) : `${date(c.from)} – ${date(c.to)}`,
+      ),
+      lang: c.lang,
+    })),
   ]
 })
 
@@ -456,7 +466,9 @@ const details = computed(() => [
                   class="mt-1.5 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-sm"
                 >
                   <template v-for="row in hours" :key="row.days">
-                    <dt class="text-zinc-600">{{ row.days }}</dt>
+                    <dt class="text-zinc-600" :lang="row.lang">
+                      {{ row.days }}
+                    </dt>
                     <dd class="font-bold">{{ row.time }}</dd>
                   </template>
                 </dl>
