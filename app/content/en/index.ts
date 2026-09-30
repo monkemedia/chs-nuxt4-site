@@ -429,8 +429,12 @@ export const en = {
       { value: "South Wales", label: "Area we cover" },
       { value: "{standard}", label: "Quality certified" },
     ],
-    valuesKicker: "How we work",
-    valuesTitle: "What you can expect from us",
+    // The customer-facing version of the Purpose in Notion ("Purpose, Mission, Vision &
+    // Values"). The machine stays in the sentence so the page is still clearly about repairs.
+    valuesKicker: "Why we do it",
+    valuesTitle: "Every broken machine has someone waiting on it",
+    valuesIntro:
+      "A broken machine is never just a machine. It's a crew stood waiting, a harvest on hold or a production line losing money. We fix it properly, keep you in the picture and get you back to work.",
     values: [
       {
         icon: "i-lucide-badge-pound-sterling",
@@ -443,9 +447,9 @@ export const en = {
         text: "{years} years of hands-on hydraulic work means we find the real fault, not just the symptom.",
       },
       {
-        icon: "i-lucide-gauge",
-        title: "{tagline}",
-        text: "A stopped machine costs you money, so we treat every job as urgent, whether it's a single hose or a full rebuild.",
+        icon: "i-lucide-message-circle",
+        title: "We keep you posted",
+        text: "A stopped machine costs you money, so we treat every job as urgent and tell you where it's up to and when it'll be ready.",
       },
     ],
     waysKicker: "Workshop or on-site",

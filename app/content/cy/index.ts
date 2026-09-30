@@ -419,8 +419,10 @@ export const cy: Content = {
       { value: "De Cymru", label: "Ein hardal" },
       { value: "{standard}", label: "Ansawdd ardystiedig" },
     ],
-    valuesKicker: "Sut rydyn ni'n gweithio",
-    valuesTitle: "Beth allwch chi ei ddisgwyl gennym",
+    valuesKicker: "Pam rydyn ni'n ei wneud",
+    valuesTitle: "Mae rhywun yn aros am bob peiriant sydd wedi torri",
+    valuesIntro:
+      "Nid peiriant yn unig yw peiriant sydd wedi torri. Mae'n griw yn aros, cynhaeaf ar stop neu linell gynhyrchu'n colli arian. Rydyn ni'n ei drwsio'n iawn, yn rhoi gwybod i chi beth sy'n digwydd ac yn eich cael yn ôl i weithio.",
     values: [
       {
         icon: "i-lucide-badge-pound-sterling",
@@ -433,9 +435,9 @@ export const cy: Content = {
         text: "Mae {years} mlynedd o waith hydrolig ymarferol yn golygu ein bod yn dod o hyd i'r gwir nam, nid y symptom yn unig.",
       },
       {
-        icon: "i-lucide-gauge",
-        title: "{tagline}",
-        text: "Mae peiriant sydd wedi stopio yn costio arian i chi, felly rydyn ni'n trin pob swydd fel un frys, boed yn un bibell neu'n ailadeiladu llawn.",
+        icon: "i-lucide-message-circle",
+        title: "Rydyn ni'n rhoi gwybod i chi",
+        text: "Mae peiriant sydd wedi stopio yn costio arian i chi, felly rydyn ni'n trin pob swydd fel un frys ac yn dweud wrthych ble mae hi arni a phryd bydd hi'n barod.",
       },
     ],
     waysKicker: "Yn y gweithdy neu ar y safle",

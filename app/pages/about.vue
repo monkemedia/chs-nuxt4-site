@@ -212,10 +212,13 @@ const crumbs = computed(() => [
         <p class="kicker mb-3 text-chs-700">{{ page.valuesKicker }}</p>
         <h2
           id="values-title"
-          class="heading-display mb-10 text-[clamp(28px,3.6vw,40px)]"
+          class="heading-display max-w-3xl text-[clamp(28px,3.6vw,40px)] text-balance"
         >
           {{ page.valuesTitle }}
         </h2>
+        <p class="mt-4 mb-10 max-w-2xl text-[17px] text-zinc-700">
+          {{ page.valuesIntro }}
+        </p>
         <ul class="grid gap-5 md:grid-cols-3">
           <li
             v-for="value in page.values"
