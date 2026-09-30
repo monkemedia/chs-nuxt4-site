@@ -30,6 +30,10 @@ const links = computed(() => {
   ]
 })
 
+// Seven links don't fit the desktop nav below xl (the Welsh labels are long), so Careers
+// shows there from xl only; it's always in the mobile menu and the footer.
+const hasCareers = computed(() => links.value.some((l) => l.id === "careers"))
+
 function isCurrent(to: string) {
   if (to === localePath("/")) return route.path === to
   return route.path === to || route.path.startsWith(`${to}/`)
@@ -196,7 +200,8 @@ onBeforeUnmount(() => {
     <nav :aria-label="content.common.primaryNav">
       <ul
         ref="list"
-        class="relative flex gap-5 xl:gap-8"
+        class="relative flex gap-5"
+        :class="hasCareers ? 'xl:gap-6' : 'xl:gap-8'"
         @mouseleave="hovered = null"
         @focusout="hovered = null"
       >
@@ -204,6 +209,7 @@ onBeforeUnmount(() => {
           v-for="(link, i) in links"
           :key="link.id"
           ref="items"
+          :class="link.id === 'careers' && 'hidden xl:block'"
           @mouseenter="hovered = i"
           @focusin="hovered = i"
         >
@@ -220,17 +226,11 @@ onBeforeUnmount(() => {
             inactive-class="text-white/85"
           >
             {{ link.label }}
-            <!-- A dot below xl, where the Welsh labels leave no room for the pill. -->
-            <template v-if="'pill' in link">
-              <span
-                class="absolute top-1.5 -right-2 size-2 rounded-full bg-primary xl:hidden"
-                aria-hidden="true"
-              />
-              <span
-                class="ms-1 rounded-full bg-primary px-1.5 py-0.5 align-[1px] text-[10px] font-bold tracking-wider text-white uppercase max-xl:sr-only"
-                >{{ link.pill }}</span
-              >
-            </template>
+            <span
+              v-if="'pill' in link"
+              class="ms-1 rounded-full bg-primary px-1.5 py-0.5 align-[1px] text-[10px] font-bold tracking-wider text-white uppercase"
+              >{{ link.pill }}</span
+            >
           </ULink>
         </li>
         <li

@@ -180,7 +180,7 @@ public/
 ### Careers (vacancies)
 
 - Staff add vacancies in the **admin area** (Vacancies). `modules/vacancies.ts` fetches them at build time (validated by `app/data/vacancies-schema.ts`) and serves them as `virtual:chs-vacancies`; keep `studio/schemas/vacancy.ts` in step. Welsh is optional, as with jobs.
-- Shown at `/careers` and `/careers/<slug>` (`JobPosting` JSON-LD for Google for Jobs), with a footer link. Applications go by email (`business.email`, subject "Application: <title>") or phone.
+- Shown at `/careers` and `/careers/<slug>` (`JobPosting` JSON-LD for Google for Jobs), with a footer link and a header nav link flagged "Hiring" (desktop from `xl` only: seven links overflow the Welsh nav below that). Applications go by email (`business.email`, subject "Application: <title>") or phone.
 - With no live vacancy, `/careers` is kept out of the prerender, sitemap and footer. Vacancies past their `closes` date are dropped, but only at the next rebuild, so staff should unpublish a filled role.
 - **Examples:** while the admin area has no vacancies, dev and the preview build (`NUXT_PUBLIC_SHOW_DRAFTS=true`) show the examples in `app/data/vacancies-examples.ts`, marked as drafts. They never reach the live site.
 - The "Why join us" points (`careersPage.why`) were drafted: check them with CHS.
