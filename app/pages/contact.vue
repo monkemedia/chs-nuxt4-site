@@ -9,7 +9,7 @@ const { $track } = useNuxtApp()
 const content = useContent()
 const page = computed(() => content.value.contact)
 const { locale } = useI18n()
-const { periods, closures } = useOpeningHours()
+const { week, closures, draft: hoursDraft } = useOpeningHours()
 
 usePageSeo({ ...page.value.seo, path: "/contact" })
 
@@ -121,8 +121,25 @@ if (import.meta.server && page.value.map.findingUsText.startsWith("["))
     '[contact] "Finding us" directions are a placeholder: edit contact.map.findingUsText in app/content/<locale>/index.ts.',
   )
 
-// Opening hours (admin area, else app.config) in the page's language ("Monday – Friday",
-// "8am – 5.30pm"), then notes such as emergency call-outs, then upcoming holiday closures.
+// Opening hours (admin area, else app.config) in the page's language, with days in a row that
+// share the same hours grouped ("Monday – Friday: 8am – 5.30pm", "Sunday: Closed"), then
+// notes such as emergency call-outs, then upcoming holiday closures.
+// Holiday closures are listed from 30 days before they start. That depends on today's date,
+// so it's worked out in the browser: the page is prerendered and only rebuilt on publish,
+// so a closure added months ahead still appears on time. (Structured data lists them all.)
+const closureNoticeDays = 30
+const today = ref<ReturnType<typeof dayjs>>()
+onMounted(() => {
+  today.value = dayjs().tz(businessTimeZone)
+})
+const upcomingClosures = computed(() => {
+  if (!today.value) return []
+  const from = today.value.format("YYYY-MM-DD")
+  const until = today.value.add(closureNoticeDays, "day").format("YYYY-MM-DD")
+  // Also drops closures that ended since the last rebuild.
+  return closures.value.filter((c) => c.from <= until && c.to >= from)
+})
+
 const hours = computed((): { days: string; time: string; lang?: string }[] => {
   const { dateLocale, business: text } = content.value
   const day = (i: number) =>
@@ -130,19 +147,29 @@ const hours = computed((): { days: string; time: string; lang?: string }[] => {
       .locale(dateLocale)
       .day((i + 1) % 7)
       .format("dddd")
-  const date = (d: string) => dayjs(d).locale(dateLocale).format("D MMM")
+  const time = (i: number) => {
+    const d = week[i]
+    return d
+      ? `${formatHour(d.open, text)} – ${formatHour(d.close, text)}`
+      : text.closedDay
+  }
+  const rows: { days: string; time: string }[] = []
+  let start = 0
+  for (let i = 0; i < 7; i++) {
+    if (i < 6 && time(i + 1) === time(i)) continue
+    rows.push({
+      days: start === i ? day(i) : `${day(start)} – ${day(i)}`,
+      time: time(i),
+    })
+    start = i + 1
+  }
   return [
-    ...periods.map((p) => ({
-      days: p.from === p.to ? day(p.from) : `${day(p.from)} – ${day(p.to)}`,
-      time: `${formatHour(p.open, text)} – ${formatHour(p.close, text)}`,
-    })),
+    ...rows,
     ...text.hoursNotes,
-    ...closures.value.map((c) => ({
+    ...upcomingClosures.value.map((c) => ({
       // Reasons finish "Closed for …" ("staff training"), so capitalise them as a label.
       days: c.reason.charAt(0).toUpperCase() + c.reason.slice(1),
-      time: text.closedDates(
-        c.from === c.to ? date(c.from) : `${date(c.from)} – ${date(c.to)}`,
-      ),
+      time: text.closedDates(c.dates),
       lang: c.lang,
     })),
   ]
@@ -462,6 +489,14 @@ const details = computed(() => [
                 <h3 class="heading-display mb-1 text-[13px] tracking-wide">
                   {{ page.openingHours }}
                 </h3>
+                <UBadge
+                  v-if="hoursDraft"
+                  color="warning"
+                  variant="solid"
+                  icon="i-lucide-pencil-line"
+                  :label="`${content.jobPage.draft}: ${content.business.hoursDraftNote}`"
+                  class="my-1.5 whitespace-normal"
+                />
                 <dl
                   class="mt-1.5 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-sm"
                 >

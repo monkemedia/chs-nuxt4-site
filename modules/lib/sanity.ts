@@ -30,6 +30,7 @@ const query = `{
   "reviews": *[_type == "review"] { author, company, rating, text, date, source },
   "googleRating": *[_id == "googleRating"][0] { rating, count },
   "openingHours": *[_id == "openingHours"][0] {
+    "draft": _originalId in path("drafts.**"),
     monday, tuesday, wednesday, thursday, friday, saturday, sunday, closures
   },
   "vacancies": *[_type == "vacancy"] {

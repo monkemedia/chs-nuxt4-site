@@ -28,10 +28,13 @@ export default defineNuxtModule({
 
     let openingHours: string[] | null = null
     let closures: Closure[] = []
+    // The hours shown are unpublished changes: only in dev and the preview build.
+    let draft = false
     if (content.openingHours) {
       const parsed = openingHoursInputSchema.safeParse(content.openingHours)
       if (parsed.success) {
         openingHours = toOpeningHours(parsed.data)
+        draft = parsed.data.draft
         closures = parsed.data.closures
           .filter((c) => c.to >= today)
           .sort((a, b) => a.from.localeCompare(b.from))
@@ -48,13 +51,13 @@ export default defineNuxtModule({
       resolveId: (source) => (source === id ? `\0${id}` : undefined),
       load: (resolved) =>
         resolved === `\0${id}`
-          ? `export const openingHours = ${JSON.stringify(openingHours)}\nexport const closures = ${JSON.stringify(closures)}`
+          ? `export const openingHours = ${JSON.stringify(openingHours)}\nexport const closures = ${JSON.stringify(closures)}\nexport const draft = ${draft}`
           : undefined,
     })
     addTypeTemplate({
       filename: "types/hours.d.ts",
       getContents: () =>
-        `declare module "virtual:chs-hours" {\n  export const openingHours: string[] | null\n  export const closures: import("${join(nuxt.options.rootDir, "app/data/hours-schema")}").Closure[]\n}\n`,
+        `declare module "virtual:chs-hours" {\n  export const openingHours: string[] | null\n  export const closures: import("${join(nuxt.options.rootDir, "app/data/hours-schema")}").Closure[]\n  export const draft: boolean\n}\n`,
     })
   },
 })

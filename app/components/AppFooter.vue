@@ -4,6 +4,10 @@ const content = useContent()
 const localePath = useLocalePath()
 const { jobs } = useJobs()
 const { vacancies } = useVacancies()
+const runtimeConfig = useRuntimeConfig()
+// The build year, not the visitor's clock: the page is prerendered, so a new year before the
+// next rebuild would otherwise mismatch on hydration.
+const year = runtimeConfig.public.buildYear
 
 const columns = computed(() => {
   const { footer, nav, services } = content.value
@@ -114,7 +118,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
 
     <UContainer>
       <USeparator :ui="{ border: 'border-white/10' }" />
-      <p class="py-6 text-xs">© {{ dayjs().year() }} {{ business.name }}.</p>
+      <p class="py-6 text-xs">© {{ year }} {{ business.name }}.</p>
     </UContainer>
   </footer>
 </template>

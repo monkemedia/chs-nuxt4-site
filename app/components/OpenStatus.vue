@@ -3,17 +3,19 @@
 // hours and holiday closures (useOpeningHours) in UK time. Rendered in the browser only,
 // since the pages are prerendered.
 const content = useContent()
-const { periods, closures } = useOpeningHours()
-
-// One { open, close } (minutes) per weekday, Monday first.
-const schedule: ({ open: number; close: number } | null)[] = Array(7).fill(null)
-for (const { from, to, open, close } of periods)
-  for (let d = from; d <= to; d++) schedule[d] = { open, close }
+const { week: schedule, closures } = useOpeningHours()
 
 const closureOn = (date: string) =>
   closures.value.find((c) => date >= c.from && date <= c.to)
 
-const status = ref<{ open: boolean; text: string } | null>(null)
+// A closure starting within this many days is mentioned in advance.
+const noticeDays = 7
+
+const status = ref<{
+  open: boolean
+  text: string
+  notice?: string
+} | null>(null)
 
 function update() {
   const { dateLocale, openStatus } = content.value
@@ -21,11 +23,21 @@ function update() {
   // dayjs weeks start on Sunday (0); the schedule starts on Monday.
   const weekday = (date: typeof now) => (date.day() + 6) % 7
   const minute = now.hour() * 60 + now.minute()
-  const closure = closureOn(now.format("YYYY-MM-DD"))
+  const today = now.format("YYYY-MM-DD")
+  const closure = closureOn(today)
   const hours = schedule[weekday(now)]
+  // Heads-up for a closure coming up soon: "Closed 24 Dec – 1 Jan for Christmas".
+  const soon = closures.value.find(
+    (c) =>
+      c.from > today &&
+      c.from <= now.add(noticeDays, "day").format("YYYY-MM-DD"),
+  )
+  const notice = soon
+    ? openStatus.closingSoon(soon.dates, soon.reason)
+    : undefined
 
   if (!closure && hours && minute >= hours.open && minute < hours.close) {
-    status.value = { open: true, text: openStatus.open }
+    status.value = { open: true, text: openStatus.open, notice }
     return
   }
 
@@ -52,6 +64,8 @@ function update() {
       text: closure
         ? openStatus.closedFor(closure.reason, when)
         : openStatus.closed(when),
+      // During a closure the next opening already says when we're back.
+      notice: closure ? undefined : notice,
     }
     return
   }
@@ -69,7 +83,7 @@ watch(content, update)
 <template>
   <p
     v-if="status"
-    class="flex items-center gap-2.5 text-sm font-semibold text-zinc-200"
+    class="flex items-baseline gap-2.5 text-sm font-semibold text-zinc-200"
     role="status"
   >
     <span class="relative flex size-2.5 shrink-0" aria-hidden="true">
@@ -82,6 +96,11 @@ watch(content, update)
         :class="status.open ? 'bg-emerald-400' : 'bg-amber-400'"
       />
     </span>
-    {{ status.text }}
+    <span>
+      {{ status.text }}
+      <span v-if="status.notice" class="mt-0.5 block text-amber-300">
+        {{ status.notice }}
+      </span>
+    </span>
   </p>
 </template>

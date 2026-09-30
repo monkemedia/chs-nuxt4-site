@@ -6,4 +6,5 @@ export type { Closure } from "./hours-schema"
 
 // Schema.org format ("Mo-Fr 08:00-17:30"), or null to use app.config. Closures that haven't
 // ended yet (at build time), soonest first.
-export { closures, openingHours } from "virtual:chs-hours"
+// `draft`: the hours are unpublished changes (dev and the preview build only).
+export { closures, draft, openingHours } from "virtual:chs-hours"

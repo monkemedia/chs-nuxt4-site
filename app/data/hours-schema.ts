@@ -46,6 +46,8 @@ const closure = z
   .refine((c) => c.from <= c.to, { message: "ends before it starts" })
 
 export const openingHoursInputSchema = z.object({
+  // Unpublished changes (preview build only).
+  draft: z.boolean().default(false),
   monday: day,
   tuesday: day,
   wednesday: day,
