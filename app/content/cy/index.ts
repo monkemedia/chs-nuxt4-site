@@ -36,6 +36,8 @@ export const cy: Content = {
     whyChs: "Pam CHS",
     contact: "Cysylltu",
     jobs: "Gwaith diweddar",
+    careers: "Gyrfaoedd",
+    hiring: "Recriwtio",
   },
 
   footer: {
@@ -254,6 +256,80 @@ export const cy: Content = {
     ctaKicker: "Wedi'n lleoli yn Cross Hands, Sir Gâr",
     ctaText:
       "Yn gwasanaethu Llanelli, Caerfyrddin, Rhydaman, Abertawe a ledled De Cymru.",
+  },
+
+  careersPage: {
+    seo: {
+      title: "Swyddi Hydrolig yn Cross Hands, Llanelli | Gyrfaoedd CHS",
+      description:
+        "Swyddi gwag yn CHS Hydraulics: swyddi peirianneg hydrolig a phrentisiaethau yn ein gweithdy yn Cross Hands, ger Llanelli yn Sir Gâr.",
+    },
+    crumb: "Gyrfaoedd",
+    title: ["Gweithio gyda", "CHS"],
+    intro:
+      "Ymunwch â'r tîm sy'n cadw peiriannau safle, fferm a diwydiannol De Cymru i weithio, o'n gweithdy yn Cross Hands.",
+    listKicker: "Swyddi gwag",
+    listTitle: "Swyddi rydyn ni'n recriwtio ar eu cyfer",
+    whyKicker: "Pam ymuno â ni",
+    whyTitle: "Crefft fedrus, yn agos at adref",
+    why: [
+      {
+        icon: "i-lucide-wrench",
+        title: "Gwaith amrywiol",
+        text: "Silindrau, pympiau, falfiau a phibellau o gloddwyr, tractorau a llinellau ffatri: does dim dau ddiwrnod yr un fath.",
+      },
+      {
+        icon: "i-lucide-graduation-cap",
+        title: "Dysgu o brofiad",
+        text: "Gweithio ochr yn ochr â pheirianwyr sydd â {years} mlynedd o wybodaeth hydrolig rhyngddyn nhw.",
+      },
+      {
+        icon: "i-lucide-map-pin",
+        title: "Lleol",
+        text: "Wedi'n lleoli yn Cross Hands, taith hawdd o Lanelli, Rhydaman a Chaerfyrddin.",
+      },
+    ],
+    cta: {
+      kicker: "Dim byd addas?",
+      title: "Anfonwch eich CV beth bynnag.",
+      text: "Rydyn ni bob amser yn falch o glywed gan beirianwyr a ffitwyr hydrolig da.",
+      button: "E-bostiwch eich CV",
+      emailSubject: "CV",
+    },
+  },
+
+  vacancyPage: {
+    notFound: "Heb ddod o hyd i'r swydd wag",
+    details: "Manylion y swydd",
+    type: "Math",
+    types: {
+      "full-time": "Llawn amser",
+      "part-time": "Rhan amser",
+      apprenticeship: "Prentisiaeth",
+      temporary: "Dros dro",
+    },
+    pay: "Cyflog",
+    payRange: (min: string, max: string | undefined, period: "year" | "hour") =>
+      `${max ? `${min} i ${max}` : min} ${period === "year" ? "y flwyddyn" : "yr awr"}`,
+    hours: "Oriau",
+    location: "Lleoliad",
+    locationValue: "Gweithdy Cross Hands",
+    posted: "Hysbysebwyd",
+    closes: "Dyddiad cau",
+    about: "Am y swydd",
+    responsibilities: "Beth fyddwch chi'n ei wneud",
+    requirements: "Beth rydyn ni'n chwilio amdano",
+    niceToHave: "Byddai'n braf cael",
+    offer: "Beth rydyn ni'n ei gynnig",
+    applyKicker: "Oes diddordeb?",
+    applyTitle: "Gwneud cais am y swydd hon",
+    applyText:
+      "E-bostiwch eich CV a rhai llinellau amdanoch chi'ch hun, neu ffoniwch ni am sgwrs yn gyntaf.",
+    applyByEmail: "E-bostiwch eich CV",
+    emailSubject: (title: string) => `Cais: ${title}`,
+    draft: "Drafft",
+    draftNote:
+      "Ddim yn fyw eto: pwyswch Publish yn yr ardal weinyddu pan fydd yn barod. Heb swyddi gwag yn yr ardal weinyddu, mae enghreifftiau'n cael eu dangos yma.",
   },
 
   about: {

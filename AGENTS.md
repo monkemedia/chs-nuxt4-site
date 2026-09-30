@@ -177,11 +177,19 @@ public/
 - With no job to show, the build shows nothing and `/work` is kept out of the prerender and sitemap (`modules/jobs.ts`).
 - **Only real jobs**, with CHS's own photos. Name a customer only with their permission. Add a header nav link once there are a few jobs.
 
+### Careers (vacancies)
+
+- Staff add vacancies in the **admin area** (Vacancies). `modules/vacancies.ts` fetches them at build time (validated by `app/data/vacancies-schema.ts`) and serves them as `virtual:chs-vacancies`; keep `studio/schemas/vacancy.ts` in step. Welsh is optional, as with jobs.
+- Shown at `/careers` and `/careers/<slug>` (`JobPosting` JSON-LD for Google for Jobs), with a footer link. Applications go by email (`business.email`, subject "Application: <title>") or phone.
+- With no live vacancy, `/careers` is kept out of the prerender, sitemap and footer. Vacancies past their `closes` date are dropped, but only at the next rebuild, so staff should unpublish a filled role.
+- **Examples:** while the admin area has no vacancies, dev and the preview build (`NUXT_PUBLIC_SHOW_DRAFTS=true`) show the examples in `app/data/vacancies-examples.ts`, marked as drafts. They never reach the live site.
+- The "Why join us" points (`careersPage.why`) were drafted: check them with CHS.
+
 ### Admin area (Sanity)
 
-- Staff manage **Recent work**, **Reviews** and the **Google rating** at `/admin`: Sanity Studio, in `studio/` (own `package.json`; schemas in `studio/schemas/`). Staff log in with the email or Google account they were invited with (sanity.io/manage → project → Members). Content lives in Sanity, not the repo, so staff edits never touch git.
+- Staff manage **Recent work**, **Reviews**, **Vacancies** and the **Google rating** at `/admin`: Sanity Studio, in `studio/` (own `package.json`; schemas in `studio/schemas/`). Staff log in with the email or Google account they were invited with (sanity.io/manage → project → Members). Content lives in Sanity, not the repo, so staff edits never touch git.
 - The site stays fully static. `modules/lib/sanity.ts` fetches everything in one GROQ query at build time (published content from the API CDN; drafts, for the preview build, with `SANITY_READ_TOKEN`). Photos are served from `cdn.sanity.io` and resized by `@nuxt/image` at build time. A Sanity API error fails the build rather than publishing a site with the content missing.
-- **Publishing rebuilds the site:** a Sanity webhook (sanity.io/manage → API → Webhooks, on create/update/delete of `job`, `review`, `googleRating`) calls the Vercel deploy hook. The preview deployment gets its own webhook with drafts included.
+- **Publishing rebuilds the site:** a Sanity webhook (sanity.io/manage → API → Webhooks, on create/update/delete of `job`, `review`, `googleRating`, `vacancy`) calls the Vercel deploy hook. The preview deployment gets its own webhook with drafts included.
 - **Building:** `npm run generate` builds the site, then `npm run build:admin` builds the studio into its `/admin` (Vercel's `buildCommand` runs both). On Vercel the site builds to `.vercel/output/static` (Build Output API), not `.output/public`; `studio/build.mjs` picks whichever exists. That output ignores `vercel.json` rewrites and headers, so the `/admin` routing (page paths serve the studio's `index.html`) and its `noindex` header are in `nitro.vercel.config.routes` in `nuxt.config.ts`. Locally, `npm run admin` runs the studio at http://localhost:3333/admin/.
 - Add the site's domains (and http://localhost:3333) as CORS origins with credentials in sanity.io/manage → API, or the studio can't log in.
 

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 // Copy defaults to the current language's `cta` content; `enquiryTo` is an English path.
+// `action` replaces the "Send an enquiry" button (e.g. "Email your CV" on the careers pages).
 const props = defineProps<{
   kicker?: string
   title?: string
   text?: string
   enquiryTo?: string
+  action?: { label: string; to: string; icon?: string }
 }>()
 
 const { business } = useAppConfig()
@@ -60,14 +62,15 @@ const enquiryTo = computed(() => localePath(props.enquiryTo ?? "/contact"))
           >{{ business.phoneDisplay }}</UButton
         >
         <UButton
-          :to="enquiryTo"
+          :to="action?.to ?? enquiryTo"
           color="neutral"
           variant="outline"
           size="xl"
-          trailing-icon="i-lucide-chevron-right"
+          :icon="action?.icon"
+          :trailing-icon="action ? undefined : 'i-lucide-chevron-right'"
           class="justify-center bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
         >
-          {{ content.common.sendEnquiry }}
+          {{ action?.label ?? content.common.sendEnquiry }}
         </UButton>
       </div>
       <OpenStatus />

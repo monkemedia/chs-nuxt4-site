@@ -45,12 +45,16 @@ export default defineNuxtModule({
         "/work",
         "/cy/work",
       ]
-      // @nuxtjs/sitemap reads this from the Nuxt options.
-      const options = nuxt.options as { sitemap?: { exclude?: string[] } }
-      options.sitemap = {
-        ...options.sitemap,
-        exclude: [...(options.sitemap?.exclude ?? []), "/work", "/cy/work"],
-      }
+      // @nuxtjs/sitemap reads its `exclude` option before this module runs, but checks
+      // route rules when it builds the sitemap. (Its route rule types don't reach modules.)
+      for (const path of ["/work", "/cy/work"])
+        nuxt.options.routeRules = {
+          ...nuxt.options.routeRules,
+          [path]: {
+            ...nuxt.options.routeRules?.[path],
+            sitemap: false,
+          } as never,
+        }
     }
 
     // No "#" in the id: in dev it becomes part of a URL, where "#" starts the fragment.

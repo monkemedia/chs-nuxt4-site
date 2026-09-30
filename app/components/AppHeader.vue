@@ -5,6 +5,7 @@ const content = useContent()
 const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const { locale } = useI18n()
+const { vacancies } = useVacancies()
 
 const links = computed(() => {
   const { nav } = content.value
@@ -14,6 +15,17 @@ const links = computed(() => {
     { id: "about", label: nav.about, to: localePath("/about") },
     { id: "sectors", label: nav.sectors, to: localePath("/sectors") },
     { id: "why-chs", label: nav.whyChs, to: localePath("/why-chs") },
+    // Only while a vacancy is live (the page 404s without one), flagged "Hiring".
+    ...(vacancies.value.length
+      ? [
+          {
+            id: "careers",
+            label: nav.careers,
+            to: localePath("/careers"),
+            pill: nav.hiring,
+          },
+        ]
+      : []),
     { id: "contact", label: nav.contact, to: localePath("/contact") },
   ]
 })
@@ -199,7 +211,7 @@ onBeforeUnmount(() => {
             :to="link.to"
             :active="isCurrent(link.to)"
             :aria-current="isCurrent(link.to) ? 'page' : undefined"
-            class="relative block py-2 text-[15px] font-medium transition-colors hover:text-white"
+            class="relative block py-2 text-[15px] font-medium whitespace-nowrap transition-colors hover:text-white"
             :active-class="
               measured
                 ? 'text-white'
@@ -208,6 +220,17 @@ onBeforeUnmount(() => {
             inactive-class="text-white/85"
           >
             {{ link.label }}
+            <!-- A dot below xl, where the Welsh labels leave no room for the pill. -->
+            <template v-if="'pill' in link">
+              <span
+                class="absolute top-1.5 -right-2 size-2 rounded-full bg-primary xl:hidden"
+                aria-hidden="true"
+              />
+              <span
+                class="ms-1 rounded-full bg-primary px-1.5 py-0.5 align-[1px] text-[10px] font-bold tracking-wider text-white uppercase max-xl:sr-only"
+                >{{ link.pill }}</span
+              >
+            </template>
           </ULink>
         </li>
         <li
@@ -268,6 +291,11 @@ onBeforeUnmount(() => {
               inactive-class="border-transparent text-white/85"
             >
               {{ link.label }}
+              <span
+                v-if="'pill' in link"
+                class="ms-2 rounded-full bg-primary px-2 py-0.5 align-[2px] text-[11px] font-bold tracking-wider text-white uppercase"
+                >{{ link.pill }}</span
+              >
             </ULink>
           </li>
         </ul>

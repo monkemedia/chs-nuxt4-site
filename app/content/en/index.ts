@@ -33,6 +33,8 @@ export const en = {
     sectors: "Sectors",
     whyChs: "Why CHS",
     jobs: "Recent work",
+    careers: "Careers",
+    hiring: "Hiring",
     contact: "Contact",
   },
 
@@ -260,6 +262,81 @@ export const en = {
       "Serving Llanelli, Carmarthen, Ammanford, Swansea and across South Wales.",
   },
 
+  careersPage: {
+    seo: {
+      title: "Hydraulic Jobs in Cross Hands, Llanelli | Careers at CHS",
+      description:
+        "Current vacancies at CHS Hydraulics: hydraulic engineering jobs and apprenticeships at our Cross Hands workshop, near Llanelli in Carmarthenshire.",
+    },
+    crumb: "Careers",
+    title: ["Work at", "CHS"] as [string, string],
+    intro:
+      "Join the team keeping South Wales's plant, farm and industrial machinery working, from our workshop in Cross Hands.",
+    listKicker: "Current vacancies",
+    listTitle: "Roles we're hiring for",
+    whyKicker: "Why join us",
+    whyTitle: "A skilled trade, close to home",
+    // Drafted: check each point with CHS before the page goes live.
+    why: [
+      {
+        icon: "i-lucide-wrench",
+        title: "Varied work",
+        text: "Cylinders, pumps, valves and hoses from diggers, tractors and factory lines: no two days the same.",
+      },
+      {
+        icon: "i-lucide-graduation-cap",
+        title: "Learn from experience",
+        text: "Work alongside engineers with {years} years of hydraulic know-how between them.",
+      },
+      {
+        icon: "i-lucide-map-pin",
+        title: "Local",
+        text: "Based in Cross Hands, an easy commute from Llanelli, Ammanford and Carmarthen.",
+      },
+    ],
+    cta: {
+      kicker: "Nothing that fits?",
+      title: "Send us your CV anyway.",
+      text: "We're always glad to hear from good hydraulic engineers and fitters.",
+      button: "Email your CV",
+      emailSubject: "CV",
+    },
+  },
+
+  vacancyPage: {
+    notFound: "Vacancy not found",
+    details: "Role details",
+    type: "Type",
+    types: {
+      "full-time": "Full-time",
+      "part-time": "Part-time",
+      apprenticeship: "Apprenticeship",
+      temporary: "Temporary",
+    },
+    pay: "Pay",
+    payRange: (min: string, max: string | undefined, period: "year" | "hour") =>
+      `${max ? `${min} to ${max}` : min} ${period === "year" ? "a year" : "an hour"}`,
+    hours: "Hours",
+    location: "Location",
+    locationValue: "Cross Hands workshop",
+    posted: "Posted",
+    closes: "Closing date",
+    about: "About the role",
+    responsibilities: "What you'll do",
+    requirements: "What we're looking for",
+    niceToHave: "Nice to have",
+    offer: "What we offer",
+    applyKicker: "Interested?",
+    applyTitle: "Apply for this role",
+    applyText:
+      "Email your CV and a few lines about yourself, or give us a call for a chat first.",
+    applyByEmail: "Email your CV",
+    emailSubject: (title: string) => `Application: ${title}`,
+    draft: "Draft",
+    draftNote:
+      "Not live yet: press Publish in the admin area when it's ready. With no vacancies in the admin area, examples show here.",
+  },
+
   about: {
     seo: {
       title: "About CHS | Hydraulic Engineers in Cross Hands, Llanelli",
@@ -344,7 +421,7 @@ export const en = {
       },
     ],
     factsLabel: "CHS at a glance",
-    // {founded} is 1991 (35 years). The LLP was only incorporated at Companies House in 2004, which is fine: the business predates it.
+    // {founded} is business.foundingYear (1991): confirm with the business.
     facts: [
       { value: "{founded}", label: "Established" },
       { value: "Cross Hands", label: "Workshop base" },

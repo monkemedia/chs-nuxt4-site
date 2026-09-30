@@ -3,6 +3,7 @@ import { structureTool } from "sanity/structure"
 import { googleRating } from "./schemas/googleRating"
 import { job } from "./schemas/job"
 import { review } from "./schemas/review"
+import { vacancy } from "./schemas/vacancy"
 
 // The CHS admin area: Sanity Studio, built into the site at /admin (see AGENTS.md "Admin").
 // The /admin path is set once, in sanity.cli.ts: setting it here too doubles it (/admin/admin).
@@ -20,6 +21,7 @@ export default defineConfig({
           .items([
             S.documentTypeListItem("job").title("Recent work"),
             S.documentTypeListItem("review").title("Reviews"),
+            S.documentTypeListItem("vacancy").title("Vacancies"),
             // One Google rating document, opened directly.
             S.listItem()
               .title("Google rating")
@@ -33,7 +35,7 @@ export default defineConfig({
     }),
   ],
   schema: {
-    types: [job, review, googleRating],
+    types: [job, review, googleRating, vacancy],
     // Only one Google rating: no "create new" for it.
     templates: (templates) =>
       templates.filter((t) => t.schemaType !== "googleRating"),

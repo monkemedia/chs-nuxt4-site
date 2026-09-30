@@ -1,5 +1,5 @@
 // Fetches the admin area's content from Sanity at build time (one request per build, shared
-// by modules/jobs.ts and modules/reviews.ts). The site stays static: nothing is fetched in
+// by modules/jobs.ts, modules/reviews.ts and modules/vacancies.ts). The site stays static: nothing is fetched in
 // the browser, and the read token below never leaves the build.
 //
 // SANITY_STUDIO_PROJECT_ID / SANITY_STUDIO_DATASET: the Sanity project (also used by the
@@ -11,6 +11,7 @@ export interface SanityContent {
   jobs: unknown[]
   reviews: unknown[]
   googleRating: unknown
+  vacancies: unknown[]
 }
 
 const apiVersion = "v2025-02-19"
@@ -26,7 +27,19 @@ const query = `{
     cy
   },
   "reviews": *[_type == "review"] { author, company, rating, text, date, source },
-  "googleRating": *[_id == "googleRating"][0] { rating, count }
+  "googleRating": *[_id == "googleRating"][0] { rating, count },
+  "vacancies": *[_type == "vacancy"] {
+    "draft": _originalId in path("drafts.**"),
+    "slug": slug.current,
+    posted,
+    closes,
+    type,
+    salaryMin,
+    salaryMax,
+    salaryPeriod,
+    en,
+    cy
+  }
 }`
 
 let cached: Promise<SanityContent> | undefined
@@ -37,12 +50,12 @@ export function fetchSanityContent(drafts: boolean): Promise<SanityContent> {
 }
 
 async function load(drafts: boolean): Promise<SanityContent> {
-  const empty = { jobs: [], reviews: [], googleRating: null }
+  const empty = { jobs: [], reviews: [], googleRating: null, vacancies: [] }
   const projectId = process.env.SANITY_STUDIO_PROJECT_ID
   const dataset = process.env.SANITY_STUDIO_DATASET || "production"
   if (!projectId) {
     console.warn(
-      "[sanity] SANITY_STUDIO_PROJECT_ID isn't set: building without jobs or reviews.",
+      "[sanity] SANITY_STUDIO_PROJECT_ID isn't set: building without jobs, reviews or vacancies.",
     )
     return empty
   }
