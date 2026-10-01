@@ -38,3 +38,21 @@ export interface Benefit {
   summary: string
   detail: string
 }
+
+// A town or area page (/areas/<slug>): local search ("hydraulic repairs Swansea") with real
+// local detail, not a copy of another town's page with the name swapped.
+export interface Area {
+  slug: string
+  // As written in the copy and matched against job locations ("Swansea").
+  town: string
+  metaTitle: string
+  metaDescription: string
+  h1: string
+  lead: string
+  intro: string[]
+  // Getting to the Cross Hands workshop from here.
+  travel: { distance: string; time: string; route: string }
+  // Places nearby, shown as "Also covering".
+  nearby: string[]
+  faqs: { q: string; a: string }[]
+}

@@ -9,6 +9,8 @@ const props = withDefaults(
     service?: string
     // Leave out this job slug (the job page it's on).
     exclude?: string
+    // Only jobs whose location mentions this town (English name, as staff type it).
+    town?: string
     limit?: number
     muted?: boolean
   }>(),
@@ -24,6 +26,10 @@ const items = computed(() =>
     .filter(
       (job) =>
         (!props.service || job.service === props.service) &&
+        (!props.town ||
+          (job.location ?? "")
+            .toLowerCase()
+            .includes(props.town.toLowerCase())) &&
         job.slug !== props.exclude,
     )
     .slice(0, props.limit),

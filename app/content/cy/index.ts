@@ -1,4 +1,5 @@
 import type { Content } from "../en"
+import { areas } from "./areas"
 import { benefits } from "./benefits"
 import { sectors } from "./sectors"
 import { services } from "./services"
@@ -49,6 +50,7 @@ export const cy: Content = {
     aboutUs: "Amdanom ni",
     getInTouch: "Cysylltu â ni",
     privacy: "Hysbysiad preifatrwydd",
+    areas: "Ardaloedd",
     company:
       "Mae CHS Hydraulics yn enw masnachu i {legalName}, cwmni wedi'i gofrestru yng Nghymru a Lloegr, rhif cwmni {companyNumber}. Swyddfa gofrestredig: {registeredOffice}.",
   },
@@ -457,6 +459,28 @@ export const cy: Content = {
     findUs: "Dewch o hyd i ni",
   },
 
+  areaPage: {
+    notFound: "Heb ddod o hyd i'r ardal",
+    gettingHere: (town: string) => `Cyrraedd atom o ${town}`,
+    distance: "Pellter",
+    time: "Gyrru",
+    route: "Llwybr",
+    directions: "Cael cyfarwyddiadau",
+    servicesTitle: "Beth allwn ni ei wneud i chi",
+    photoCard: {
+      kicker: "Ddim yn siŵr beth sydd ei angen?",
+      title: "Anfonwch lun atom",
+      text: "E-bostiwch lun o'r bibell, y ram neu'r ffitiad, gydag unrhyw farciau y gallwch eu gweld, a byddwn yn dweud beth sydd ei angen cyn i chi wneud y daith.",
+      button: "E-bostio llun",
+      emailSubject: "Llun ar gyfer pris",
+    },
+    nearbyTitle: "Hefyd yn agos at",
+    faqTitle: "Cwestiynau cyffredin",
+    jobsKicker: "Gwaith lleol",
+    jobsTitle: (town: string) => `Gwaith diweddar yn ${town}`,
+    ctaKicker: (town: string) => `Atgyweirio hydrolig ar gyfer ${town}`,
+  },
+
   about: {
     seo: {
       title: "Amdanom ni | Peirianwyr Hydrolig Cross Hands, Llanelli | CHS",
@@ -753,4 +777,5 @@ export const cy: Content = {
   services,
   sectors,
   benefits,
+  areas,
 }

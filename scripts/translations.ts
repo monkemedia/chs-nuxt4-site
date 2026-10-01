@@ -39,6 +39,11 @@ const sources = [
     cy: ["cy/benefits.ts", "benefits"],
   },
   {
+    prefix: "areas.",
+    en: ["en/areas.ts", "areas"],
+    cy: ["cy/areas.ts", "areas"],
+  },
+  {
     prefix: "workshop.",
     en: ["en/workshop.ts", "workshop"],
     cy: ["cy/workshop.ts", "workshop"],
@@ -222,6 +227,8 @@ const names: Record<string, string> = {
   errorPage: "Error page",
   faqs: "FAQs",
   workshop: "Workshop-only version",
+  areas: "Town pages",
+  areaPage: "Town pages: labels",
 }
 
 const humanise = (key: string) =>

@@ -1,3 +1,4 @@
+import { areas } from "./areas"
 import { benefits } from "./benefits"
 import { sectors } from "./sectors"
 import { services } from "./services"
@@ -47,6 +48,7 @@ export const en = {
     aboutUs: "About us",
     getInTouch: "Get in touch",
     privacy: "Privacy notice",
+    areas: "Areas",
     // Company details a company's website must show (Companies Act 2006).
     company:
       "CHS Hydraulics is a trading name of {legalName}, registered in England and Wales, company number {companyNumber}. Registered office: {registeredOffice}.",
@@ -477,6 +479,30 @@ export const en = {
     findUs: "Find us",
   },
 
+  // Town pages (/areas/<slug>; the towns themselves are in ./areas.ts).
+  areaPage: {
+    notFound: "Area not found",
+    gettingHere: (town: string) => `Getting to us from ${town}`,
+    distance: "Distance",
+    time: "Drive",
+    route: "Route",
+    directions: "Get directions",
+    servicesTitle: "What we can do for you",
+    // Fills the services grid when there's an odd number of services.
+    photoCard: {
+      kicker: "Not sure what you need?",
+      title: "Send us a photo",
+      text: "Email a photo of the hose, ram or fitting, with any markings you can see, and we'll tell you what it needs before you make the trip.",
+      button: "Email a photo",
+      emailSubject: "Photo for a quote",
+    },
+    nearbyTitle: "Also close to",
+    faqTitle: "Common questions",
+    jobsKicker: "Local work",
+    jobsTitle: (town: string) => `Recent jobs in ${town}`,
+    ctaKicker: (town: string) => `Hydraulic repairs for ${town}`,
+  },
+
   about: {
     seo: {
       title: "About CHS | Hydraulic Engineers in Cross Hands, Llanelli",
@@ -777,6 +803,7 @@ export const en = {
   services,
   sectors,
   benefits,
+  areas,
 }
 
 export type Content = typeof en

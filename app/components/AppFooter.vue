@@ -47,6 +47,14 @@ const columns = computed(() => {
         { label: nav.contact, to: localePath("/contact") },
       ],
     },
+    {
+      id: "footer-areas",
+      title: footer.areas,
+      links: content.value.areas.map((a) => ({
+        label: a.town,
+        to: localePath(`/areas/${a.slug}`),
+      })),
+    },
   ]
 })
 
@@ -56,7 +64,7 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
 <template>
   <footer class="bg-ink-950 text-sm text-zinc-400">
     <UContainer
-      class="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-[1.3fr_1.2fr_0.8fr_1fr]"
+      class="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-[1.3fr_1.2fr_0.8fr_0.7fr_1fr]"
     >
       <div class="sm:col-span-2 lg:col-span-1">
         <NuxtPicture
