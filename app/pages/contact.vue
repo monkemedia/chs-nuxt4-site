@@ -7,6 +7,7 @@ const runtimeConfig = useRuntimeConfig()
 const endpoint = runtimeConfig.public.contactFormEndpoint as string
 const { $track } = useNuxtApp()
 const content = useContent()
+const localePath = useLocalePath()
 const page = computed(() => content.value.contact)
 const { locale } = useI18n()
 const { week, closures, draft: hoursDraft } = useOpeningHours()
@@ -424,6 +425,12 @@ const details = computed(() => [
               </UButton>
               <p class="text-[13px] text-zinc-600">
                 {{ page.privacy }}
+                <ULink
+                  raw
+                  :to="localePath('/privacy')"
+                  class="font-semibold text-chs-700 underline"
+                  >{{ page.privacyLink }}</ULink
+                >
               </p>
             </div>
           </UForm>

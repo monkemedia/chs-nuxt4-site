@@ -40,8 +40,16 @@ export default defineAppConfig({
     // Brand line: the homepage H1, the footer and structured data (`slogan`). Kept in English
     // on the Welsh pages too, like the name. The last word is highlighted in the hero.
     tagline: "Driven By Pressure",
-    // Registered name at Companies House (OC308080); confirm it's still the legal entity.
-    legalName: "Crosshands Hydraulic Services LLP",
+    // The company running CHS Hydraulics, which took the business over from Crosshands
+    // Hydraulic Services LLP (OC308080, see `formerName`). Used in the footer's company details
+    // (required on a company's website), the privacy notice (data controller) and structured
+    // data. Must match Companies House exactly, including "Ltd" if it's a limited company.
+    legalName: "Roberts Commercial Group Ltd",
+    // PLACEHOLDERS: from Companies House. The build warns until they're set.
+    company: {
+      number: "17322072",
+      registeredOffice: "10-11 Caer Street, Swansea, Wales, SA1 3PP",
+    },
     // Founding directors, named in the About page story and the homepage "why" band (copy uses
     // {founder1} and {founder2}). PLACEHOLDERS: names in [brackets] show on the site but are
     // kept out of structured data, and `npm run generate` warns until they're replaced.

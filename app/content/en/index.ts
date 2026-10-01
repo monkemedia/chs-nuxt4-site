@@ -46,6 +46,10 @@ export const en = {
     allServices: "All services",
     aboutUs: "About us",
     getInTouch: "Get in touch",
+    privacy: "Privacy notice",
+    // Company details a company's website must show (Companies Act 2006).
+    company:
+      "CHS Hydraulics is a trading name of {legalName}, registered in England and Wales, company number {companyNumber}. Registered office: {registeredOffice}.",
   },
 
   business: {
@@ -353,6 +357,93 @@ export const en = {
       "Not live yet: press Publish in the admin area when it's ready. With no vacancies in the admin area, examples show here.",
   },
 
+  // Privacy notice (UK GDPR). Drafted from what the site and the business do with personal
+  // data: check it with CHS, fill in the [brackets] (the build warns until then), and update
+  // `updated` whenever it changes.
+  privacyPage: {
+    seo: {
+      title: "Privacy Notice | CHS Hydraulics, Cross Hands, Llanelli",
+      description:
+        "How CHS Hydraulics in Cross Hands, Llanelli uses the details you give us when you call, email, send an enquiry or apply for a job.",
+    },
+    crumb: "Privacy",
+    title: ["Privacy", "notice"] as [string, string],
+    intro:
+      "What we do with your details when you call us, email us, send an enquiry or apply for a job. In short: we only use them to help you, we never sell them, and this website doesn't use cookies.",
+    updated: "2026-10-01",
+    updatedLabel: (date: string) => `Last updated ${date}`,
+    sections: [
+      {
+        title: "Who we are",
+        text: [
+          'This website is run by {legalName}, trading as CHS Hydraulics, of {address}. We\'re responsible for your personal information (the "controller" under UK data protection law).',
+          "Questions about your information? Email {email} or call {phone}. We're registered with the Information Commissioner's Office (ICO), registration number [ICO registration number].",
+        ],
+        list: [] as string[],
+      },
+      {
+        title: "What we collect and why",
+        text: [] as string[],
+        list: [
+          "Enquiries: when you use our contact form we receive your name, phone number, email address and anything else you choose to tell us (your company, location, the service you need, how urgent it is and your message). We use it to reply, quote and do the work.",
+          "Calls and emails: your contact details and what you tell us, for the same reasons.",
+          "Customers: the details we need to do the job, invoice you and keep proper records.",
+          "Job applications: your CV and anything you send with it, used only to consider you for the role.",
+        ],
+      },
+      {
+        title: "Our legal basis",
+        text: [
+          "We use enquiry and customer details to take the steps you've asked for before a contract and to carry it out, and in our legitimate interest in running the business and answering people who contact us. We keep accounting records because the law requires it. Job applications are used to consider you for work you've applied for.",
+        ],
+        list: [] as string[],
+      },
+      {
+        title: "Who we share it with",
+        text: [
+          "We never sell your information or use it for marketing you haven't asked for. We only share it with services that help us run the business, under contract, and only what they need:",
+        ],
+        list: [
+          "[Form service], which delivers messages from our contact form to our inbox.",
+          "Our email and accounting providers.",
+          "Vercel, which hosts this website. It keeps short-term server logs, including IP addresses, for security.",
+          "Plausible Analytics (see below).",
+        ],
+      },
+      {
+        title: "Website analytics and cookies",
+        text: [
+          "This website doesn't set any cookies. We use Plausible Analytics to count visits, see which pages are useful and whether people call or send an enquiry. Plausible doesn't use cookies, doesn't collect personal information and doesn't follow you across other websites.",
+          "The map on our contact page only loads Google Maps if you click it. Google may then set its own cookies, covered by Google's privacy policy.",
+        ],
+        list: [] as string[],
+      },
+      {
+        title: "How long we keep it",
+        text: [] as string[],
+        list: [
+          "Enquiries that don't lead to work: [12 months].",
+          "Customer and invoice records: 6 years after the end of the financial year, as HMRC requires.",
+          "Job applications: [6 months] after the role is filled, unless you agree to us keeping yours longer.",
+        ],
+      },
+      {
+        title: "Your rights",
+        text: [
+          "You can ask for a copy of your information, ask us to correct or delete it, restrict or object to how we use it, or have it sent to you or someone else. Email {email} and we'll reply within one month. There's no charge.",
+        ],
+        list: [] as string[],
+      },
+      {
+        title: "Complaints",
+        text: [
+          "If you're unhappy with how we've handled your information, please tell us first so we can put it right. You can also complain to the Information Commissioner's Office at ico.org.uk or on 0303 123 1113.",
+        ],
+        list: [] as string[],
+      },
+    ],
+  },
+
   about: {
     seo: {
       title: "About CHS | Hydraulic Engineers in Cross Hands, Llanelli",
@@ -618,6 +709,7 @@ export const en = {
     send: "Send enquiry",
     sending: "Sending…",
     privacy: "We only use your details to respond to your enquiry.",
+    privacyLink: "Read our privacy notice",
     sentTitle: "Thanks, your enquiry has been sent",
     sentText:
       "We'll be in touch as soon as possible. If your machine is down, call us on",

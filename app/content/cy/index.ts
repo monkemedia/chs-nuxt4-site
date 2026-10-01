@@ -48,6 +48,9 @@ export const cy: Content = {
     allServices: "Pob gwasanaeth",
     aboutUs: "Amdanom ni",
     getInTouch: "Cysylltu â ni",
+    privacy: "Hysbysiad preifatrwydd",
+    company:
+      "Mae CHS Hydraulics yn enw masnachu i {legalName}, cwmni wedi'i gofrestru yng Nghymru a Lloegr, rhif cwmni {companyNumber}. Swyddfa gofrestredig: {registeredOffice}.",
   },
 
   business: {
@@ -339,6 +342,90 @@ export const cy: Content = {
       "Ddim yn fyw eto: pwyswch Publish yn yr ardal weinyddu pan fydd yn barod. Heb swyddi gwag yn yr ardal weinyddu, mae enghreifftiau'n cael eu dangos yma.",
   },
 
+  privacyPage: {
+    seo: {
+      title: "Hysbysiad Preifatrwydd | CHS Hydraulics, Cross Hands",
+      description:
+        "Sut mae CHS Hydraulics yn Cross Hands, Llanelli yn defnyddio'r manylion rydych yn eu rhoi i ni wrth ffonio, e-bostio, anfon ymholiad neu wneud cais am swydd.",
+    },
+    crumb: "Preifatrwydd",
+    title: ["Hysbysiad", "preifatrwydd"],
+    intro:
+      "Beth rydyn ni'n ei wneud â'ch manylion pan fyddwch yn ein ffonio, yn anfon e-bost, yn anfon ymholiad neu'n gwneud cais am swydd. Yn fyr: dim ond i'ch helpu chi rydyn ni'n eu defnyddio, dydyn ni byth yn eu gwerthu, a dydy'r wefan hon ddim yn defnyddio cwcis.",
+    updated: "2026-10-01",
+    updatedLabel: (date: string) => `Diweddarwyd ddiwethaf ${date}`,
+    sections: [
+      {
+        title: "Pwy ydyn ni",
+        text: [
+          "Mae'r wefan hon yn cael ei rhedeg gan {legalName}, yn masnachu fel CHS Hydraulics, {address}. Ni sy'n gyfrifol am eich gwybodaeth bersonol (y \"rheolydd\" o dan gyfraith diogelu data'r DU).",
+          "Cwestiynau am eich gwybodaeth? E-bostiwch {email} neu ffoniwch {phone}. Rydyn ni wedi cofrestru gyda Swyddfa'r Comisiynydd Gwybodaeth (ICO), rhif cofrestru [Rhif cofrestru ICO].",
+        ],
+        list: [],
+      },
+      {
+        title: "Beth rydyn ni'n ei gasglu a pham",
+        text: [],
+        list: [
+          "Ymholiadau: pan fyddwch yn defnyddio ein ffurflen gyswllt, rydyn ni'n cael eich enw, rhif ffôn, cyfeiriad e-bost ac unrhyw beth arall rydych yn dewis ei ddweud wrthym (eich cwmni, lleoliad, y gwasanaeth sydd ei angen, pa mor frys yw e a'ch neges). Rydyn ni'n ei ddefnyddio i ateb, rhoi pris a gwneud y gwaith.",
+          "Galwadau ac e-byst: eich manylion cyswllt a'r hyn rydych yn ei ddweud wrthym, am yr un rhesymau.",
+          "Cwsmeriaid: y manylion sydd eu hangen arnom i wneud y gwaith, anfon anfoneb a chadw cofnodion priodol.",
+          "Ceisiadau am swyddi: eich CV ac unrhyw beth rydych yn ei anfon gydag ef, dim ond i'ch ystyried ar gyfer y swydd.",
+        ],
+      },
+      {
+        title: "Ein sail gyfreithiol",
+        text: [
+          "Rydyn ni'n defnyddio manylion ymholiadau a chwsmeriaid i gymryd y camau rydych wedi gofyn amdanynt cyn contract ac i'w gyflawni, ac er ein buddiant dilys mewn rhedeg y busnes ac ateb pobl sy'n cysylltu â ni. Rydyn ni'n cadw cofnodion cyfrifon oherwydd bod y gyfraith yn gofyn am hynny. Defnyddir ceisiadau am swyddi i'ch ystyried ar gyfer gwaith rydych wedi gwneud cais amdano.",
+        ],
+        list: [],
+      },
+      {
+        title: "Gyda phwy rydyn ni'n ei rannu",
+        text: [
+          "Dydyn ni byth yn gwerthu eich gwybodaeth na'i defnyddio ar gyfer marchnata nad ydych wedi gofyn amdano. Dim ond gyda gwasanaethau sy'n ein helpu i redeg y busnes rydyn ni'n ei rhannu, o dan gontract, a dim ond yr hyn sydd ei angen arnynt:",
+        ],
+        list: [
+          "[Gwasanaeth ffurflenni], sy'n anfon negeseuon o'n ffurflen gyswllt i'n mewnflwch.",
+          "Ein darparwyr e-bost a chyfrifon.",
+          "Vercel, sy'n cynnal y wefan hon. Mae'n cadw cofnodion gweinydd tymor byr, gan gynnwys cyfeiriadau IP, er diogelwch.",
+          "Plausible Analytics (gweler isod).",
+        ],
+      },
+      {
+        title: "Dadansoddi'r wefan a chwcis",
+        text: [
+          "Dydy'r wefan hon ddim yn gosod unrhyw gwcis. Rydyn ni'n defnyddio Plausible Analytics i gyfrif ymweliadau, gweld pa dudalennau sy'n ddefnyddiol ac a yw pobl yn ffonio neu'n anfon ymholiad. Dydy Plausible ddim yn defnyddio cwcis, ddim yn casglu gwybodaeth bersonol a ddim yn eich dilyn ar draws gwefannau eraill.",
+          "Dim ond os byddwch yn clicio arno y mae'r map ar ein tudalen gyswllt yn llwytho Google Maps. Efallai y bydd Google wedyn yn gosod ei gwcis ei hun, o dan bolisi preifatrwydd Google.",
+        ],
+        list: [],
+      },
+      {
+        title: "Am ba hyd rydyn ni'n ei gadw",
+        text: [],
+        list: [
+          "Ymholiadau nad ydynt yn arwain at waith: [12 mis].",
+          "Cofnodion cwsmeriaid ac anfonebau: 6 blynedd ar ôl diwedd y flwyddyn ariannol, fel y mae CThEF yn ei ofyn.",
+          "Ceisiadau am swyddi: [6 mis] ar ôl llenwi'r swydd, oni bai eich bod yn cytuno i ni gadw eich un chi yn hirach.",
+        ],
+      },
+      {
+        title: "Eich hawliau",
+        text: [
+          "Gallwch ofyn am gopi o'ch gwybodaeth, gofyn i ni ei chywiro neu ei dileu, cyfyngu ar sut rydyn ni'n ei defnyddio neu wrthwynebu hynny, neu ei chael wedi'i hanfon atoch chi neu at rywun arall. E-bostiwch {email} a byddwn yn ateb o fewn mis. Does dim tâl.",
+        ],
+        list: [],
+      },
+      {
+        title: "Cwynion",
+        text: [
+          "Os nad ydych yn hapus â sut rydyn ni wedi trin eich gwybodaeth, dywedwch wrthym yn gyntaf er mwyn i ni allu ei chywiro. Gallwch hefyd gwyno i Swyddfa'r Comisiynydd Gwybodaeth yn ico.org.uk neu ar 0303 123 1113.",
+        ],
+        list: [],
+      },
+    ],
+  },
+
   about: {
     seo: {
       title: "Amdanom ni | Peirianwyr Hydrolig Cross Hands, Llanelli | CHS",
@@ -602,6 +689,7 @@ export const cy: Content = {
     sending: "Wrthi'n anfon…",
     privacy:
       "Dim ond i ymateb i'ch ymholiad y byddwn yn defnyddio'ch manylion.",
+    privacyLink: "Darllenwch ein hysbysiad preifatrwydd",
     sentTitle: "Diolch, mae'ch ymholiad wedi'i anfon",
     sentText:
       "Byddwn yn cysylltu â chi cyn gynted â phosib. Os yw'ch peiriant wedi stopio, ffoniwch ni ar",

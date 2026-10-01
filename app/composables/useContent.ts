@@ -8,9 +8,9 @@ import { applyOverrides } from "~/content/overrides"
 
 // Copy for the current language (see app/content/). Use in templates as content.home.heroCopy.
 // {years} (of experience: the build year minus `business.foundingYear`) and {hours} (from
-// app.config `offer`), plus {founder1}, {founder2}, {founded}, {tagline} and {standard} (the
-// ISO standard's full reference, which ISO asks for) from `business`, are filled in here, so
-// they stay the same in every language.
+// app.config `offer`), plus {founder1}, {founder2}, {founded}, {tagline}, {standard} (the
+// ISO standard's full reference, which ISO asks for), {legalName}, {companyNumber},
+// {registeredOffice}, {email}, {phone} and {address} from `business`, are filled in here, so they stay the same in every language.
 // While app.config `features.onsite` is off, the workshop-only copy (app/content/<locale>/
 // workshop.ts) replaces anything that mentions on-site work, and the On-site Service is
 // removed everywhere services are listed (so its page isn't linked, prerendered or mapped).
@@ -28,13 +28,18 @@ export function useContent() {
     founded: business.foundingYear,
     tagline: business.tagline,
     standard: business.certification.standard,
+    // Contact details, for the privacy notice.
+    legalName: business.legalName,
+    companyNumber: business.company.number,
+    registeredOffice: business.company.registeredOffice,
+    email: business.email,
+    phone: business.phoneDisplay,
+    address: addressLines(business.address).join(", "),
   }
+  const pattern = new RegExp(`\\{(${Object.keys(tokens).join("|")})\\}`, "g")
   const fill = <T>(value: T): T => {
     if (typeof value === "string")
-      return value.replace(
-        /\{(years|hours|founder1|founder2|founded|tagline|standard)\}/g,
-        (_, key: string) => tokens[key]!,
-      ) as T
+      return value.replace(pattern, (_, key: string) => tokens[key]!) as T
     if (Array.isArray(value)) return value.map(fill) as T
     if (value && typeof value === "object")
       return Object.fromEntries(

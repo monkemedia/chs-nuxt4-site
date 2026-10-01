@@ -9,6 +9,15 @@ const runtimeConfig = useRuntimeConfig()
 // next rebuild would otherwise mismatch on hydration.
 const year = runtimeConfig.public.buildYear
 
+// The company number and registered office must be shown before launch.
+if (
+  import.meta.server &&
+  Object.values(business.company).some((v) => v.startsWith("["))
+)
+  console.warn(
+    "[company] Set business.company (company number, registered office) in app.config.ts from Companies House.",
+  )
+
 const columns = computed(() => {
   const { footer, nav, services } = content.value
   return [
@@ -118,7 +127,17 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
 
     <UContainer>
       <USeparator :ui="{ border: 'border-white/10' }" />
-      <p class="py-6 text-xs">© {{ year }} {{ business.name }}.</p>
+      <div
+        class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 py-6 text-xs"
+      >
+        <div class="max-w-3xl space-y-1">
+          <p>© {{ year }} {{ business.name }}.</p>
+          <p>{{ content.footer.company }}</p>
+        </div>
+        <ULink raw :to="localePath('/privacy')" :class="linkClass">
+          {{ content.footer.privacy }}
+        </ULink>
+      </div>
     </UContainer>
   </footer>
 </template>
