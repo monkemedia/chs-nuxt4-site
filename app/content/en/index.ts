@@ -444,6 +444,39 @@ export const en = {
     ],
   },
 
+  // Holding pages, shown on every URL while runtimeConfig `siteMode` is "coming-soon" or
+  // "maintenance" (NUXT_PUBLIC_SITE_MODE). Preview them at /coming-soon and /maintenance.
+  holding: {
+    comingSoon: {
+      seo: {
+        title: "CHS Hydraulics | New Website Coming Soon",
+        description:
+          "Our new website is nearly ready. Hydraulic hose, ram and system repairs in Cross Hands, Llanelli: call {phone}.",
+      },
+      kicker: "New website on the way",
+      title: ["Building", "pressure."] as [string, string],
+      text: "Our new website is nearly ready. In the meantime we're open as usual: give us a call, send an email or drop in to the workshop in Cross Hands.",
+      reading: "SOON",
+      gaugeLabel: "Pressure gauge climbing to working pressure",
+    },
+    maintenance: {
+      seo: {
+        title: "CHS Hydraulics | Back Shortly",
+        description:
+          "Our website is down for a quick service. We're still open for hydraulic repairs in Cross Hands, Llanelli: call {phone}.",
+      },
+      kicker: "Down for maintenance",
+      title: ["Routine", "service."] as [string, string],
+      text: "We're giving the website a quick service and it'll be back shortly. The workshop is open as normal, so if a machine's down, call us now.",
+      reading: "503",
+      gaugeLabel:
+        "Pressure gauge resting at zero while the website is serviced",
+    },
+    whatWeDo: "What we do",
+    email: "Email us",
+    findUs: "Find us",
+  },
+
   about: {
     seo: {
       title: "About CHS | Hydraulic Engineers in Cross Hands, Llanelli",

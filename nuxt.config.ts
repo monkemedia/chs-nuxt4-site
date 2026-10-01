@@ -54,7 +54,13 @@ export default defineNuxtConfig({
       // at build time, not from the visitor's clock, so prerendered pages and hydration agree;
       // the first rebuild of the year moves it on.
       buildYear: new Date().getFullYear(),
+      // "live", or "coming-soon" / "maintenance" to show the holding page on every URL
+      // (set NUXT_PUBLIC_SITE_MODE in the host's build settings and redeploy).
+      siteMode: "live",
     },
+  },
+  sitemap: {
+    exclude: ["/coming-soon", "/maintenance"],
   },
   site: {
     url: "https://www.chshydraulics.co.uk",
@@ -70,6 +76,12 @@ export default defineNuxtConfig({
     "/": { prerender: true },
     "/services/**": { prerender: true },
     "/contact": { prerender: true },
+    // Holding page previews: prerendered so they can be checked on a deployment, but never
+    // indexed (noindex) or listed (sitemap.exclude).
+    "/coming-soon": { prerender: true },
+    "/maintenance": { prerender: true },
+    "/cy/coming-soon": { prerender: true },
+    "/cy/maintenance": { prerender: true },
   },
   nitro: {
     // On Vercel the build uses the Build Output API, which ignores vercel.json's rewrites and
@@ -85,6 +97,26 @@ export default defineNuxtConfig({
             continue: true,
           },
           { src: "^/admin(?:/[^.]*)?$", dest: "/admin/index.html" },
+          // Maintenance mode (NUXT_PUBLIC_SITE_MODE=maintenance): every page URL serves the
+          // maintenance page with 503 and Retry-After, so search engines treat the outage as
+          // temporary instead of dropping pages. Files (scripts, images, icons) and /admin
+          // still load. Only on Vercel; the static output alone would give 404s.
+          ...(process.env.NUXT_PUBLIC_SITE_MODE === "maintenance"
+            ? [
+                {
+                  src: "^/cy(?:/[^._][^.]*)?/?$",
+                  dest: "/cy/maintenance/index.html",
+                  status: 503,
+                  headers: { "Retry-After": "3600" },
+                },
+                {
+                  src: "^/(?!admin(?:/|$)|cy(?:/|$))(?:[^._][^.]*)?/?$",
+                  dest: "/maintenance/index.html",
+                  status: 503,
+                  headers: { "Retry-After": "3600" },
+                },
+              ]
+            : []),
           // Nitro types routes too narrowly (only cache-control headers); Vercel accepts any.
         ] as never,
       },

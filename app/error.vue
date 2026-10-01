@@ -3,6 +3,12 @@ import type { NuxtError } from "#app"
 
 const props = defineProps<{ error: NuxtError }>()
 
+// While the site is in coming-soon or maintenance mode, every missing page shows the
+// holding page too.
+const runtimeConfig = useRuntimeConfig()
+const siteMode = runtimeConfig.public.siteMode as
+  "live" | "coming-soon" | "maintenance"
+
 const { business } = useAppConfig()
 const content = useContent()
 const localePath = useLocalePath()
@@ -35,7 +41,8 @@ const leave = (to: string) => clearError({ redirect: to })
 </script>
 
 <template>
-  <NuxtLayout>
+  <HoldingPage v-if="siteMode !== 'live'" :mode="siteMode" />
+  <NuxtLayout v-else>
     <section
       class="relative isolate overflow-hidden bg-ink-950 py-16 text-white sm:py-24"
       aria-labelledby="error-title"
@@ -85,7 +92,7 @@ const leave = (to: string) => clearError({ redirect: to })
         </div>
 
         <ErrorGauge
-          :code="code"
+          :reading="code"
           :unit="page.gaugeUnit"
           :label="page.gaugeLabel(code)"
           class="mx-auto w-full max-w-[260px] sm:max-w-[340px] drop-shadow-[0_24px_48px_rgba(229,16,31,0.18)]"

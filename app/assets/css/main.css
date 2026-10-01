@@ -35,6 +35,11 @@
   --animate-needle-drop:
     needle-drop 1.6s cubic-bezier(0.3, 0, 0.2, 1) both,
     needle-quiver 2.4s ease-in-out 1.6s infinite;
+  /* Coming-soon page: the needle climbs from zero to its resting pressure (250 bar, 169° on
+     from zero), overshoots, settles and quivers. */
+  --animate-needle-build:
+    needle-build 2.4s cubic-bezier(0.45, 0, 0.2, 1) both,
+    needle-quiver 2.4s ease-in-out 2.4s infinite;
 
   @keyframes needle-drop {
     0% {
@@ -45,6 +50,20 @@
     }
     85% {
       rotate: 4deg;
+    }
+    100% {
+      rotate: 0deg;
+    }
+  }
+  @keyframes needle-build {
+    0% {
+      rotate: -169deg;
+    }
+    75% {
+      rotate: 5deg;
+    }
+    88% {
+      rotate: -2deg;
     }
     100% {
       rotate: 0deg;

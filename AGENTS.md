@@ -34,6 +34,7 @@ Build-time environment variables (both optional). Copy `.env.example` to `.env` 
 | `NUXT_PUBLIC_CONTACT_FORM_ENDPOINT` | Form service URL (Formspree-style, FormData POST, 2xx = success) | Form shows an error asking visitors to call |
 | `NUXT_PUBLIC_PLAUSIBLE_DOMAIN`      | Site domain as added in Plausible                                | No analytics                                |
 | `NUXT_PUBLIC_SHOW_DRAFTS`           | `true` on the drafts preview deployment only (see Admin area)    | Drafts left out (live site)                 |
+| `NUXT_PUBLIC_SITE_MODE`             | `coming-soon` or `maintenance`: holding page on every URL        | Normal site (`live`)                        |
 | `SANITY_STUDIO_PROJECT_ID`          | Sanity project for the admin area (jobs, reviews)                | Builds with no jobs or reviews (warns)      |
 | `SANITY_STUDIO_DATASET`             | Sanity dataset                                                   | `production`                                |
 | `SANITY_READ_TOKEN`                 | **Secret.** Preview deployment only: reads drafts from Sanity    | Preview shows published content only        |
@@ -198,6 +199,12 @@ public/
 - **Publishing rebuilds the site:** a Sanity webhook (sanity.io/manage → API → Webhooks, on create/update/delete of `job`, `review`, `googleRating`, `vacancy`, `openingHours`) calls the Vercel deploy hook. The preview deployment gets its own webhook with drafts included.
 - **Building:** `npm run generate` builds the site, then `npm run build:admin` builds the studio into its `/admin` (Vercel's `buildCommand` runs both). On Vercel the site builds to `.vercel/output/static` (Build Output API), not `.output/public`; `studio/build.mjs` picks whichever exists. That output ignores `vercel.json` rewrites and headers, so the `/admin` routing (page paths serve the studio's `index.html`) and its `noindex` header are in `nitro.vercel.config.routes` in `nuxt.config.ts`. Locally, `npm run admin` runs the studio at http://localhost:3333/admin/.
 - Add the site's domains (and http://localhost:3333) as CORS origins with credentials in sanity.io/manage → API, or the studio can't log in.
+
+### Coming soon and maintenance
+
+- `NUXT_PUBLIC_SITE_MODE=coming-soon` or `maintenance` (build setting, then redeploy) swaps every page, and the 404 page, for `<HoldingPage>` (`app.vue`, `error.vue`): full-screen, `noindex`, with the phone, email, address, open/closed line and services kept up front, plus the pressure gauge (`<ErrorGauge>` climbing to "SOON", or resting at "503"). Copy is in `holding` in the content. `/admin` keeps working, so staff can still edit.
+- **Maintenance on Vercel** also returns **503 with `Retry-After`** for every page URL (`nitro.vercel.config.routes` in `nuxt.config.ts`), so search engines treat it as temporary rather than dropping pages. Without it, URLs other than the prerendered few would be 404s. Keep maintenance short.
+- Preview the designs at `/coming-soon` and `/maintenance` (and `/cy/…`): prerendered, `noindex`, not linked and excluded from the sitemap.
 
 ### Analytics
 

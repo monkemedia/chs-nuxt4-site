@@ -426,6 +426,37 @@ export const cy: Content = {
     ],
   },
 
+  holding: {
+    comingSoon: {
+      seo: {
+        title: "CHS Hydraulics | Gwefan Newydd yn Dod yn Fuan",
+        description:
+          "Mae ein gwefan newydd bron yn barod. Atgyweirio pibellau, rams a systemau hydrolig yn Cross Hands, Llanelli: ffoniwch {phone}.",
+      },
+      kicker: "Gwefan newydd ar y ffordd",
+      title: ["Codi", "pwysau."],
+      text: "Mae ein gwefan newydd bron yn barod. Yn y cyfamser rydyn ni ar agor fel arfer: ffoniwch ni, anfonwch e-bost neu galwch heibio i'r gweithdy yn Cross Hands.",
+      reading: "CYN HIR",
+      gaugeLabel: "Medrydd pwysau yn codi i'r pwysau gweithio",
+    },
+    maintenance: {
+      seo: {
+        title: "CHS Hydraulics | Yn Ôl Cyn Hir",
+        description:
+          "Mae ein gwefan i lawr am wasanaeth sydyn. Rydyn ni dal ar agor ar gyfer atgyweirio hydrolig yn Cross Hands, Llanelli: ffoniwch {phone}.",
+      },
+      kicker: "I lawr am waith cynnal a chadw",
+      title: ["Gwasanaeth", "arferol."],
+      text: "Rydyn ni'n rhoi gwasanaeth sydyn i'r wefan a bydd yn ôl cyn hir. Mae'r gweithdy ar agor fel arfer, felly os oes peiriant wedi torri, ffoniwch ni nawr.",
+      reading: "503",
+      gaugeLabel:
+        "Medrydd pwysau yn gorffwys ar sero tra bod y wefan yn cael gwasanaeth",
+    },
+    whatWeDo: "Beth rydyn ni'n ei wneud",
+    email: "E-bostiwch ni",
+    findUs: "Dewch o hyd i ni",
+  },
+
   about: {
     seo: {
       title: "Amdanom ni | Peirianwyr Hydrolig Cross Hands, Llanelli | CHS",

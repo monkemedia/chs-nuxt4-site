@@ -1,7 +1,19 @@
 <script setup lang="ts">
-// Pressure gauge for the error page: 0–400 bar over a 270° dial, needle dropped to zero and
-// the error code on the readout.
-defineProps<{ code: number; unit: string; label: string }>()
+// Pressure gauge, 0–400 bar over a 270° dial. The error page drops the needle to zero with
+// the error code on the readout; the holding pages build it up to working pressure ("SOON")
+// or rest it at zero ("503").
+const props = withDefaults(
+  defineProps<{
+    reading: string | number
+    unit: string
+    label: string
+    // Where the needle settles, in bar.
+    bar?: number
+    // "drop": falls from high pressure. "build": climbs from zero.
+    motion?: "drop" | "build"
+  }>(),
+  { bar: 0, motion: "drop" },
+)
 
 const cx = 120
 const cy = 120
@@ -20,6 +32,11 @@ const ticks = Array.from({ length: max / 20 + 1 }, (_, i) => {
   const to = point(bar, 92)
   return { bar, major, from, to, text: point(bar, 64) }
 })
+
+// The readout box grows with longer readings ("CYN HIR"), centred under the needle.
+const readoutWidth = computed(() =>
+  Math.max(64, String(props.reading).length * 14 + 16),
+)
 
 // Red zone from 320 bar to the top of the scale.
 const redFrom = point(320, 92)
@@ -50,9 +67,9 @@ const redZone = `M ${redFrom.x} ${redFrom.y} A 92 92 0 0 1 ${redTo.x} ${redTo.y}
     />
 
     <rect
-      x="88"
+      :x="cx - readoutWidth / 2"
       y="176"
-      width="64"
+      :width="readoutWidth"
       height="30"
       rx="3"
       class="fill-ink-900 stroke-ink-700"
@@ -64,7 +81,7 @@ const redZone = `M ${redFrom.x} ${redFrom.y} A 92 92 0 0 1 ${redTo.x} ${redTo.y}
       dominant-baseline="central"
       class="fill-chs-400 font-display text-[20px] font-black tracking-[2px]"
     >
-      {{ code }}
+      {{ reading }}
     </text>
     <text
       :x="cx"
@@ -75,10 +92,15 @@ const redZone = `M ${redFrom.x} ${redFrom.y} A 92 92 0 0 1 ${redTo.x} ${redTo.y}
       {{ unit }}
     </text>
 
-    <!-- Rotated to zero; the inner group animates relative to that. -->
-    <g :transform="`rotate(${angle(0)} ${cx} ${cy})`">
+    <!-- Rotated to its resting pressure; the inner group animates relative to that. -->
+    <g :transform="`rotate(${angle(props.bar)} ${cx} ${cy})`">
       <g
-        class="origin-[120px_120px] animate-needle-drop motion-reduce:animate-none"
+        class="origin-[120px_120px] motion-reduce:animate-none"
+        :class="
+          props.motion === 'build'
+            ? 'animate-needle-build'
+            : 'animate-needle-drop'
+        "
       >
         <polygon
           :points="`${cx - 4},${cy} ${cx},${cy - 88} ${cx + 4},${cy}`"
