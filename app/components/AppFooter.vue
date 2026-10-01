@@ -60,15 +60,15 @@ const linkClass = "transition-colors hover:text-white focus-visible:text-white"
     >
       <div class="sm:col-span-2 lg:col-span-1">
         <NuxtPicture
-          src="/images/chs-logo-white.png"
+          src="/images/chs-logo-mark-white.png"
           alt="CHS Hydraulics"
-          sizes="130px"
-          width="130"
-          height="69"
+          sizes="140px"
+          width="140"
+          height="62"
           densities="x1 x2"
           format="avif,webp"
           loading="lazy"
-          :img-attrs="{ class: 'h-auto w-[130px]' }"
+          :img-attrs="{ class: 'h-auto w-[140px]' }"
         />
         <p class="kicker mt-4 text-[11px] text-chs-400">
           {{ business.tagline }}

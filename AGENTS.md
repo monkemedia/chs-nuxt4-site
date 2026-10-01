@@ -148,6 +148,10 @@ public/
 - Unprefixed `sizes="100vw ..."` generates junk `1w`/`2w` srcset entries; avoid it.
 - Hero/LCP images: a real `<img>` (not a CSS background) with `:preload="{ fetchPriority: 'high' }"` and `fetchpriority: 'high'` in `img-attrs`.
 
+### Logo
+
+- The header and footer use `public/images/chs-logo-mark-white.png`: the "CHS" box only, cut at full resolution from `chs-logo-white.png` (the full lockup with "HYDRAULICS" underneath, which stays for vans, print and the LocalBusiness `logo`). On the site "hydraulics" is already all around it, and at header size the word was unreadable. Keep `alt="CHS Hydraulics"`. If the logo is redrawn, re-cut both from the designer's vector rather than resizing the PNGs.
+
 ### Favicon
 
 - `public/favicon.svg` is the source (dark rounded square, two red stripes). `favicon.ico` (16/32/48), `apple-touch-icon.png` (180) and `icon-192/512.png` (for `site.webmanifest`) are generated from it with sharp; regenerate them all if the SVG changes. The head links are in `nuxt.config.ts`.

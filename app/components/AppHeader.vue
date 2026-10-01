@@ -181,17 +181,20 @@ onBeforeUnmount(() => {
     }"
   >
     <template #title>
+      <!-- "CHS" mark only: the site says "hydraulics" all around it, and at header size the
+           word under the box was unreadable. The full lockup is for vans and print. -->
       <NuxtPicture
-        src="/images/chs-logo-white.png"
+        src="/images/chs-logo-mark-white.png"
         alt="CHS Hydraulics"
-        sizes="120px"
-        width="120"
+        sizes="136px"
+        width="136"
+        height="60"
         densities="x1 x2"
         format="avif,webp"
         :img-attrs="{
           class: [
-            'h-auto w-[80px] transition-[width] duration-300 motion-reduce:transition-none sm:w-[100px]',
-            headerCompact ? 'lg:w-[90px]' : 'lg:w-[120px]',
+            'h-auto w-[90px] transition-[width] duration-300 motion-reduce:transition-none sm:w-[112px]',
+            headerCompact ? 'lg:w-[100px]' : 'lg:w-[136px]',
           ],
         }"
       />
@@ -262,19 +265,13 @@ onBeforeUnmount(() => {
         icon="i-lucide-phone"
         size="xl"
         :aria-label="content.common.callChs"
-        class="h-10 px-2 sm:px-5"
-        :class="headerCompact ? 'lg:h-11' : 'lg:h-14'"
+        class="h-10 px-2 sm:px-5 lg:h-12"
+        :ui="{ leadingIcon: 'size-5' }"
       >
-        <span class="hidden flex-col text-left leading-tight sm:flex">
-          <span
-            class="text-[13px] tracking-[2px] lg:text-[17px]"
-            :class="headerCompact && 'lg:hidden'"
-            >{{ content.common.callNow }}</span
-          >
-          <span class="text-xs tracking-[1.5px] lg:text-sm">{{
-            business.phoneDisplay
-          }}</span>
-        </span>
+        <span
+          class="hidden text-sm tracking-[1.5px] sm:inline lg:text-[15px]"
+          >{{ business.phoneDisplay }}</span
+        >
       </UButton>
     </template>
 
