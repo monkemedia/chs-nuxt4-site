@@ -190,11 +190,11 @@ const faqs = computed(() =>
 
         <aside
           class="grid gap-5 sm:grid-cols-2 lg:sticky lg:top-[calc(var(--header-offset)+1.5rem)] lg:transition-[top] lg:duration-300 lg:grid-cols-1"
-          :aria-label="page.gettingHere(area!.town)"
+          :aria-label="page.gettingHere(area!.fromTown)"
         >
           <div class="rounded-box bg-ink-900 p-6 text-white sm:p-7.5">
             <h2 class="heading-display mb-2 text-lg leading-tight">
-              {{ page.gettingHere(area!.town) }}
+              {{ page.gettingHere(area!.fromTown) }}
             </h2>
             <dl class="divide-y divide-white/10">
               <div
@@ -248,7 +248,7 @@ const faqs = computed(() =>
 
     <RecentJobs
       :kicker="page.jobsKicker"
-      :title="page.jobsTitle(area!.town)"
+      :title="page.jobsTitle(area!.inTown)"
       :town="englishTown"
       muted
     />

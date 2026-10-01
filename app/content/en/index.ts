@@ -482,7 +482,7 @@ export const en = {
   // Town pages (/areas/<slug>; the towns themselves are in ./areas.ts).
   areaPage: {
     notFound: "Area not found",
-    gettingHere: (town: string) => `Getting to us from ${town}`,
+    gettingHere: (fromTown: string) => `Getting to us ${fromTown}`,
     distance: "Distance",
     time: "Drive",
     route: "Route",
@@ -499,7 +499,7 @@ export const en = {
     nearbyTitle: "Also close to",
     faqTitle: "Common questions",
     jobsKicker: "Local work",
-    jobsTitle: (town: string) => `Recent jobs in ${town}`,
+    jobsTitle: (inTown: string) => `Recent jobs ${inTown}`,
     ctaKicker: (town: string) => `Hydraulic repairs for ${town}`,
   },
 

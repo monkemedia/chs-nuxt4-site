@@ -45,6 +45,10 @@ export interface Area {
   slug: string
   // As written in the copy and matched against job locations ("Swansea").
   town: string
+  // "from Swansea" / "in Swansea". Welsh mutates the name ("o Gaerfyrddin", "yng
+  // Nghaerfyrddin"), so labels use these rather than adding a word to `town`.
+  fromTown: string
+  inTown: string
   metaTitle: string
   metaDescription: string
   h1: string

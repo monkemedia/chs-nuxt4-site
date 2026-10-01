@@ -461,7 +461,7 @@ export const cy: Content = {
 
   areaPage: {
     notFound: "Heb ddod o hyd i'r ardal",
-    gettingHere: (town: string) => `Cyrraedd atom o ${town}`,
+    gettingHere: (fromTown: string) => `Cyrraedd atom ${fromTown}`,
     distance: "Pellter",
     time: "Gyrru",
     route: "Llwybr",
@@ -477,7 +477,7 @@ export const cy: Content = {
     nearbyTitle: "Hefyd yn agos at",
     faqTitle: "Cwestiynau cyffredin",
     jobsKicker: "Gwaith lleol",
-    jobsTitle: (town: string) => `Gwaith diweddar yn ${town}`,
+    jobsTitle: (inTown: string) => `Gwaith diweddar ${inTown}`,
     ctaKicker: (town: string) => `Atgyweirio hydrolig ar gyfer ${town}`,
   },
 
