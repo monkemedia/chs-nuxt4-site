@@ -5,5 +5,5 @@ definePageMeta({ layout: false })
 </script>
 
 <template>
-  <HoldingPage mode="coming-soon" />
+  <HoldingPage mode="coming-soon" preview />
 </template>

@@ -161,7 +161,7 @@ public/
 
 - Every page calls `usePageSeo({ title, description, path })`. Keep titles ≤ 60 characters and descriptions ≤ 160, and include a location (Llanelli / Carmarthenshire).
 - Inner pages add `useBreadcrumbs([...])` and show a matching `UBreadcrumb` in `PageHero` using `heroBreadcrumbUi`.
-- `layouts/default.vue` outputs `LocalBusiness` JSON-LD from `app.config.ts`; service pages add `Service` JSON-LD referencing it via `useBusinessId()`.
+- `useSiteHead()` (from `layouts/default.vue`) outputs `LocalBusiness` JSON-LD from `app.config.ts`; service pages add `Service` JSON-LD referencing it via `useBusinessId()`.
 - One `h1` per page. The homepage H1 is the brand line (`business.tagline`, "Driven By Pressure", in `app.config.ts`) with the keyword line inside it. The tagline is also in the footer and the LocalBusiness `slogan`; use `business.tagline` rather than typing it.
 - New pages are picked up by the prerender crawler and sitemap automatically if something links to them.
 
@@ -202,9 +202,11 @@ public/
 
 ### Coming soon and maintenance
 
-- `NUXT_PUBLIC_SITE_MODE=coming-soon` or `maintenance` (build setting, then redeploy) swaps every page, and the 404 page, for `<HoldingPage>` (`app.vue`, `error.vue`): full-screen, `noindex`, with the phone, email, address, open/closed line and services kept up front, plus the pressure gauge (`<ErrorGauge>` climbing to "SOON", or resting at "503"). Copy is in `holding` in the content. `/admin` keeps working, so staff can still edit.
+- `NUXT_PUBLIC_SITE_MODE=coming-soon` or `maintenance` (build setting, then redeploy) swaps every page, and the 404 page, for `<HoldingPage>` (`app.vue`, `error.vue`): full-screen, with the phone, email, address, open/closed line and services kept up front, plus the pressure gauge (`<ErrorGauge>` climbing to "SOON", or resting at "503"). Copy is in `holding` in the content. `/admin` keeps working, so staff can still edit.
 - **Maintenance on Vercel** also returns **503 with `Retry-After`** for every page URL (`nitro.vercel.config.routes` in `nuxt.config.ts`), so search engines treat it as temporary rather than dropping pages. Without it, URLs other than the prerendered few would be 404s. Keep maintenance short.
 - Preview the designs at `/coming-soon` and `/maintenance` (and `/cy/…`): prerendered, `noindex`, not linked and excluded from the sitemap.
+- **Indexing:** in coming-soon mode the page is `index, follow` with the LocalBusiness data, so the domain and phone number can appear in Google before launch (Lighthouse SEO 100). Maintenance relies on the 503, never `noindex`, so Google can't drop the real pages. Only the preview URLs are `noindex` (`preview` prop).
+- `useSiteHead()` (called by the layout and `<HoldingPage>`) sets `<html lang>`, canonical, hreflang and the LocalBusiness JSON-LD. Anything rendered outside the layout must call it.
 
 ### Analytics
 

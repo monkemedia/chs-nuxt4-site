@@ -3,10 +3,15 @@
 // Shown instead of every page by app.vue / error.vue when runtimeConfig `siteMode` says so,
 // and at /coming-soon and /maintenance to preview. Keeps the phone, email and address up
 // front: the workshop is open even when the website isn't.
-const props = defineProps<{ mode: "coming-soon" | "maintenance" }>()
+const props = defineProps<{
+  mode: "coming-soon" | "maintenance"
+  // The /coming-soon and /maintenance preview pages on the live site.
+  preview?: boolean
+}>()
 
 const { business } = useAppConfig()
-const content = useContent()
+// Language, canonical, hreflang and the LocalBusiness data, as on every other page.
+const { content } = useSiteHead()
 const switchLocalePath = useSwitchLocalePath()
 const { locale } = useI18n()
 
@@ -16,11 +21,16 @@ const copy = computed(() =>
     : content.value.holding.maintenance,
 )
 
+// Before launch the coming-soon page should be indexed: it's the business's name, number and
+// address on its own domain. Maintenance relies on the 503 from Vercel instead of noindex, so
+// a noindex can never be what Google sees for the real pages. The preview URLs on the live
+// site are never indexed.
 useSeoMeta({
   title: () => copy.value.seo.title,
   description: () => copy.value.seo.description,
-  // Holding pages must never replace the real pages in search results.
-  robots: "noindex, nofollow",
+  ogTitle: () => copy.value.seo.title,
+  ogDescription: () => copy.value.seo.description,
+  robots: props.preview ? "noindex, nofollow" : "index, follow",
 })
 
 const otherLocale = computed(() => (locale.value === "en" ? "cy" : "en"))
@@ -41,12 +51,11 @@ const otherLocaleFlag = computed(() =>
       class="absolute -top-40 -right-40 -z-10 size-[42rem] rounded-full bg-primary/15 blur-3xl"
       aria-hidden="true"
     />
-    <p
-      class="heading-display pointer-events-none absolute -bottom-12 -left-6 -z-10 text-[clamp(180px,32vw,460px)] leading-none text-white/[0.03] select-none"
+    <!-- Drawn with CSS content, not text, so it isn't read or contrast-checked. -->
+    <div
+      class="heading-display pointer-events-none absolute -bottom-12 -left-6 -z-10 text-[clamp(180px,32vw,460px)] leading-none text-white/[0.03] select-none before:content-['CHS']"
       aria-hidden="true"
-    >
-      CHS
-    </p>
+    />
 
     <header>
       <UContainer class="flex items-center justify-between gap-4 py-5">

@@ -5,5 +5,5 @@ definePageMeta({ layout: false })
 </script>
 
 <template>
-  <HoldingPage mode="maintenance" />
+  <HoldingPage mode="maintenance" preview />
 </template>

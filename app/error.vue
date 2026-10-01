@@ -48,12 +48,12 @@ const leave = (to: string) => clearError({ redirect: to })
       aria-labelledby="error-title"
     >
       <!-- Faint oversized code behind everything. -->
-      <p
-        class="heading-display pointer-events-none absolute -right-6 -bottom-10 -z-10 text-[clamp(160px,30vw,420px)] leading-none text-white/[0.03] select-none"
+      <!-- Drawn with CSS content, not text, so it isn't read or contrast-checked. -->
+      <div
+        class="heading-display pointer-events-none absolute -right-6 -bottom-10 -z-10 text-[clamp(160px,30vw,420px)] leading-none text-white/[0.03] select-none before:content-[attr(data-code)]"
+        :data-code="code"
         aria-hidden="true"
-      >
-        {{ code }}
-      </p>
+      />
       <UContainer
         class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
       >
