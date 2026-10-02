@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import * as z from "zod"
 import type { FormSubmitEvent } from "@nuxt/ui"
+import { useMounted, usePreferredReducedMotion } from "@vueuse/core"
 import { contentByLocale } from "~/content"
 const { business } = useAppConfig()
 const runtimeConfig = useRuntimeConfig()
 const endpoint = runtimeConfig.public.contactFormEndpoint as string
 const { $track } = useNuxtApp()
 const content = useContent()
+const reducedMotion = usePreferredReducedMotion()
+const mounted = useMounted()
 const localePath = useLocalePath()
 const page = computed(() => content.value.contact)
 const { locale } = useI18n()
@@ -113,7 +116,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     Object.assign(state, initialState())
   }
   await nextTick()
-  result.value?.focus()
+  // Bring the thank-you (which replaces the form, above where the visitor clicked) or the
+  // error message into view, below the sticky header, then focus it for screen readers.
+  result.value?.scrollIntoView({
+    behavior: reducedMotion.value === "reduce" ? "auto" : "smooth",
+    block: status.value === "sent" ? "start" : "nearest",
+  })
+  result.value?.focus({ preventScroll: true })
 }
 
 // "Finding us" directions are a [placeholder] until the business supplies them.
@@ -129,14 +138,11 @@ if (import.meta.server && page.value.map.findingUsText.startsWith("["))
 // so it's worked out in the browser: the page is prerendered and only rebuilt on publish,
 // so a closure added months ahead still appears on time. (Structured data lists them all.)
 const closureNoticeDays = 30
-const today = ref<ReturnType<typeof dayjs>>()
-onMounted(() => {
-  today.value = dayjs().tz(businessTimeZone)
-})
 const upcomingClosures = computed(() => {
-  if (!today.value) return []
-  const from = today.value.format("YYYY-MM-DD")
-  const until = today.value.add(closureNoticeDays, "day").format("YYYY-MM-DD")
+  if (!mounted.value) return []
+  const today = dayjs().tz(businessTimeZone)
+  const from = today.format("YYYY-MM-DD")
+  const until = today.add(closureNoticeDays, "day").format("YYYY-MM-DD")
   // Also drops closures that ended since the last rebuild.
   return closures.value.filter((c) => c.from <= until && c.to >= from)
 })
@@ -231,7 +237,7 @@ const details = computed(() => [
             v-if="status === 'sent'"
             ref="result"
             tabindex="-1"
-            class="focus:outline-none"
+            class="scroll-mt-[calc(var(--ui-header-height)+1.5rem)] focus:outline-none"
           >
             <UAlert
               color="success"
@@ -389,7 +395,7 @@ const details = computed(() => [
               v-if="status === 'error'"
               ref="result"
               tabindex="-1"
-              class="focus:outline-none"
+              class="scroll-mt-[calc(var(--ui-header-height)+1.5rem)] focus:outline-none"
             >
               <UAlert
                 color="error"

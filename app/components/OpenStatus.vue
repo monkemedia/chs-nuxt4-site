@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useMounted, useNow } from "@vueuse/core"
+
 // "Open now" / "Closed, opens Monday at 08:00" line for dark backgrounds, from the opening
 // hours and holiday closures (useOpeningHours) in UK time. Rendered in the browser only,
 // since the pages are prerendered.
@@ -13,6 +15,10 @@ const closingSoonMinutes = 60
 // A closure starting within this many days is mentioned in advance.
 const noticeDays = 7
 
+// Ticks every minute, in the browser only (the server's clock would be the build time).
+const mounted = useMounted()
+const clock = useNow({ interval: 60_000 })
+
 const status = ref<{
   open: boolean
   closingSoon?: boolean
@@ -22,7 +28,7 @@ const status = ref<{
 
 function update() {
   const { dateLocale, openStatus } = content.value
-  const now = dayjs().tz(businessTimeZone).locale(dateLocale)
+  const now = dayjs(clock.value).tz(businessTimeZone).locale(dateLocale)
   // dayjs weeks start on Sunday (0); the schedule starts on Monday.
   const weekday = (date: typeof now) => (date.day() + 6) % 7
   const minute = now.hour() * 60 + now.minute()
@@ -85,13 +91,13 @@ function update() {
   }
 }
 
-let timer: ReturnType<typeof setInterval> | undefined
-onMounted(() => {
-  update()
-  timer = setInterval(update, 60_000)
-})
-onBeforeUnmount(() => clearInterval(timer))
-watch(content, update)
+watch(
+  [mounted, clock, content],
+  () => {
+    if (mounted.value) update()
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

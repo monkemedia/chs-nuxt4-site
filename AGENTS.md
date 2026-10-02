@@ -94,6 +94,7 @@ public/
 
   Call composables at the top of `<script setup>` (or the top of a composable), never inside event handlers or after an `await`.
 
+- **Browser events and observers: use VueUse** (`@vueuse/core`, imported explicitly), not raw `addEventListener` / `ResizeObserver` / `matchMedia`: `useEventListener`, `useResizeObserver`, `usePreferredReducedMotion` and so on clean up automatically and are safe during prerendering. VueUse has no scroll-to-element helper, so use the native `el.scrollIntoView()`, with `behavior` from `usePreferredReducedMotion()`.
 - **Formatting:** Prettier, configured in `.prettierrc`: **no semicolons**, double quotes, trailing commas. The whole repo is formatted; run `npm run format` after changes (`npm run format:check` to verify). The maintainer's editor also formats on save.
 - Match the surrounding comment density. Comments explain _why_, not what.
 - Never hard-code copy in templates: add it to `app/content/en/` and `app/content/cy/`.

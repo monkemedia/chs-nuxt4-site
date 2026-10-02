@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useEventListener, useResizeObserver } from "@vueuse/core"
+
 const { business } = useAppConfig()
 const route = useRoute()
 const content = useContent()
@@ -123,14 +125,14 @@ watch([menuOpen, () => route.fullPath], () => {
 // Re-measure whenever the layout can move a link: the nav reappearing at the desktop
 // breakpoint, the gap widening at xl (moves links without resizing them, so the list itself
 // is observed too), window resizes and text reflow. Moves without any size change (the
-// centred nav shifting as the window resizes) are caught by the window listener.
-let resizeObserver: ResizeObserver | undefined
-function observe() {
-  resizeObserver?.disconnect()
-  if (list.value) resizeObserver?.observe(list.value)
-  items.value.forEach((el) => resizeObserver?.observe(el))
-}
-watch(items, observe, { flush: "post" })
+// centred nav shifting as the window resizes) are caught by the window listener. VueUse
+// removes the listeners and observer when the header unmounts (and skips them on the server).
+useResizeObserver(
+  () => [list.value, ...items.value].filter((el) => el !== undefined),
+  placeBar,
+)
+useEventListener("resize", placeBar)
+useEventListener("scroll", onScroll, { passive: true })
 
 onMounted(() => {
   placeBar()
@@ -138,17 +140,10 @@ onMounted(() => {
   requestAnimationFrame(() => {
     animate.value = true
   })
-  resizeObserver = new ResizeObserver(placeBar)
-  observe()
-  window.addEventListener("resize", placeBar)
   lastScrollY = window.scrollY
   headerCompact.value = lastScrollY > 160
-  window.addEventListener("scroll", onScroll, { passive: true })
 })
 onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-  window.removeEventListener("resize", placeBar)
-  window.removeEventListener("scroll", onScroll)
   cancelAnimationFrame(scrollFrame)
   document.documentElement.removeAttribute("data-header-hidden")
   document.documentElement.removeAttribute("data-header-compact")

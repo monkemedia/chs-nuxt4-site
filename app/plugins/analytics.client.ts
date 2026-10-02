@@ -1,4 +1,5 @@
 import { init, track as plausibleTrack } from "@plausible-analytics/tracker"
+import { useEventListener } from "@vueuse/core"
 
 // Plausible analytics: cookie-free, so no consent banner is needed.
 // Only runs when NUXT_PUBLIC_PLAUSIBLE_DOMAIN is set at build time, so local dev and
@@ -23,7 +24,7 @@ export default defineNuxtPlugin(() => {
       outboundLinks: true,
     })
 
-    document.addEventListener("click", (event) => {
+    useEventListener(document, "click", (event) => {
       const link = (event.target as Element | null)?.closest?.(
         'a[href^="tel:"], a[href^="mailto:"]',
       )
