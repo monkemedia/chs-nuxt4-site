@@ -36,6 +36,8 @@ const loading = ref(false)
 const failed = ref(false)
 const notice = ref("")
 const showDetails = ref(false)
+// The step that's open; finished steps collapse to a one-line summary with "Change".
+const active = ref<1 | 2 | 3>(1)
 const booked = ref<Slot>()
 // Where we're going, for a booked on-site visit.
 const bookedOnsite = ref("")
@@ -81,8 +83,14 @@ onMounted(() => {
 })
 
 function chooseService(key: BookingService, scroll = true) {
-  if (service.value === key) return
+  if (service.value === key) {
+    // Reopened step 1 and kept the same job: carry on where they were.
+    active.value = slot.value ? (showDetails.value ? 3 : 2) : 2
+    if (scroll) scrollTo(dateSection.value)
+    return
+  }
   service.value = key
+  active.value = 2
   slot.value = undefined
   day.value = undefined
   month.value = undefined
@@ -181,13 +189,20 @@ const state = reactive<Partial<Schema>>({
   message: "",
 })
 
-const step = computed(() =>
-  booked.value ? 4 : showDetails.value ? 3 : service.value ? 2 : 1,
-)
+const step = computed(() => (booked.value ? 4 : active.value))
 
 function nextStep() {
   showDetails.value = true
+  active.value = 3
   scrollTo(detailsSection.value)
+}
+
+// Reopens a finished step ("Change").
+function edit(n: 1 | 2 | 3) {
+  active.value = n
+  scrollTo(
+    n === 1 ? top.value : n === 2 ? dateSection.value : detailsSection.value,
+  )
 }
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -226,6 +241,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (status === 409) {
       slot.value = undefined
       showDetails.value = false
+      active.value = 2
       await loadSlots()
       scrollTo(dateSection.value)
     }
@@ -252,6 +268,7 @@ function again() {
   slot.value = undefined
   day.value = undefined
   showDetails.value = false
+  active.value = service.value ? 2 : 1
   loadSlots()
 }
 
@@ -260,14 +277,14 @@ const summary = computed(() => [
     label: live.value.summary.service,
     value: service.value ? live.value.services[service.value].title : "",
     empty: live.value.summary.notChosen,
-    target: top,
+    target: 1 as const,
     icon: service.value ? icons[service.value] : undefined,
   },
   {
     label: live.value.summary.when,
     value: slot.value ? whenText(slot.value) : "",
     empty: live.value.summary.notChosen,
-    target: dateSection,
+    target: 2 as const,
     icon: undefined as string | undefined,
   },
   {
@@ -276,7 +293,7 @@ const summary = computed(() => [
       ? `${state.name}${state.company ? `, ${state.company}` : ""}`
       : "",
     empty: live.value.summary.notCompleted,
-    target: detailsSection,
+    target: 3 as const,
     icon: undefined as string | undefined,
   },
 ])
@@ -406,65 +423,95 @@ const card =
         <template v-else>
           <!-- 1. Service -->
           <section :class="card" aria-labelledby="bk-service-title">
-            <h2
-              id="bk-service-title"
-              class="heading-display text-[clamp(22px,2.6vw,28px)]"
-            >
-              {{ live.serviceTitle }}
-            </h2>
-            <p class="mt-1 mb-5 text-sm text-zinc-600">
-              {{ live.serviceText }}
-            </p>
-            <div
-              class="grid gap-3"
-              :class="services.length % 2 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'"
-              role="radiogroup"
-              :aria-label="live.serviceTitle"
-            >
-              <button
-                v-for="key in services"
-                :key="key"
-                type="button"
-                role="radio"
-                :aria-checked="service === key"
-                class="relative flex items-start gap-3 rounded-box border-2 p-4 pr-8 text-left transition"
+            <template v-if="active === 1 || !service">
+              <h2
+                id="bk-service-title"
+                class="heading-display text-[clamp(22px,2.6vw,28px)]"
+              >
+                {{ live.serviceTitle }}
+              </h2>
+              <p class="mt-1 mb-5 text-sm text-zinc-600">
+                {{ live.serviceText }}
+              </p>
+              <div
+                class="grid gap-3"
                 :class="
-                  service === key
-                    ? 'border-primary bg-chs-50'
-                    : 'border-zinc-200 hover:border-chs-300'
+                  services.length % 2 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
                 "
-                @click="chooseService(key)"
+                role="radiogroup"
+                :aria-label="live.serviceTitle"
               >
-                <span
-                  class="grid size-10 shrink-0 place-items-center rounded-box bg-primary text-white"
+                <button
+                  v-for="key in services"
+                  :key="key"
+                  type="button"
+                  role="radio"
+                  :aria-checked="service === key"
+                  class="relative flex items-start gap-3 rounded-box border-2 p-4 pr-8 text-left transition"
+                  :class="
+                    service === key
+                      ? 'border-primary bg-chs-50'
+                      : 'border-zinc-200 hover:border-chs-300'
+                  "
+                  @click="chooseService(key)"
                 >
-                  <UIcon :name="icons[key]" class="size-5" />
-                </span>
-                <span>
-                  <span class="block text-sm font-extrabold uppercase">{{
-                    live.services[key].title
-                  }}</span>
-                  <span class="mt-0.5 block text-xs text-zinc-600">{{
-                    live.services[key].text
-                  }}</span>
-                </span>
-                <UIcon
-                  v-if="service === key"
-                  name="i-lucide-circle-check"
-                  class="absolute top-2 right-2 size-5 text-primary"
-                />
-              </button>
-            </div>
-            <p class="mt-5 text-sm text-zinc-600">
-              {{ live.otherPrompt }}
-              <ULink
-                raw
-                :to="localePath('/contact')"
-                class="font-semibold text-chs-700 underline"
+                  <UIcon
+                    :name="icons[key]"
+                    class="mt-0.5 size-7 shrink-0 text-ink-950"
+                  />
+                  <span>
+                    <span class="block text-sm font-extrabold uppercase">{{
+                      live.services[key].title
+                    }}</span>
+                    <span class="mt-0.5 block text-xs text-zinc-600">{{
+                      live.services[key].text
+                    }}</span>
+                  </span>
+                  <UIcon
+                    v-if="service === key"
+                    name="i-lucide-circle-check"
+                    class="absolute top-2 right-2 size-5 text-primary"
+                  />
+                </button>
+              </div>
+              <p class="mt-5 text-sm text-zinc-600">
+                {{ live.otherPrompt }}
+                <ULink
+                  raw
+                  :to="localePath('/contact')"
+                  class="font-semibold text-chs-700 underline"
+                >
+                  {{ live.otherLink }}
+                </ULink>
+              </p>
+            </template>
+            <div v-else class="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <h2 id="bk-service-title" class="heading-display text-lg">
+                {{ live.serviceTitle }}
+              </h2>
+              <span
+                class="flex min-w-0 items-center gap-2 text-sm font-semibold"
               >
-                {{ live.otherLink }}
-              </ULink>
-            </p>
+                <UIcon
+                  name="i-lucide-circle-check"
+                  class="size-5 shrink-0 text-green-700"
+                />
+                <UIcon
+                  v-if="service"
+                  :name="icons[service]"
+                  class="size-5 shrink-0 text-ink-950"
+                />
+                {{ service && live.services[service].title }}
+              </span>
+              <UButton
+                variant="link"
+                color="neutral"
+                class="ms-auto px-0 font-semibold text-chs-700 normal-case tracking-normal"
+                @click="edit(1)"
+              >
+                {{ live.summary.change }}
+              </UButton>
+            </div>
           </section>
 
           <!-- 2. Date and time -->
@@ -473,181 +520,216 @@ const card =
             :class="[card, 'scroll-mt-[calc(var(--ui-header-height)+1.5rem)]']"
             aria-labelledby="bk-date-title"
           >
+            <template v-if="active === 2">
+              <h2
+                id="bk-date-title"
+                class="heading-display text-[clamp(22px,2.6vw,28px)]"
+              >
+                {{ live.dateTitle }}
+              </h2>
+              <p class="mt-1 text-sm text-zinc-600">
+                {{ service === "onsite" ? live.dateTextOnsite : live.dateText }}
+              </p>
+
+              <p
+                v-if="notice"
+                class="mt-5 flex items-start gap-2 rounded-box bg-red-50 px-4 py-3 text-sm font-semibold text-red-800"
+                role="alert"
+              >
+                <UIcon name="i-lucide-circle-alert" class="size-5 shrink-0" />
+                {{ notice }}
+              </p>
+
+              <template v-if="service">
+                <p
+                  v-if="!loading && (failed || !days.length)"
+                  class="mt-6 rounded-box bg-zinc-100 px-4 py-3 text-sm font-semibold"
+                >
+                  {{ failed ? live.failed : live.none }}
+                  <a
+                    :href="business.phoneHref"
+                    class="whitespace-nowrap text-chs-700 underline"
+                    >{{ business.phoneDisplay }}</a
+                  >
+                </p>
+                <div
+                  v-else
+                  class="mt-6 grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]"
+                  :aria-busy="loading"
+                >
+                  <!-- Month calendar (a spinner in its place while the diary loads) -->
+                  <div
+                    v-if="loading"
+                    class="flex min-h-72 flex-col items-center md:min-h-80 justify-center gap-3 rounded-box bg-zinc-50 text-sm font-semibold text-zinc-600"
+                    role="status"
+                  >
+                    <UIcon
+                      name="i-lucide-loader-circle"
+                      class="size-8 animate-spin text-primary"
+                    />
+                    {{ live.loading }}
+                  </div>
+                  <div v-else>
+                    <div class="mb-3 flex items-center justify-between">
+                      <p class="font-extrabold">{{ monthLabel }}</p>
+                      <div class="flex gap-1">
+                        <UButton
+                          icon="i-lucide-chevron-left"
+                          color="neutral"
+                          variant="ghost"
+                          :aria-label="live.previousMonth"
+                          :disabled="monthIndex <= 0"
+                          @click="month = months[monthIndex - 1]"
+                        />
+                        <UButton
+                          icon="i-lucide-chevron-right"
+                          color="neutral"
+                          variant="ghost"
+                          :aria-label="live.nextMonth"
+                          :disabled="monthIndex >= months.length - 1"
+                          @click="month = months[monthIndex + 1]"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-zinc-500"
+                      aria-hidden="true"
+                    >
+                      <span v-for="w in weekdays" :key="w" class="py-1">{{
+                        w
+                      }}</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1">
+                      <button
+                        v-for="c in cells"
+                        :key="c.key"
+                        type="button"
+                        class="aspect-square rounded-box text-sm font-semibold transition"
+                        :class="[
+                          !c.inMonth && 'invisible',
+                          c.key === day
+                            ? 'bg-primary text-white'
+                            : c.bookable
+                              ? 'bg-zinc-100 text-ink-950 hover:bg-chs-100'
+                              : 'cursor-not-allowed text-zinc-300',
+                        ]"
+                        :disabled="!c.bookable"
+                        :aria-pressed="c.key === day"
+                        :aria-label="
+                          local(`${c.key}T12:00:00Z`).format('dddd D MMMM')
+                        "
+                        @click="chooseDay(c.key)"
+                      >
+                        {{ c.label }}
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Times -->
+                  <div>
+                    <p class="mb-1 font-extrabold">{{ live.timesTitle }}</p>
+                    <template v-if="day && !loading">
+                      <p class="mb-4 text-sm text-zinc-600">
+                        {{
+                          local(`${day}T12:00:00Z`).format("dddd D MMMM YYYY")
+                        }}
+                        · {{ live.services[service].title }}
+                      </p>
+                      <div
+                        class="grid gap-2"
+                        :class="
+                          service === 'dropoff'
+                            ? 'grid-cols-1'
+                            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3'
+                        "
+                      >
+                        <button
+                          v-for="s in daySlots"
+                          :key="s.start"
+                          type="button"
+                          class="rounded-box border px-2 py-2.5 text-sm font-semibold transition"
+                          :class="
+                            slot?.start === s.start
+                              ? 'border-primary bg-primary text-white'
+                              : 'border-zinc-300 bg-white hover:border-primary'
+                          "
+                          :aria-pressed="slot?.start === s.start"
+                          @click="slot = s"
+                        >
+                          {{ slotLabel(s) }}
+                        </button>
+                      </div>
+                    </template>
+                    <p v-else class="mt-2 text-sm text-zinc-500">
+                      {{ live.chooseDay }}
+                    </p>
+                  </div>
+                </div>
+              </template>
+
+              <div
+                class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div
+                  class="flex items-start gap-3 rounded-box bg-zinc-100 px-4 py-3 text-sm sm:max-w-md"
+                >
+                  <UIcon
+                    name="i-lucide-info"
+                    class="mt-0.5 size-5 shrink-0 text-ink-950"
+                  />
+                  <p>
+                    <span class="font-bold">{{ live.urgentTitle }}</span>
+                    {{ live.urgentText }}
+                    <a
+                      :href="business.phoneHref"
+                      class="font-bold whitespace-nowrap text-chs-700 underline"
+                      >{{ business.phoneDisplay }}</a
+                    >.
+                  </p>
+                </div>
+                <UButton
+                  size="xl"
+                  trailing-icon="i-lucide-arrow-right"
+                  class="justify-center px-6"
+                  :disabled="!slot"
+                  @click="nextStep"
+                >
+                  {{ live.nextStep }}
+                </UButton>
+              </div>
+            </template>
+            <div
+              v-else-if="slot"
+              class="flex flex-wrap items-center gap-x-4 gap-y-1"
+            >
+              <h2 id="bk-date-title" class="heading-display text-lg">
+                {{ live.dateTitle }}
+              </h2>
+              <span
+                class="flex min-w-0 items-center gap-2 text-sm font-semibold"
+              >
+                <UIcon
+                  name="i-lucide-circle-check"
+                  class="size-5 shrink-0 text-green-700"
+                />
+                {{ slot && whenText(slot) }}
+              </span>
+              <UButton
+                variant="link"
+                color="neutral"
+                class="ms-auto px-0 font-semibold text-chs-700 normal-case tracking-normal"
+                @click="edit(2)"
+              >
+                {{ live.summary.change }}
+              </UButton>
+            </div>
             <h2
+              v-else
               id="bk-date-title"
-              class="heading-display text-[clamp(22px,2.6vw,28px)]"
-              :class="!service && 'text-zinc-400'"
+              class="heading-display text-[clamp(22px,2.6vw,28px)] text-zinc-400"
             >
               {{ live.dateTitle }}
             </h2>
-            <p class="mt-1 text-sm text-zinc-600">
-              {{ service === "onsite" ? live.dateTextOnsite : live.dateText }}
-            </p>
-
-            <p
-              v-if="notice"
-              class="mt-5 flex items-start gap-2 rounded-box bg-red-50 px-4 py-3 text-sm font-semibold text-red-800"
-              role="alert"
-            >
-              <UIcon name="i-lucide-circle-alert" class="size-5 shrink-0" />
-              {{ notice }}
-            </p>
-
-            <template v-if="service">
-              <p
-                v-if="!loading && (failed || !days.length)"
-                class="mt-6 rounded-box bg-zinc-100 px-4 py-3 text-sm font-semibold"
-              >
-                {{ failed ? live.failed : live.none }}
-                <a
-                  :href="business.phoneHref"
-                  class="whitespace-nowrap text-chs-700 underline"
-                  >{{ business.phoneDisplay }}</a
-                >
-              </p>
-              <div
-                v-else
-                class="mt-6 grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]"
-                :aria-busy="loading"
-              >
-                <!-- Month calendar (a spinner in its place while the diary loads) -->
-                <div
-                  v-if="loading"
-                  class="flex min-h-72 flex-col items-center md:min-h-80 justify-center gap-3 rounded-box bg-zinc-50 text-sm font-semibold text-zinc-600"
-                  role="status"
-                >
-                  <UIcon
-                    name="i-lucide-loader-circle"
-                    class="size-8 animate-spin text-primary"
-                  />
-                  {{ live.loading }}
-                </div>
-                <div v-else>
-                  <div class="mb-3 flex items-center justify-between">
-                    <p class="font-extrabold">{{ monthLabel }}</p>
-                    <div class="flex gap-1">
-                      <UButton
-                        icon="i-lucide-chevron-left"
-                        color="neutral"
-                        variant="ghost"
-                        :aria-label="live.previousMonth"
-                        :disabled="monthIndex <= 0"
-                        @click="month = months[monthIndex - 1]"
-                      />
-                      <UButton
-                        icon="i-lucide-chevron-right"
-                        color="neutral"
-                        variant="ghost"
-                        :aria-label="live.nextMonth"
-                        :disabled="monthIndex >= months.length - 1"
-                        @click="month = months[monthIndex + 1]"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-zinc-500"
-                    aria-hidden="true"
-                  >
-                    <span v-for="w in weekdays" :key="w" class="py-1">{{
-                      w
-                    }}</span>
-                  </div>
-                  <div class="grid grid-cols-7 gap-1">
-                    <button
-                      v-for="c in cells"
-                      :key="c.key"
-                      type="button"
-                      class="aspect-square rounded-box text-sm font-semibold transition"
-                      :class="[
-                        !c.inMonth && 'invisible',
-                        c.key === day
-                          ? 'bg-primary text-white'
-                          : c.bookable
-                            ? 'bg-zinc-100 text-ink-950 hover:bg-chs-100'
-                            : 'cursor-not-allowed text-zinc-300',
-                      ]"
-                      :disabled="!c.bookable"
-                      :aria-pressed="c.key === day"
-                      :aria-label="
-                        local(`${c.key}T12:00:00Z`).format('dddd D MMMM')
-                      "
-                      @click="chooseDay(c.key)"
-                    >
-                      {{ c.label }}
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Times -->
-                <div>
-                  <p class="mb-1 font-extrabold">{{ live.timesTitle }}</p>
-                  <template v-if="day && !loading">
-                    <p class="mb-4 text-sm text-zinc-600">
-                      {{ local(`${day}T12:00:00Z`).format("dddd D MMMM YYYY") }}
-                      · {{ live.services[service].title }}
-                    </p>
-                    <div
-                      class="grid gap-2"
-                      :class="
-                        service === 'dropoff'
-                          ? 'grid-cols-1'
-                          : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3'
-                      "
-                    >
-                      <button
-                        v-for="s in daySlots"
-                        :key="s.start"
-                        type="button"
-                        class="rounded-box border px-2 py-2.5 text-sm font-semibold transition"
-                        :class="
-                          slot?.start === s.start
-                            ? 'border-primary bg-primary text-white'
-                            : 'border-zinc-300 bg-white hover:border-primary'
-                        "
-                        :aria-pressed="slot?.start === s.start"
-                        @click="slot = s"
-                      >
-                        {{ slotLabel(s) }}
-                      </button>
-                    </div>
-                  </template>
-                  <p v-else class="mt-2 text-sm text-zinc-500">
-                    {{ live.chooseDay }}
-                  </p>
-                </div>
-              </div>
-            </template>
-
-            <div
-              class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div
-                class="flex items-start gap-3 rounded-box bg-zinc-100 px-4 py-3 text-sm sm:max-w-md"
-              >
-                <UIcon
-                  name="i-lucide-info"
-                  class="mt-0.5 size-5 shrink-0 text-ink-950"
-                />
-                <p>
-                  <span class="font-bold">{{ live.urgentTitle }}</span>
-                  {{ live.urgentText }}
-                  <a
-                    :href="business.phoneHref"
-                    class="font-bold whitespace-nowrap text-chs-700 underline"
-                    >{{ business.phoneDisplay }}</a
-                  >.
-                </p>
-              </div>
-              <UButton
-                size="xl"
-                trailing-icon="i-lucide-arrow-right"
-                class="justify-center px-6"
-                :disabled="!slot"
-                @click="nextStep"
-              >
-                {{ live.nextStep }}
-              </UButton>
-            </div>
           </section>
 
           <!-- 3. Details -->
@@ -657,144 +739,172 @@ const card =
             :class="[card, 'scroll-mt-[calc(var(--ui-header-height)+1.5rem)]']"
             aria-labelledby="bk-details-title"
           >
-            <h2
-              id="bk-details-title"
-              class="heading-display text-[clamp(22px,2.6vw,28px)]"
-            >
-              {{ live.detailsTitle }}
-            </h2>
-            <p class="mt-1 mb-5 text-sm text-zinc-600">
-              {{ live.detailsText }}
-            </p>
-            <UForm
-              :schema="schema"
-              :state="state"
-              class="space-y-5"
-              @submit="onSubmit"
-            >
-              <div class="sr-only" aria-hidden="true">
-                <label for="lb-company-website">{{ contact.honeypot }}</label>
-                <input
-                  id="lb-company-website"
-                  v-model="gotcha"
-                  type="text"
-                  tabindex="-1"
-                  autocomplete="off"
-                />
-              </div>
-              <div class="grid gap-5 sm:grid-cols-2">
-                <UFormField
-                  eager-validation
-                  :label="contact.fields.name"
-                  name="name"
-                  required
-                >
-                  <UInput
-                    v-model="state.name"
-                    autocomplete="name"
-                    size="xl"
-                    class="w-full"
+            <template v-if="active === 3">
+              <h2
+                id="bk-details-title"
+                class="heading-display text-[clamp(22px,2.6vw,28px)]"
+              >
+                {{ live.detailsTitle }}
+              </h2>
+              <p class="mt-1 mb-5 text-sm text-zinc-600">
+                {{ live.detailsText }}
+              </p>
+              <UForm
+                :schema="schema"
+                :state="state"
+                class="space-y-5"
+                @submit="onSubmit"
+              >
+                <div class="sr-only" aria-hidden="true">
+                  <label for="lb-company-website">{{ contact.honeypot }}</label>
+                  <input
+                    id="lb-company-website"
+                    v-model="gotcha"
+                    type="text"
+                    tabindex="-1"
+                    autocomplete="off"
                   />
-                </UFormField>
+                </div>
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <UFormField
+                    eager-validation
+                    :label="contact.fields.name"
+                    name="name"
+                    required
+                  >
+                    <UInput
+                      v-model="state.name"
+                      autocomplete="name"
+                      size="xl"
+                      class="w-full"
+                    />
+                  </UFormField>
+                  <UFormField
+                    eager-validation
+                    :label="contact.fields.company"
+                    name="company"
+                    :hint="contact.optional"
+                  >
+                    <UInput
+                      v-model="state.company"
+                      autocomplete="organization"
+                      size="xl"
+                      class="w-full"
+                    />
+                  </UFormField>
+                  <UFormField
+                    eager-validation
+                    :label="contact.fields.phone"
+                    name="phone"
+                    required
+                  >
+                    <UInput
+                      v-model="state.phone"
+                      type="tel"
+                      autocomplete="tel"
+                      inputmode="tel"
+                      size="xl"
+                      class="w-full"
+                    />
+                  </UFormField>
+                  <UFormField
+                    eager-validation
+                    :label="contact.fields.email"
+                    name="email"
+                    required
+                  >
+                    <UInput
+                      v-model="state.email"
+                      type="email"
+                      autocomplete="email"
+                      size="xl"
+                      class="w-full"
+                    />
+                  </UFormField>
+                </div>
                 <UFormField
                   eager-validation
-                  :label="contact.fields.company"
-                  name="company"
+                  :label="page.fields.machine"
+                  name="machine"
                   :hint="contact.optional"
                 >
                   <UInput
-                    v-model="state.company"
-                    autocomplete="organization"
+                    v-model="state.machine"
+                    :placeholder="page.fields.machinePlaceholder"
+                    size="xl"
+                    class="w-full"
+                  />
+                </UFormField>
+                <UFormField
+                  v-if="service === 'onsite'"
+                  eager-validation
+                  :label="live.locationLabel"
+                  name="location"
+                  required
+                >
+                  <UInput
+                    v-model="state.location"
+                    autocomplete="street-address"
+                    :placeholder="live.locationPlaceholder"
                     size="xl"
                     class="w-full"
                   />
                 </UFormField>
                 <UFormField
                   eager-validation
-                  :label="contact.fields.phone"
-                  name="phone"
-                  required
+                  :label="page.fields.details"
+                  name="message"
+                  :hint="contact.optional"
                 >
-                  <UInput
-                    v-model="state.phone"
-                    type="tel"
-                    autocomplete="tel"
-                    inputmode="tel"
+                  <UTextarea
+                    v-model="state.message"
+                    :rows="3"
+                    autoresize
+                    :placeholder="page.fields.detailsPlaceholder"
                     size="xl"
                     class="w-full"
                   />
                 </UFormField>
-                <UFormField
-                  eager-validation
-                  :label="contact.fields.email"
-                  name="email"
-                  required
-                >
-                  <UInput
-                    v-model="state.email"
-                    type="email"
-                    autocomplete="email"
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-4 pt-2">
+                  <UButton
+                    type="submit"
                     size="xl"
-                    class="w-full"
-                  />
-                </UFormField>
-              </div>
-              <UFormField
-                eager-validation
-                :label="page.fields.machine"
-                name="machine"
-                :hint="contact.optional"
+                    icon="i-lucide-calendar-check"
+                    :loading="sending"
+                    class="h-13.5 w-full justify-center px-8 sm:w-auto"
+                  >
+                    {{ sending ? live.booking : live.confirm }}
+                  </UButton>
+                  <p class="text-[13px] text-zinc-600">{{ contact.privacy }}</p>
+                </div>
+              </UForm>
+            </template>
+            <div v-else class="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <h2 id="bk-details-title" class="heading-display text-lg">
+                {{ live.detailsTitle }}
+              </h2>
+              <span
+                class="flex min-w-0 items-center gap-2 text-sm font-semibold"
               >
-                <UInput
-                  v-model="state.machine"
-                  :placeholder="page.fields.machinePlaceholder"
-                  size="xl"
-                  class="w-full"
+                <UIcon
+                  name="i-lucide-circle-check"
+                  class="size-5 shrink-0 text-green-700"
                 />
-              </UFormField>
-              <UFormField
-                v-if="service === 'onsite'"
-                eager-validation
-                :label="live.locationLabel"
-                name="location"
-                required
+                {{
+                  state.name
+                    ? `${state.name}${state.company ? `, ${state.company}` : ""}`
+                    : live.summary.notCompleted
+                }}
+              </span>
+              <UButton
+                variant="link"
+                color="neutral"
+                class="ms-auto px-0 font-semibold text-chs-700 normal-case tracking-normal"
+                @click="edit(3)"
               >
-                <UInput
-                  v-model="state.location"
-                  autocomplete="street-address"
-                  :placeholder="live.locationPlaceholder"
-                  size="xl"
-                  class="w-full"
-                />
-              </UFormField>
-              <UFormField
-                eager-validation
-                :label="page.fields.details"
-                name="message"
-                :hint="contact.optional"
-              >
-                <UTextarea
-                  v-model="state.message"
-                  :rows="3"
-                  autoresize
-                  :placeholder="page.fields.detailsPlaceholder"
-                  size="xl"
-                  class="w-full"
-                />
-              </UFormField>
-              <div class="flex flex-wrap items-center gap-x-6 gap-y-4 pt-2">
-                <UButton
-                  type="submit"
-                  size="xl"
-                  icon="i-lucide-calendar-check"
-                  :loading="sending"
-                  class="h-13.5 w-full justify-center px-8 sm:w-auto"
-                >
-                  {{ sending ? live.booking : live.confirm }}
-                </UButton>
-                <p class="text-[13px] text-zinc-600">{{ contact.privacy }}</p>
-              </div>
-            </UForm>
+                {{ live.summary.change }}
+              </UButton>
+            </div>
           </section>
         </template>
       </div>
@@ -822,13 +932,12 @@ const card =
                   class="mt-1 flex items-center gap-2.5 text-sm font-semibold"
                   :class="!row.value && 'text-zinc-400'"
                 >
-                  <span
+                  <UIcon
                     v-if="row.icon"
-                    class="grid size-8 shrink-0 place-items-center rounded-box bg-primary text-white"
+                    :name="row.icon"
+                    class="size-5 shrink-0 text-ink-950"
                     aria-hidden="true"
-                  >
-                    <UIcon :name="row.icon" class="size-4" />
-                  </span>
+                  />
                   {{ row.value || row.empty }}
                 </dd>
               </div>
@@ -836,7 +945,7 @@ const card =
                 v-if="row.value && !booked"
                 type="button"
                 class="shrink-0 text-sm font-semibold text-chs-700 hover:underline"
-                @click="scrollTo(row.target.value)"
+                @click="edit(row.target)"
               >
                 {{ live.summary.change }}
               </button>

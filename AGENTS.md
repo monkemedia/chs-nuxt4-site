@@ -110,6 +110,7 @@ public/
 - `@nuxtjs/i18n` with `prefix_except_default`: English at `/`, Welsh at `/cy/`. No browser-language redirects. It outputs `<html lang>`, canonical links, `hreflang` alternates and `og:locale` (via `useLocaleHead` in the layout), plus a sitemap per language (`sitemap_index.xml`).
 - **All copy lives in `app/content/<locale>/`**, not i18n JSON messages (they break on `|` and `@`). `cy/index.ts` is typed as `Content`, so `nuxt typecheck` fails if a Welsh string is missing. Services, sectors and benefits must keep the same slugs/order in every locale; `app/content/index.ts` fails the build otherwise.
 - In components: `const content = useContent()` then `content.home.heroCopy` in templates. Internal links: `const localePath = useLocalePath()` and `:to="localePath('/about')"`. Pass English paths to `usePageSeo`, `useBreadcrumbs` and `CtaBand`; they localise them.
+- In the desktop header the language switch is compact (flag + `CY`/`EN`, full name as its `aria-label` and tooltip); the mobile menu spells it out.
 - The language switcher uses `NuxtLink` + `useSwitchLocalePath()`. **Not `ULink`**, which re-localises the path and sends Welsh visitors back to `/cy/…`.
 - Contact enquiries always send the English urgency label plus a `language` field, so the business knows to reply in Welsh.
 - The Welsh is a drafted translation: have it checked by a fluent speaker (e.g. the Welsh Government's free Helo Blod service) before launch.
@@ -149,6 +150,7 @@ public/
 - `ULink` highlights links that match the current route. Use `raw` for links outside the header nav so they don't turn red.
 - Outline `UButton` has a white background by default; add `bg-transparent` on dark or grey backgrounds.
 - `UHeader` handles the mobile slide-over menu and closes it on navigation.
+- **Header actions:** the red call button stays the main action (calls are the site's goal; breakdowns shouldn't book). The desktop header has no booking button (it made the header too busy); while booking is available, a full-width "Book online" sits under "Call" in the mobile menu, and the pages carry their own booking buttons.
 - The header hides while scrolling down and returns on scroll up (`AppHeader.vue`), and on desktop turns compact (64px, smaller logo, one-line call button) once 160px down the page via `<html data-header-compact>`, which shortens `--ui-header-height`. Resizing shifts the page and the browser corrects the scroll position, so scroll direction is ignored for 400ms after a resize; it always shows near the top, with the menu open, on keyboard focus and after navigating. **Sticky elements below it use `top-(--header-offset)`, not `--ui-header-height`**: the offset drops to 0 while the header is hidden (`<html data-header-hidden>`), so they move up with it. `scroll-margin` still uses the full header height.
 
 ### Images

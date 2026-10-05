@@ -8,6 +8,7 @@ const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const { locale } = useI18n()
 const { vacancies } = useVacancies()
+const booking = useBookingLink()
 
 const links = computed(() => {
   const { nav } = content.value
@@ -248,15 +249,18 @@ onBeforeUnmount(() => {
     </nav>
 
     <template #right>
+      <!-- Compact language switch (flag + CY/EN); the full name is its accessible label and
+           tooltip, and the mobile menu spells it out. -->
       <NuxtLink
         :to="switchLocalePath(otherLocale)"
         :lang="otherLocaleTag"
         :hreflang="otherLocaleTag"
         :aria-label="content.common.languageSwitchLabel"
-        class="me-2 hidden items-center gap-1.5 text-sm font-semibold text-white/85 transition-colors hover:text-white md:inline-flex"
+        :title="content.common.languageSwitch"
+        class="me-1 hidden items-center gap-1.5 rounded-full px-2 py-1.5 text-sm font-bold tracking-wider text-white/85 uppercase ring-1 ring-white/25 transition-colors hover:text-white hover:ring-white/60 md:inline-flex"
       >
         <UIcon :name="otherLocaleFlag" class="size-4" />
-        {{ content.common.languageSwitch }}
+        {{ otherLocale }}
       </NuxtLink>
       <UButton
         :to="business.phoneHref"
@@ -298,6 +302,18 @@ onBeforeUnmount(() => {
       <div class="space-y-4 p-5">
         <UButton :to="business.phoneHref" icon="i-lucide-phone" size="xl" block>
           {{ content.common.call(business.phoneDisplay) }}
+        </UButton>
+        <UButton
+          v-if="booking.available"
+          :to="booking.to()"
+          icon="i-lucide-calendar-check"
+          color="neutral"
+          variant="outline"
+          size="xl"
+          block
+          class="bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
+        >
+          {{ booking.label.value }}
         </UButton>
         <NuxtLink
           :to="switchLocalePath(otherLocale)"
