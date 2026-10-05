@@ -86,6 +86,8 @@ function chooseService(key: BookingService, scroll = true) {
   slot.value = undefined
   day.value = undefined
   month.value = undefined
+  // Don't leave the previous service's times on screen while the new ones load.
+  days.value = []
   showDetails.value = false
   notice.value = ""
   loadSlots()
@@ -493,17 +495,7 @@ const card =
 
             <template v-if="service">
               <p
-                v-if="loading && !days.length"
-                class="mt-6 flex items-center gap-2 text-sm font-semibold text-zinc-600"
-              >
-                <UIcon
-                  name="i-lucide-loader-circle"
-                  class="size-5 animate-spin"
-                />
-                {{ live.loading }}
-              </p>
-              <p
-                v-else-if="failed || !days.length"
+                v-if="!loading && (failed || !days.length)"
                 class="mt-6 rounded-box bg-zinc-100 px-4 py-3 text-sm font-semibold"
               >
                 {{ failed ? live.failed : live.none }}
@@ -516,9 +508,21 @@ const card =
               <div
                 v-else
                 class="mt-6 grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]"
+                :aria-busy="loading"
               >
-                <!-- Month calendar -->
-                <div>
+                <!-- Month calendar (a spinner in its place while the diary loads) -->
+                <div
+                  v-if="loading"
+                  class="flex min-h-72 flex-col items-center md:min-h-80 justify-center gap-3 rounded-box bg-zinc-50 text-sm font-semibold text-zinc-600"
+                  role="status"
+                >
+                  <UIcon
+                    name="i-lucide-loader-circle"
+                    class="size-8 animate-spin text-primary"
+                  />
+                  {{ live.loading }}
+                </div>
+                <div v-else>
                   <div class="mb-3 flex items-center justify-between">
                     <p class="font-extrabold">{{ monthLabel }}</p>
                     <div class="flex gap-1">
@@ -577,7 +581,7 @@ const card =
                 <!-- Times -->
                 <div>
                   <p class="mb-1 font-extrabold">{{ live.timesTitle }}</p>
-                  <template v-if="day">
+                  <template v-if="day && !loading">
                     <p class="mb-4 text-sm text-zinc-600">
                       {{ local(`${day}T12:00:00Z`).format("dddd D MMMM YYYY") }}
                       · {{ live.services[service].title }}
