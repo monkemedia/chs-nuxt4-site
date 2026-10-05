@@ -3,6 +3,8 @@ interface PageSeo {
   description: string
   path: string
   image?: string
+  // Keep out of search results (e.g. the customer login page).
+  noindex?: boolean
 }
 
 // Title, description and social tags for a page. `path` is the English path; it's
@@ -13,6 +15,7 @@ export function usePageSeo({
   description,
   path,
   image = "/images/hero.jpg",
+  noindex = false,
 }: PageSeo) {
   const { url: siteUrl, name: siteName } = useSiteConfig()
   const runtimeConfig = useRuntimeConfig()
@@ -30,9 +33,10 @@ export function usePageSeo({
     ogSiteName: siteName,
     twitterCard: "summary_large_image",
     // The drafts preview build must never be indexed.
-    robots: runtimeConfig.public.showDrafts
-      ? "noindex, nofollow"
-      : "index, follow",
+    robots:
+      runtimeConfig.public.showDrafts || noindex
+        ? "noindex, nofollow"
+        : "index, follow",
   })
 }
 

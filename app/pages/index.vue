@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { business, features } = useAppConfig()
 const content = useContent()
+const booking = useBookingLink()
 const localePath = useLocalePath()
 
 usePageSeo({ ...content.value.home.seo, path: "/" })
@@ -80,6 +81,18 @@ const trustIcons = [
                 {{ content.common.callNow }}
               </UButton>
               <UButton
+                v-if="booking.available"
+                :to="booking.to()"
+                color="neutral"
+                variant="outline"
+                icon="i-lucide-calendar-check"
+                size="xl"
+                class="h-14 justify-center px-6 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
+              >
+                {{ booking.label.value }}
+              </UButton>
+              <UButton
+                v-else
                 to="#services"
                 color="neutral"
                 variant="outline"

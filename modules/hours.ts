@@ -54,6 +54,20 @@ export default defineNuxtModule({
           ? `export const openingHours = ${JSON.stringify(openingHours)}\nexport const closures = ${JSON.stringify(closures)}\nexport const draft = ${draft}`
           : undefined,
     })
+    // The same data for the server (the booking API), as #chs-hours.
+    nuxt.hook("nitro:config", (nitroConfig) => {
+      nitroConfig.virtual ??= {}
+      nitroConfig.virtual["#chs-hours"] =
+        `export const openingHours = ${JSON.stringify(openingHours)}\nexport const closures = ${JSON.stringify(closures)}`
+    })
+    addTypeTemplate(
+      {
+        filename: "types/chs-hours-server.d.ts",
+        getContents: () =>
+          `declare module "#chs-hours" {\n  export const openingHours: string[] | null\n  export const closures: import("${join(nuxt.options.rootDir, "app/data/hours-schema")}").Closure[]\n}\n`,
+      },
+      { nitro: true, nuxt: true },
+    )
     addTypeTemplate({
       filename: "types/hours.d.ts",
       getContents: () =>

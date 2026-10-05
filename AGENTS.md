@@ -29,15 +29,21 @@ npm run format       # Prettier (no semicolons); format:check to verify
 
 Build-time environment variables (both optional). Copy `.env.example` to `.env` for local builds (Nuxt loads it for `dev` and `generate`; `.env` is git-ignored). In production, set them in the host's build settings. Values are baked into the static pages and are public, so never put secrets here.
 
-| Variable                            | Purpose                                                          | Unset                                       |
-| ----------------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
-| `NUXT_PUBLIC_CONTACT_FORM_ENDPOINT` | Form service URL (Formspree-style, FormData POST, 2xx = success) | Form shows an error asking visitors to call |
-| `NUXT_PUBLIC_PLAUSIBLE_DOMAIN`      | Site domain as added in Plausible                                | No analytics                                |
-| `NUXT_PUBLIC_SHOW_DRAFTS`           | `true` on the drafts preview deployment only (see Admin area)    | Drafts left out (live site)                 |
-| `NUXT_PUBLIC_SITE_MODE`             | `coming-soon` or `maintenance`: holding page on every URL        | Normal site (`live`)                        |
-| `SANITY_STUDIO_PROJECT_ID`          | Sanity project for the admin area (jobs, reviews)                | Builds with no jobs or reviews (warns)      |
-| `SANITY_STUDIO_DATASET`             | Sanity dataset                                                   | `production`                                |
-| `SANITY_READ_TOKEN`                 | **Secret.** Preview deployment only: reads drafts from Sanity    | Preview shows published content only        |
+| Variable                            | Purpose                                                                         | Unset                                           |
+| ----------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `NUXT_PUBLIC_CONTACT_FORM_ENDPOINT` | Form service URL (Formspree-style, FormData POST, 2xx = success)                | Form shows an error asking visitors to call     |
+| `NUXT_PUBLIC_PLAUSIBLE_DOMAIN`      | Site domain as added in Plausible                                               | No analytics                                    |
+| `NUXT_PUBLIC_SHOW_DRAFTS`           | `true` on the drafts preview deployment only (see Admin area)                   | Drafts left out (live site)                     |
+| `NUXT_PUBLIC_SITE_MODE`             | `coming-soon` or `maintenance`: holding page on every URL                       | Normal site (`live`)                            |
+| `NUXT_PUBLIC_FERGUS_BOOKING_URL`    | Fergus hosted booking page: booking buttons link to it (if live booking is off) | No booking buttons (unless live booking is on)  |
+| `NUXT_PUBLIC_FERGUS_PORTAL_URL`     | Fergus customer portal: turns on `/login` and its links                         | No `/login` page or links                       |
+| `NUXT_FERGUS_API_TOKEN`             | **Secret.** Fergus API token: live booking slots on `/book`                     | No `/book` page; booking buttons hidden         |
+| `NUXT_FERGUS_MOCK`                  | `true`: live booking against a pretend calendar (testing)                       | Real Fergus (when a token is set)               |
+| `NUXT_RESEND_API_KEY`               | **Secret.** Resend: booking confirmation emails                                 | No customer email (summary via form service)    |
+| `NUXT_EMAIL_FROM`                   | Sender for booking emails (domain verified in Resend)                           | `CHS Hydraulics <bookings@chshydraulics.co.uk>` |
+| `SANITY_STUDIO_PROJECT_ID`          | Sanity project for the admin area (jobs, reviews)                               | Builds with no jobs or reviews (warns)          |
+| `SANITY_STUDIO_DATASET`             | Sanity dataset                                                                  | `production`                                    |
+| `SANITY_READ_TOKEN`                 | **Secret.** Preview deployment only: reads drafts from Sanity                   | Preview shows published content only            |
 
 ## Project structure
 
@@ -112,6 +118,7 @@ public/
 ### Feature flags (on-site work)
 
 - `app.config.ts` → `features.onsite` is **off until CHS launches on-site/mobile work**. Off: the homepage "We come to you" band, the On-site Service (card, page, footer link, contact dropdown, sector links, sitemap) and the Uptime Promise disappear, and `app/content/<locale>/workshop.ts` replaces every sentence that mentions on-site, mobile or call-out work. Turning it on restores everything; nothing needs deleting.
+- **Online booking:** the "On-site visit" service (`onsite` in `shared/utils/booking.ts`) only appears in `<BookingPicker>` while `features.onsite` is on, and the booking API refuses it otherwise (`refuseUnavailable()`), so it can't be booked by calling the API directly. It asks where the machine is.
 - `useContent()` applies this, so components need no checks beyond whole sections (`features.onsite` in `index.vue` and `UptimePromise`).
 - **When writing copy that mentions on-site work, add a workshop-only version to `workshop.ts` in both languages.** Arrays are patched by index (`{ 1: "…" }` replaces, `{ 2: null }` removes; see `app/content/overrides.ts`). To check nothing leaks, build with the flag off and search the HTML for "on-site", "mobile", "call-out", "ar y safle" and "symudol".
 
@@ -209,9 +216,19 @@ public/
 - **Indexing:** in coming-soon mode the page is `index, follow` with the LocalBusiness data, so the domain and phone number can appear in Google before launch (Lighthouse SEO 100). Maintenance relies on the 503, never `noindex`, so Google can't drop the real pages. Only the preview URLs are `noindex` (`preview` prop).
 - `useSiteHead()` (called by the layout and `<HoldingPage>`) sets `<html lang>`, canonical, hreflang and the LocalBusiness JSON-LD. Anything rendered outside the layout must call it.
 
+### Booking, trade accounts and customer login
+
+- CHS uses **Fergus** for job management. The site stays static: booking and customer accounts live in Fergus, and the site links to them.
+- **Live booking (Kwik Fit style)** on `/book` when `NUXT_FERGUS_API_TOKEN` is set (or `NUXT_FERGUS_MOCK=true`) in a **server build**. `server/api/booking/slots.get.ts` reads the Fergus calendar (Open API, `server/utils/fergus.ts`) and returns free slots, cached for a minute (Fergus allows 100 requests a minute); `server/api/booking/index.post.ts` re-checks the slot against a fresh calendar (409 if taken), finds or creates the customer, creates an **active** job (Fergus needs a site for that: the "CHS workshop (Cross Hands)" site, created once, or a new site from the on-site location; it falls back to a draft only if Fergus refuses) and the calendar event, linked to the job through its first phase so the booking opens the job from the Fergus calendar. The business summary email includes the Fergus job number. The rules (services, durations, capacity, notice, drop-off windows) and the slot maths are in `shared/utils/booking.ts`, shared by server and page: **starting values, to be replaced from the "Online Booking: Rules Worksheet" in Notion.** Bookings are recognised in the calendar by their `Web booking:` title. `<BookingPicker>` is the UI; anything not bookable ("Something else?", or when the diary can't load) goes to the contact form. **While live booking is off there's no `/book`:** it isn't prerendered or in the sitemap, and `useBookingLink()` reports `available: false`, so the homepage, CTA band, service pages, contact page and footer show their usual buttons (call, send an enquiry, our services) instead of "Book online". Service pages pre-select their job (`/book?service=…`, `bookingServiceForPage`).
+- **After booking:** the customer gets a confirmation email in their language (`bookPage.email` in the content) with what to bring and a calendar invite attached, and the business gets the summary (reply-to the customer), both through Resend (`server/utils/email.ts`). Without `NUXT_RESEND_API_KEY` the customer email is skipped and the summary goes through the form service. The confirmation screen has "Add to calendar" (.ics download) and "Google Calendar" buttons (`shared/utils/ics.ts`), and only says "We've emailed…" when an email was actually sent.
+- **Builds:** Vercel runs `npm run build` (`nuxt build`: pages still prerendered, plus the booking functions; `vercel.json`). `npm run generate` still makes a fully static site, with live booking off.
+- **`/accounts`:** trade accounts for plant hire, contractors and farms. The benefits are drafted and the payment terms are a [placeholder] (the build warns): check them with CHS.
+- **`/login`:** a gateway to the Fergus customer portal. Only built and linked when `NUXT_PUBLIC_FERGUS_PORTAL_URL` is set (`nuxt.config.ts` skips prerendering it otherwise, because the prerenderer visits every page file); always `noindex` and out of the sitemap.
+- **Forms** (`contact`, `book`) send through `useEnquirySubmit()` (endpoint, language field, `_subject`, honeypot, Plausible event, scroll to the result). Every `UFormField` uses **`eager-validation`**: without it, a corrected field's error only clears on blur, the form shrinks as the visitor clicks Send, and the click misses the button.
+
 ### Analytics
 
-`app/plugins/analytics.client.ts` provides `$track(event, props)`, which does nothing when Plausible is disabled. Current events: `Phone Call`, `Email Click` (automatic on `tel:` / `mailto:` clicks) and `Enquiry Sent` (contact form success). Each needs a matching goal in Plausible.
+`app/plugins/analytics.client.ts` provides `$track(event, props)`, which does nothing when Plausible is disabled. Current events: `Phone Call`, `Email Click` (automatic on `tel:` / `mailto:` clicks), `Enquiry Sent` (contact form success) and `Booking Made` (online booking). Each needs a matching goal in Plausible.
 
 ## Gotchas already hit
 

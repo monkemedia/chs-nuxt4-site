@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import * as z from "zod"
 import type { FormSubmitEvent } from "@nuxt/ui"
-import { useMounted, usePreferredReducedMotion } from "@vueuse/core"
+import { useMounted } from "@vueuse/core"
 import { contentByLocale } from "~/content"
 const { business } = useAppConfig()
-const runtimeConfig = useRuntimeConfig()
-const endpoint = runtimeConfig.public.contactFormEndpoint as string
-const { $track } = useNuxtApp()
 const content = useContent()
-const reducedMotion = usePreferredReducedMotion()
 const mounted = useMounted()
 const localePath = useLocalePath()
+const booking = useBookingLink()
 const page = computed(() => content.value.contact)
-const { locale } = useI18n()
+const { status, result, gotcha, send } = useEnquirySubmit({
+  subject: "New website enquiry – CHS Hydraulics",
+  event: "Enquiry Sent",
+})
 const { week, closures, draft: hoursDraft } = useOpeningHours()
 
 usePageSeo({ ...page.value.seo, path: "/contact" })
@@ -55,10 +55,6 @@ const initialState = (): Partial<Schema> => ({
   message: "",
 })
 const state = reactive(initialState())
-// Honeypot: hidden from people, filled in by spam bots. Kept out of the schema.
-const gotcha = ref("")
-const status = ref<"idle" | "sending" | "sent" | "error">("idle")
-const result = ref<HTMLElement | null>(null)
 
 // Service links elsewhere on the site point here with ?service=<slug>. This page is
 // prerendered at /contact, so on a direct load the router briefly reports no query while
@@ -77,52 +73,13 @@ onMounted(() => {
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  if (status.value === "sending") return
-  if (!endpoint) {
-    console.error(
-      "Contact form endpoint missing: set NUXT_PUBLIC_CONTACT_FORM_ENDPOINT.",
-    )
-    status.value = "error"
-  } else {
-    status.value = "sending"
-    const body = new FormData()
-    for (const [key, value] of Object.entries(event.data))
-      if (value) body.append(key, value)
-    body.set(
-      "urgency",
-      contentByLocale.en.contact.urgencies[event.data.urgency],
-    )
-    // Tells the business which language to reply in.
-    body.append("language", locale.value === "cy" ? "Welsh" : "English")
-    body.append("_subject", "New website enquiry – CHS Hydraulics")
-    body.append("_gotcha", gotcha.value)
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        body,
-        headers: { Accept: "application/json" },
-      })
-      status.value = response.ok ? "sent" : "error"
-    } catch {
-      status.value = "error"
-    }
-  }
-  if (status.value === "sent") {
-    $track("Enquiry Sent", {
-      service: event.data.service,
-      urgency: contentByLocale.en.contact.urgencies[event.data.urgency],
-      language: locale.value,
-    })
-    Object.assign(state, initialState())
-  }
-  await nextTick()
-  // Bring the thank-you (which replaces the form, above where the visitor clicked) or the
-  // error message into view, below the sticky header, then focus it for screen readers.
-  result.value?.scrollIntoView({
-    behavior: reducedMotion.value === "reduce" ? "auto" : "smooth",
-    block: status.value === "sent" ? "start" : "nearest",
-  })
-  result.value?.focus({ preventScroll: true })
+  // The business always receives the English urgency label.
+  const urgency = contentByLocale.en.contact.urgencies[event.data.urgency]
+  const sent = await send(
+    { ...event.data, urgency },
+    { service: event.data.service, urgency },
+  )
+  if (sent) Object.assign(state, initialState())
 }
 
 // "Finding us" directions are a [placeholder] until the business supplies them.
@@ -270,6 +227,9 @@ const details = computed(() => [
             </UButton>
           </div>
 
+          <!-- eager-validation re-checks each field as it's typed in, so a corrected error
+               clears straight away. Otherwise it only clears on blur, and the form shrinking
+               under the cursor makes the click on Send miss. -->
           <UForm
             v-else
             :schema="schema"
@@ -303,7 +263,12 @@ const details = computed(() => [
             </div>
 
             <div class="grid gap-5 sm:grid-cols-2">
-              <UFormField :label="page.fields.name" name="name" required>
+              <UFormField
+                eager-validation
+                :label="page.fields.name"
+                name="name"
+                required
+              >
                 <UInput
                   v-model="state.name"
                   autocomplete="name"
@@ -312,6 +277,7 @@ const details = computed(() => [
                 />
               </UFormField>
               <UFormField
+                eager-validation
                 :label="page.fields.company"
                 name="company"
                 :hint="page.optional"
@@ -323,7 +289,12 @@ const details = computed(() => [
                   class="w-full"
                 />
               </UFormField>
-              <UFormField :label="page.fields.phone" name="phone" required>
+              <UFormField
+                eager-validation
+                :label="page.fields.phone"
+                name="phone"
+                required
+              >
                 <UInput
                   v-model="state.phone"
                   type="tel"
@@ -333,7 +304,12 @@ const details = computed(() => [
                   class="w-full"
                 />
               </UFormField>
-              <UFormField :label="page.fields.email" name="email" required>
+              <UFormField
+                eager-validation
+                :label="page.fields.email"
+                name="email"
+                required
+              >
                 <UInput
                   v-model="state.email"
                   type="email"
@@ -342,7 +318,12 @@ const details = computed(() => [
                   class="w-full"
                 />
               </UFormField>
-              <UFormField :label="page.fields.service" name="service" required>
+              <UFormField
+                eager-validation
+                :label="page.fields.service"
+                name="service"
+                required
+              >
                 <USelect
                   v-model="state.service"
                   :items="serviceOptions"
@@ -352,6 +333,7 @@ const details = computed(() => [
                 />
               </UFormField>
               <UFormField
+                eager-validation
                 :label="page.fields.location"
                 name="location"
                 :hint="page.optional"
@@ -366,7 +348,12 @@ const details = computed(() => [
               </UFormField>
             </div>
 
-            <UFormField :label="page.fields.urgency" name="urgency" required>
+            <UFormField
+              eager-validation
+              :label="page.fields.urgency"
+              name="urgency"
+              required
+            >
               <URadioGroup
                 v-model="state.urgency"
                 :items="urgencyItems"
@@ -380,7 +367,12 @@ const details = computed(() => [
               />
             </UFormField>
 
-            <UFormField :label="page.fields.details" name="message" required>
+            <UFormField
+              eager-validation
+              :label="page.fields.details"
+              name="message"
+              required
+            >
               <UTextarea
                 v-model="state.message"
                 :rows="6"
@@ -463,6 +455,25 @@ const details = computed(() => [
               class="bg-white text-[17px] text-ink-950 hover:bg-ink-950 hover:text-white"
             >
               {{ business.phoneDisplay }}
+            </UButton>
+          </div>
+
+          <div
+            v-if="booking.available"
+            class="rounded-box border-t-3 border-primary bg-white p-6 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-7.5 md:col-span-2 lg:col-span-1"
+          >
+            <p class="kicker mb-3 text-chs-700">{{ page.bookBox.kicker }}</p>
+            <h2 class="heading-display mb-2 text-2xl leading-[1.1]">
+              {{ page.bookBox.title }}
+            </h2>
+            <p class="mb-5 text-sm text-zinc-600">{{ page.bookBox.text }}</p>
+            <UButton
+              :to="booking.to()"
+              icon="i-lucide-calendar-check"
+              size="xl"
+              block
+            >
+              {{ booking.label.value }}
             </UButton>
           </div>
 

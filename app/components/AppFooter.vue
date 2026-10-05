@@ -2,12 +2,14 @@
 const { business } = useAppConfig()
 const content = useContent()
 const localePath = useLocalePath()
+const booking = useBookingLink()
 const { jobs } = useJobs()
 const { vacancies } = useVacancies()
 const runtimeConfig = useRuntimeConfig()
 // The build year, not the visitor's clock: the page is prerendered, so a new year before the
 // next rebuild would otherwise mismatch on hydration.
 const year = runtimeConfig.public.buildYear
+const portalUrl = runtimeConfig.public.fergusPortalUrl as string
 
 // The company number and registered office must be shown before launch.
 if (
@@ -43,6 +45,14 @@ const columns = computed(() => {
           : []),
         ...(vacancies.value.length
           ? [{ label: nav.careers, to: localePath("/careers") }]
+          : []),
+        ...(booking.available
+          ? [{ label: booking.label.value, to: booking.to() }]
+          : []),
+        { label: footer.accounts, to: localePath("/accounts") },
+        // Only once the Fergus customer portal is set up (the page 404s without it).
+        ...(portalUrl
+          ? [{ label: footer.login, to: localePath("/login") }]
           : []),
         { label: nav.contact, to: localePath("/contact") },
       ],

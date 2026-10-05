@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run generate && npm run build:admin",
+  "buildCommand": "npm run build && npm run build:admin",
   "headers": [
     {
       "source": "/_nuxt/(.*)",

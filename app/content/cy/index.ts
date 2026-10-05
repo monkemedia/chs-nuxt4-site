@@ -21,6 +21,7 @@ export const cy: Content = {
     callNow: "Ffoniwch nawr",
     call: (phone: string) => `Ffoniwch ${phone}`,
     sendEnquiry: "Anfon ymholiad",
+    bookOnline: "Archebu ar-lein",
     orSendEnquiry: "Neu anfonwch ymholiad",
     ourServices: "Ein gwasanaethau",
     viewAllServices: "Gweld pob gwasanaeth",
@@ -51,6 +52,8 @@ export const cy: Content = {
     getInTouch: "Cysylltu â ni",
     privacy: "Hysbysiad preifatrwydd",
     areas: "Ardaloedd",
+    accounts: "Cyfrifon masnach",
+    login: "Mewngofnodi cwsmeriaid",
     company:
       "Mae CHS Hydraulics yn enw masnachu i {legalName}, cwmni wedi'i gofrestru yng Nghymru a Lloegr, rhif cwmni {companyNumber}. Swyddfa gofrestredig: {registeredOffice}.",
   },
@@ -354,7 +357,7 @@ export const cy: Content = {
     title: ["Hysbysiad", "preifatrwydd"],
     intro:
       "Beth rydyn ni'n ei wneud â'ch manylion pan fyddwch yn ein ffonio, yn anfon e-bost, yn anfon ymholiad neu'n gwneud cais am swydd. Yn fyr: dim ond i'ch helpu chi rydyn ni'n eu defnyddio, dydyn ni byth yn eu gwerthu, a dydy'r wefan hon ddim yn defnyddio cwcis.",
-    updated: "2026-10-01",
+    updated: "2026-10-05",
     updatedLabel: (date: string) => `Diweddarwyd ddiwethaf ${date}`,
     sections: [
       {
@@ -390,6 +393,8 @@ export const cy: Content = {
         list: [
           "[Gwasanaeth ffurflenni], sy'n anfon negeseuon o'n ffurflen gyswllt i'n mewnflwch.",
           "Ein darparwyr e-bost a chyfrifon.",
+          "Fergus, ein system rheoli swyddi: mae archebion ar-lein yn mynd yn syth iddo, gyda'r manylion rydych chi'n eu rhoi i ni.",
+          "Resend, sy'n anfon ein negeseuon e-bost i gadarnhau archebion.",
           "Vercel, sy'n cynnal y wefan hon. Mae'n cadw cofnodion gweinydd tymor byr, gan gynnwys cyfeiriadau IP, er diogelwch.",
           "Plausible Analytics (gweler isod).",
         ],
@@ -479,6 +484,247 @@ export const cy: Content = {
     jobsKicker: "Gwaith lleol",
     jobsTitle: (inTown: string) => `Gwaith diweddar ${inTown}`,
     ctaKicker: (town: string) => `Atgyweirio hydrolig ar gyfer ${town}`,
+  },
+
+  bookPage: {
+    seo: {
+      title: "Archebu Gollwng Atgyweiriad Hydrolig | Cross Hands",
+      description:
+        "Archebwch amser i ollwng ram, pibell neu wiriad hydrolig cyn y tymor yn ein gweithdy yn Cross Hands. Yn gwasanaethu Llanelli, Sir Gâr a De Cymru.",
+    },
+    crumb: "Archebu",
+    fields: {
+      machine: "Peiriant",
+      machinePlaceholder: "e.e. JCB 3CX, John Deere 6155R",
+      details: "Unrhyw beth y dylen ni ei wybod",
+      detailsPlaceholder:
+        "Beth sydd o'i le, neu beth hoffech chi ei wirio, ac unrhyw rifau rhannau.",
+    },
+    // Live booking (the slot picker), shown when live booking is on.
+    live: {
+      kicker: ["Atgyweirio", "Gwasanaethu", "Cyflenwi"],
+      title: ["Archebu atgyweiriad", "hydrolig"],
+      intro:
+        "Dewiswch amser sy'n gyfleus a byddwch yn mynd yn syth i'n dyddiadur. Peiriant wedi torri nawr? Ffoniwch ni yn lle hynny.",
+      benefits: [
+        {
+          icon: "i-lucide-clock",
+          title: "Dewis amser",
+          text: "Dewiswch amser sy'n gyfleus",
+        },
+        {
+          icon: "i-lucide-calendar-check",
+          title: "Yn syth i'n dyddiadur",
+          text: "Dim aros i ni ffonio'n ôl",
+        },
+        {
+          icon: "i-lucide-badge-pound-sterling",
+          title: "Pris wedi'i gytuno ymlaen llaw",
+          text: "Rydyn ni'n dweud y gost cyn dechrau",
+        },
+        {
+          icon: "i-lucide-shield-check",
+          title: "Cymorth arbenigol",
+          text: "{years} mlynedd o wybodaeth hydrolig",
+        },
+      ],
+      steps: [
+        { title: "Gwasanaeth", text: "Dewis y gwaith" },
+        { title: "Dyddiad ac amser", text: "Dewis amser" },
+        { title: "Eich manylion", text: "Dweud wrthym amdano" },
+      ],
+      serviceTitle: "1. Beth sydd ei angen arnoch chi?",
+      serviceText: "Dewiswch y gwaith rydych chi'n ei archebu.",
+      services: {
+        hose: {
+          title: "Gwneud pibell",
+          text: "Tua 30 munud, tra byddwch yn aros",
+        },
+        check: {
+          title: "Gwiriad cyn y tymor",
+          text: "Tua awr, cyn y silwair neu'r cynhaeaf",
+        },
+        onsite: {
+          title: "Ymweliad ar y safle",
+          text: "Rydyn ni'n dod atoch chi: tua 2 awr a'r daith",
+        },
+        dropoff: {
+          title: "Gollwng ram neu gydran",
+          text: "Dewch ag ef yn ystod y bore",
+        },
+      },
+      otherPrompt: "Rhywbeth arall, neu dim amser sy'n gyfleus?",
+      otherLink: "Anfonwch ymholiad atom yn lle hynny",
+      dateTitle: "2. Dewis dyddiad ac amser",
+      dateText:
+        "Dewiswch ddiwrnod, yna amser i ddod ag ef i'n gweithdy yn Cross Hands.",
+      dateTextOnsite: "Dewiswch ddiwrnod, yna amser i ni ddod atoch chi.",
+      locationLabel: "Ble mae'r peiriant?",
+      locationPlaceholder: "Cyfeiriad y safle neu god post",
+      locationError: "Dywedwch wrthym ble mae'r peiriant",
+      comingTo: "Byddwn yn dod i:",
+      previousMonth: "Mis blaenorol",
+      nextMonth: "Mis nesaf",
+      timesTitle: "Amseroedd ar gael",
+      chooseDay: "Dewiswch ddiwrnod i weld yr amseroedd.",
+      dropoffWindow: (from: string, to: string) => `Gollwng ${from} – ${to}`,
+      loading: "Yn gwirio'r dyddiadur…",
+      none: "Dim amseroedd rhydd ar-lein yn y pedair wythnos nesaf. Ffoniwch ni a byddwn yn dod o hyd i amser.",
+      failed:
+        "Allwn ni ddim llwytho'r dyddiadur ar hyn o bryd. Ffoniwch ni, neu anfonwch ymholiad atom yn lle hynny.",
+      urgentTitle: "Angen amser ar frys?",
+      urgentText:
+        "Os yw eich peiriant wedi torri a bod angen amser cynharach arnoch, ffoniwch ni'n uniongyrchol ar",
+      nextStep: "Cam nesaf",
+      detailsTitle: "3. Eich manylion",
+      detailsText: "Er mwyn i ni wybod pwy sy'n dod a beth i'w ddisgwyl.",
+      confirm: "Cadarnhau'r archeb",
+      booking: "Yn archebu…",
+      taken:
+        "Mae'n ddrwg gennym, mae'r amser hwnnw newydd gael ei gymryd. Dewiswch un arall.",
+      summary: {
+        title: "Eich archeb",
+        service: "Gwasanaeth",
+        when: "Dyddiad ac amser",
+        details: "Eich manylion",
+        notChosen: "Heb ddewis eto",
+        notCompleted: "Heb ei gwblhau",
+        change: "Newid",
+      },
+      help: {
+        title: "Angen help i ddewis?",
+        text: "Ddim yn siŵr beth sydd ei angen? Gall ein tîm helpu.",
+      },
+      doneTitle: "Rydych chi wedi archebu",
+      doneText: (when: string) =>
+        `Rydyn ni wedi eich rhoi yn ein dyddiadur ar gyfer ${when}. Os bydd unrhyw beth yn newid, ffoniwch ni ar`,
+      bringTo: "Dewch ag ef i'n gweithdy:",
+      bookAnother: "Gwneud archeb arall",
+      addToCalendar: "Ychwanegu at y calendr",
+      googleCalendar: "Google Calendar",
+      emailed: (email: string) =>
+        `Rydyn ni wedi e-bostio cadarnhad at ${email}.`,
+      calendarTitle: (service: string) => `CHS Hydraulics: ${service}`,
+      calendarDescription: (phone: string) =>
+        `Wedi'i archebu ar-lein gyda CHS Hydraulics. I newid neu ganslo, ffoniwch ${phone}.`,
+    },
+    email: {
+      subject: (service: string, when: string) =>
+        `Archeb wedi'i chadarnhau: ${service}, ${when}`,
+      greeting: (name: string) => `Helo ${name},`,
+      intro: "Rydych chi wedi archebu gyda CHS Hydraulics. Dyma'r manylion:",
+      service: "Gwasanaeth",
+      when: "Pryd",
+      where: "Ble",
+      bringTitle: "Beth i ddod gyda chi",
+      bring: {
+        hose: "Yr hen bibell, gyda'i ffitiadau os gallwch chi, er mwyn i ni gyfateb yr hyd, y sgôr pwysedd a'r pennau.",
+        check:
+          "Y peiriant, gydag unrhyw namau rydych chi wedi sylwi arnyn nhw wedi'u nodi. Ffoniwch ni os yw'n rhy fawr i ddod ag ef i mewn.",
+        dropoff:
+          "Y ram neu'r gydran, a gwneuthuriad a model y peiriant y daeth ohono.",
+        onsite:
+          "Dim byd: byddwn ni'n dod atoch chi. Gwnewch yn siŵr y gallwn ni gyrraedd y peiriant yn ddiogel.",
+      },
+      change: "Angen newid neu ganslo? Ffoniwch ni ar",
+      orReply: "neu atebwch yr e-bost hwn.",
+      calendarNote: "Mae gwahoddiad calendr wedi'i atodi.",
+      signoff: "Diolch,",
+      team: "Tîm CHS Hydraulics",
+    },
+  },
+
+  accountsPage: {
+    seo: {
+      title: "Cyfrifon Masnach i Logi Peiriannau a Ffermydd | CHS",
+      description:
+        "Agorwch gyfrif masnach gyda CHS Hydraulics yn Cross Hands: atgyweirio hydrolig i gwmnïau llogi peiriannau, contractwyr a ffermydd ar draws Llanelli a De Cymru.",
+    },
+    crumb: "Cyfrifon masnach",
+    title: ["Cyfrifon", "masnach"],
+    intro:
+      "I gwmnïau llogi peiriannau, contractwyr a ffermydd sy'n dibynnu ar eu peiriannau: un lle ar gyfer pob pibell, ram ac atgyweiriad.",
+    whoKicker: "I bwy mae e",
+    whoTitle: "I fusnesau sy'n rhedeg peiriannau",
+    who: [
+      {
+        icon: "i-lucide-construction",
+        title: "Cwmnïau llogi peiriannau",
+        text: "Cloddwyr, dympwyr a telehandlers yn ôl allan ar log, gyda'r gwaith papur wedi'i drefnu.",
+      },
+      {
+        icon: "i-lucide-hard-hat",
+        title: "Contractwyr",
+        text: "Mae criwiau'n aros yn costio arian. Byddwn yn dweud yn blaen beth sydd ei angen a phryd bydd yn barod.",
+      },
+      {
+        icon: "i-lucide-tractor",
+        title: "Ffermydd",
+        text: "Tractorau, llwythwyr ac offer yn dal i weithio, yn enwedig drwy'r silwair a'r cynhaeaf.",
+      },
+    ],
+    benefitsKicker: "Beth rydych chi'n ei gael",
+    benefitsTitle: "Pam agor cyfrif",
+    benefits: [
+      {
+        icon: "i-lucide-receipt-text",
+        title: "Talu ar gyfrif",
+        text: "Talu ar anfoneb yn lle ar y diwrnod: [telerau talu, e.e. 30 diwrnod o'r anfoneb].",
+      },
+      {
+        icon: "i-lucide-clipboard-list",
+        title: "Eich peiriannau ar gofnod",
+        text: "Rydyn ni'n cadw cofnod o'r pibellau a'r atgyweiriadau rydyn ni'n eu gwneud i'ch peiriannau, felly mae \"yr un fath â'r tro diwethaf\" yn hawdd.",
+      },
+      {
+        icon: "i-lucide-message-circle",
+        title: "Cael gwybod",
+        text: "Byddwn yn dweud wrthych ble mae pob swydd arni a phryd bydd yn barod.",
+      },
+      {
+        icon: "i-lucide-badge-pound-sterling",
+        title: "Pris wedi'i gytuno ymlaen llaw",
+        text: "Rydyn ni'n dweud wrthych beth sydd o'i le a faint fydd y gost cyn i ni ddechrau.",
+      },
+    ],
+    stepsTitle: "Agor cyfrif",
+    steps: [
+      {
+        title: "Cysylltu â ni",
+        text: "Ffoniwch neu e-bostiwch gydag enw eich busnes a'r peiriannau rydych chi'n eu rhedeg.",
+      },
+      {
+        title: "Rydyn ni'n eich gosod chi i fyny",
+        text: "Byddwn yn cymryd eich manylion ac yn cytuno ar eich telerau.",
+      },
+      {
+        title: "Anfonwch waith atom",
+        text: "Dewch ag ef i mewn neu ffoniwch, a rhowch enw eich cyfrif.",
+      },
+    ],
+    ctaTitle: "Agor cyfrif",
+    ctaText: "Ffoniwch neu e-bostiwch ni a byddwn yn eich gosod chi i fyny.",
+    emailButton: "E-bostiwch ni",
+    emailSubject: "Ymholiad cyfrif masnach",
+    loginPrompt: "Oes gennych chi gyfrif yn barod?",
+    loginLink: "Mewngofnodi",
+  },
+
+  loginPage: {
+    seo: {
+      title: "Mewngofnodi Cwsmeriaid | CHS Hydraulics",
+      description:
+        "Mewngofnodwch i weld eich swyddi a'ch anfonebau gyda CHS Hydraulics.",
+    },
+    crumb: "Mewngofnodi cwsmeriaid",
+    title: ["Mewngofnodi", "cwsmeriaid"],
+    intro:
+      "Gweld ble mae eich swyddi arni a gweld eich anfonebau yn ein porth cwsmeriaid.",
+    button: "Mewngofnodi i'ch cyfrif",
+    note: "Byddwch yn cael eich tywys i'n porth cwsmeriaid diogel, a ddarperir gan Fergus.",
+    noAccount: "Dim cyfrif eto?",
+    accountsLink: "Dysgu am gyfrifon masnach",
+    help: "Methu mewngofnodi? Ffoniwch ni ar",
   },
 
   about: {
@@ -693,6 +939,11 @@ export const cy: Content = {
   },
 
   contact: {
+    bookBox: {
+      kicker: "Gwaith wedi'i gynllunio?",
+      title: "Archebwch amser sy'n gyfleus",
+      text: "Gellir archebu pibellau, gwiriadau cyn y tymor ac amseroedd gollwng ar-lein, yn syth i'n dyddiadur.",
+    },
     seo: {
       title: "Cysylltu â CHS Hydraulics | Cross Hands, Llanelli",
       description:

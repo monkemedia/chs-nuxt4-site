@@ -37,7 +37,8 @@ export const employmentTypes = [
 ] as const
 
 export const vacancyInputSchema = z.object({
-  draft: z.boolean().default(false),
+  // Published content comes back with null here (no draft id), drafts with true.
+  draft: z.preprocess(empty, z.boolean().default(false)),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   posted: z.iso.date(),
   // Optional: without one, the vacancy stays up until it's unpublished.

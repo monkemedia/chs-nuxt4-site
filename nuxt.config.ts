@@ -1,3 +1,11 @@
+// Live online booking needs the server functions in server/api/booking, so it's only on when a
+// Fergus token (or the mock calendar) is set *and* this is a server build (`nuxt build`), not a
+// purely static `nuxt generate`. Otherwise there's no /book page and the booking buttons hide.
+const liveBooking =
+  !process.argv.includes("generate") &&
+  (!!process.env.NUXT_FERGUS_API_TOKEN ||
+    process.env.NUXT_FERGUS_MOCK === "true")
+
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-01",
   devtools: { enabled: false },
@@ -42,7 +50,20 @@ export default defineNuxtConfig({
     detectBrowserLanguage: false,
   },
   runtimeConfig: {
+    // Server only (secrets). Fergus API token for live booking: NUXT_FERGUS_API_TOKEN. Never in
+    // a NUXT_PUBLIC_ variable. NUXT_FERGUS_MOCK=true uses a pretend calendar instead (testing).
+    fergusApiToken: "",
+    fergusMock: false,
+    // Job type for booked jobs ("Charge Up", "Quote" or "Estimate") and the Fergus user id
+    // bookings are assigned to (empty = unassigned).
+    fergusJobType: "Charge Up",
+    fergusUserId: "",
+    // Booking confirmation emails through Resend: NUXT_RESEND_API_KEY (secret) and the sender,
+    // on a domain verified in Resend (NUXT_EMAIL_FROM).
+    resendApiKey: "",
+    emailFrom: "CHS Hydraulics <bookings@chshydraulics.co.uk>",
     public: {
+      liveBooking,
       // Form service URL (e.g. https://formspree.io/f/xxxx), set via NUXT_PUBLIC_CONTACT_FORM_ENDPOINT at build time.
       contactFormEndpoint: "",
       // Site domain as added in Plausible (e.g. www.chshydraulics.co.uk), set via NUXT_PUBLIC_PLAUSIBLE_DOMAIN at build time. Empty = no analytics.
@@ -57,10 +78,22 @@ export default defineNuxtConfig({
       // "live", or "coming-soon" / "maintenance" to show the holding page on every URL
       // (set NUXT_PUBLIC_SITE_MODE in the host's build settings and redeploy).
       siteMode: "live",
+      // Fergus (job management) links, once set up in Fergus. Empty = not used. Booking URL: the
+      // booking buttons link to Fergus's hosted page (when the site's own live booking is off).
+      // Portal URL: turns on /login and the "Customer login" links.
+      // Set NUXT_PUBLIC_FERGUS_BOOKING_URL / NUXT_PUBLIC_FERGUS_PORTAL_URL at build time.
+      fergusBookingUrl: "",
+      fergusPortalUrl: "",
     },
   },
   sitemap: {
-    exclude: ["/coming-soon", "/maintenance"],
+    // Holding page previews, and the customer login (a gateway to Fergus, not a search result).
+    exclude: [
+      "/coming-soon",
+      "/maintenance",
+      "/login",
+      ...(liveBooking ? [] : ["/book"]),
+    ],
   },
   site: {
     url: "https://www.chshydraulics.co.uk",
@@ -110,7 +143,7 @@ export default defineNuxtConfig({
                   headers: { "Retry-After": "3600" },
                 },
                 {
-                  src: "^/(?!admin(?:/|$)|cy(?:/|$))(?:[^._][^.]*)?/?$",
+                  src: "^/(?!admin(?:/|$)|api(?:/|$)|cy(?:/|$))(?:[^._][^.]*)?/?$",
                   dest: "/maintenance/index.html",
                   status: 503,
                   headers: { "Retry-After": "3600" },
@@ -124,6 +157,14 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: true,
       routes: ["/", "/cy", "/services", "/contact", "/sitemap_index.xml"],
+      // The customer login only exists once the Fergus portal link is set, and /book only while
+      // live booking is on.
+      ignore: [
+        ...(process.env.NUXT_PUBLIC_FERGUS_PORTAL_URL
+          ? []
+          : ["/login", "/cy/login"]),
+        ...(liveBooking ? [] : ["/book", "/cy/book"]),
+      ],
     },
   },
 })

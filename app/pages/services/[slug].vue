@@ -52,6 +52,8 @@ const faqs = computed(() =>
 // English path; CtaBand localises it itself.
 const enquiryPath = `/contact?service=${service.value.slug}`
 const enquiryTo = computed(() => localePath(enquiryPath))
+const booking = useBookingLink()
+const bookService = bookingServiceForPage[service.value.slug]
 </script>
 
 <template>
@@ -81,14 +83,19 @@ const enquiryTo = computed(() => localePath(enquiryPath))
           {{ content.common.call(business.phoneDisplay) }}
         </UButton>
         <UButton
-          :to="enquiryTo"
+          :to="booking.available ? booking.to(bookService) : enquiryTo"
           color="neutral"
           variant="outline"
-          trailing-icon="i-lucide-chevron-right"
+          :icon="booking.available ? 'i-lucide-calendar-check' : undefined"
+          :trailing-icon="
+            booking.available ? undefined : 'i-lucide-chevron-right'
+          "
           size="xl"
           class="h-14 justify-center px-6 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
         >
-          {{ content.common.sendEnquiry }}
+          {{
+            booking.available ? booking.label.value : content.common.sendEnquiry
+          }}
         </UButton>
       </div>
     </PageHero>
@@ -189,6 +196,18 @@ const enquiryTo = computed(() => localePath(enquiryPath))
             >
               {{ business.phoneDisplay }}
             </UButton>
+            <UButton
+              v-if="booking.available"
+              :to="booking.to(bookService)"
+              icon="i-lucide-calendar-check"
+              color="neutral"
+              variant="outline"
+              size="lg"
+              block
+              class="mt-3 bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
+            >
+              {{ booking.label.value }}
+            </UButton>
             <ULink
               raw
               :to="enquiryTo"
@@ -258,6 +277,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
     />
 
     <CtaBand
+      :book-service="bookService"
       :kicker="page.ctaKicker"
       :text="page.ctaText"
       :enquiry-to="enquiryPath"

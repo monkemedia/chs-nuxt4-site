@@ -22,7 +22,7 @@ export default defineAppConfig({
   features: {
     // On-site / mobile work: the homepage "We come to you" band, the On-site Service page,
     // on-site claims and the Uptime Promise. Off uses app/content/<locale>/workshop.ts.
-    onsite: false,
+    onsite: true,
   },
   // The offer. Copy in app/content/ uses {hours}, filled in by useContent(), and {years} of
   // experience, worked out from `business.foundingYear` (35 in 2026, going up each year).

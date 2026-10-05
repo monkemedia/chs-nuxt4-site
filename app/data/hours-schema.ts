@@ -47,7 +47,8 @@ const closure = z
 
 export const openingHoursInputSchema = z.object({
   // Unpublished changes (preview build only).
-  draft: z.boolean().default(false),
+  // Published content comes back with null here (no draft id), drafts with true.
+  draft: z.preprocess(empty, z.boolean().default(false)),
   monday: day,
   tuesday: day,
   wednesday: day,

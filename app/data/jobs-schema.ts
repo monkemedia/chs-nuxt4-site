@@ -26,7 +26,8 @@ const text = z.object({
 })
 
 export const jobInputSchema = z.object({
-  draft: z.boolean().default(false),
+  // Published content comes back with null here (no draft id), drafts with true.
+  draft: z.preprocess(empty, z.boolean().default(false)),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   date: z.iso.date(),
   service: z.string(),

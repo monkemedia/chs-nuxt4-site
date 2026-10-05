@@ -1,17 +1,22 @@
 <script setup lang="ts">
+import type { BookingService } from "#shared/utils/booking"
+
 // Copy defaults to the current language's `cta` content; `enquiryTo` is an English path.
-// `action` replaces the "Send an enquiry" button (e.g. "Email your CV" on the careers pages).
+// `action` replaces the booking (or enquiry) button and the enquiry link (e.g. "Email your CV" on the careers pages).
 const props = defineProps<{
   kicker?: string
   title?: string
   text?: string
   enquiryTo?: string
   action?: { label: string; to: string; icon?: string }
+  // Pre-selects this job on /book (e.g. "hose" on the hose page).
+  bookService?: BookingService
 }>()
 
 const { business } = useAppConfig()
 const content = useContent()
 const localePath = useLocalePath()
+const booking = useBookingLink()
 
 const kicker = computed(() => props.kicker ?? content.value.cta.kicker)
 const title = computed(() => props.title ?? content.value.cta.title)
@@ -61,18 +66,41 @@ const enquiryTo = computed(() => localePath(props.enquiryTo ?? "/contact"))
           class="justify-center"
           >{{ business.phoneDisplay }}</UButton
         >
+        <!-- Booking when it's on (enquiry as a link below), else the enquiry button. -->
         <UButton
-          :to="action?.to ?? enquiryTo"
+          :to="
+            action?.to ??
+            (booking.available ? booking.to(bookService) : enquiryTo)
+          "
           color="neutral"
           variant="outline"
           size="xl"
-          :icon="action?.icon"
-          :trailing-icon="action ? undefined : 'i-lucide-chevron-right'"
+          :icon="
+            action?.icon ??
+            (booking.available ? 'i-lucide-calendar-check' : undefined)
+          "
+          :trailing-icon="
+            action || booking.available ? undefined : 'i-lucide-chevron-right'
+          "
           class="justify-center bg-transparent text-white ring-2 ring-white hover:bg-white hover:text-ink-950"
         >
-          {{ action?.label ?? content.common.sendEnquiry }}
+          {{
+            action?.label ??
+            (booking.available
+              ? booking.label.value
+              : content.common.sendEnquiry)
+          }}
         </UButton>
       </div>
+      <ULink
+        v-if="!action && booking.available"
+        raw
+        :to="enquiryTo"
+        class="-mt-4 inline-flex items-center gap-2 text-[13px] font-extrabold tracking-wider text-white uppercase hover:underline"
+      >
+        {{ content.common.orSendEnquiry }}
+        <UIcon name="i-lucide-chevron-right" class="size-4" />
+      </ULink>
       <OpenStatus />
     </UContainer>
   </section>

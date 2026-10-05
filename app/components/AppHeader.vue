@@ -102,7 +102,10 @@ function updateHeader() {
     headerHidden.value = delta > 0 && !menuOpen.value
   if (settling || Math.abs(delta) >= 10) lastScrollY = y
 
-  const compact = y > 160
+  // Compact past 160px, but only expand again above 120px. Going compact shortens the page by
+  // about 28px and the browser pulls the scroll back with it, so a single threshold flickers
+  // forever when someone stops right at it.
+  const compact = headerCompact.value ? y > 120 : y > 160
   if (compact !== headerCompact.value) {
     headerCompact.value = compact
     resizingUntil = performance.now() + 400

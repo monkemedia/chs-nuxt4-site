@@ -19,6 +19,8 @@ export const en = {
     callNow: "Call now",
     call: (phone: string) => `Call ${phone}`,
     sendEnquiry: "Send an enquiry",
+    // Booking buttons (only while online booking is on).
+    bookOnline: "Book online",
     orSendEnquiry: "Or send an enquiry",
     ourServices: "Our services",
     viewAllServices: "View all services",
@@ -49,6 +51,8 @@ export const en = {
     getInTouch: "Get in touch",
     privacy: "Privacy notice",
     areas: "Areas",
+    accounts: "Trade accounts",
+    login: "Customer login",
     // Company details a company's website must show (Companies Act 2006).
     company:
       "CHS Hydraulics is a trading name of {legalName}, registered in England and Wales, company number {companyNumber}. Registered office: {registeredOffice}.",
@@ -372,7 +376,7 @@ export const en = {
     title: ["Privacy", "notice"] as [string, string],
     intro:
       "What we do with your details when you call us, email us, send an enquiry or apply for a job. In short: we only use them to help you, we never sell them, and this website doesn't use cookies.",
-    updated: "2026-10-01",
+    updated: "2026-10-05",
     updatedLabel: (date: string) => `Last updated ${date}`,
     sections: [
       {
@@ -408,6 +412,8 @@ export const en = {
         list: [
           "[Form service], which delivers messages from our contact form to our inbox.",
           "Our email and accounting providers.",
+          "Fergus, our job management system: online bookings go straight into it, with the details you give us.",
+          "Resend, which sends our booking confirmation emails.",
           "Vercel, which hosts this website. It keeps short-term server logs, including IP addresses, for security.",
           "Plausible Analytics (see below).",
         ],
@@ -501,6 +507,252 @@ export const en = {
     jobsKicker: "Local work",
     jobsTitle: (inTown: string) => `Recent jobs ${inTown}`,
     ctaKicker: (town: string) => `Hydraulic repairs for ${town}`,
+  },
+
+  // Booking request (/book): planned work only. Fields shared with the contact form (name,
+  // phone, email…) use contact.fields.
+  bookPage: {
+    seo: {
+      title: "Book a Hydraulic Repair Drop-off | Cross Hands, Llanelli",
+      description:
+        "Book a drop-off at our Cross Hands workshop for a ram rebuild, a hose or a pre-season hydraulic check. Serving Llanelli, Carmarthenshire and South Wales.",
+    },
+    crumb: "Book",
+    fields: {
+      machine: "Machine",
+      machinePlaceholder: "e.g. JCB 3CX, John Deere 6155R",
+      details: "Anything we should know",
+      detailsPlaceholder:
+        "What's wrong, or what you'd like checked, and any part numbers.",
+    },
+    // Live booking (the slot picker), shown when live booking is on.
+    live: {
+      kicker: ["Repair", "Service", "Supply"],
+      title: ["Book a hydraulic", "repair"] as [string, string],
+      intro:
+        "Pick a time that suits you and you're booked straight into our diary. Machine down right now? Call us instead.",
+      benefits: [
+        {
+          icon: "i-lucide-clock",
+          title: "Choose a time",
+          text: "Pick a slot that suits you",
+        },
+        {
+          icon: "i-lucide-calendar-check",
+          title: "Straight into our diary",
+          text: "No waiting for a call back",
+        },
+        {
+          icon: "i-lucide-badge-pound-sterling",
+          title: "Price agreed up front",
+          text: "We tell you the cost before we start",
+        },
+        {
+          icon: "i-lucide-shield-check",
+          title: "Expert support",
+          text: "{years} years of hydraulic know-how",
+        },
+      ],
+      steps: [
+        { title: "Service", text: "Choose the job" },
+        { title: "Date & time", text: "Pick a slot" },
+        { title: "Your details", text: "Tell us about it" },
+      ],
+      serviceTitle: "1. What do you need?",
+      serviceText: "Choose the job you're booking in.",
+      services: {
+        hose: {
+          title: "Hose made up",
+          text: "About 30 minutes, while you wait",
+        },
+        check: {
+          title: "Pre-season check",
+          text: "About an hour, before silage or harvest",
+        },
+        onsite: {
+          title: "On-site visit",
+          text: "We come to you: about 2 hours plus travel",
+        },
+        dropoff: {
+          title: "Ram or component drop-off",
+          text: "Drop it off in the morning window",
+        },
+      },
+      otherPrompt: "Something else, or no time that suits?",
+      otherLink: "Send us an enquiry instead",
+      dateTitle: "2. Choose a date & time",
+      dateText:
+        "Pick a day, then a time to bring it to our Cross Hands workshop.",
+      dateTextOnsite: "Pick a day, then a time for us to come to you.",
+      locationLabel: "Where's the machine?",
+      locationPlaceholder: "Site address or postcode",
+      locationError: "Please tell us where the machine is",
+      comingTo: "We'll come to:",
+      previousMonth: "Previous month",
+      nextMonth: "Next month",
+      timesTitle: "Available times",
+      chooseDay: "Choose a day to see the times.",
+      dropoffWindow: (from: string, to: string) => `Drop off ${from} – ${to}`,
+      loading: "Checking the diary…",
+      none: "No free times online in the next four weeks. Give us a call and we'll fit you in.",
+      failed:
+        "We can't load the diary right now. Call us, or send us an enquiry instead.",
+      urgentTitle: "Need an urgent slot?",
+      urgentText:
+        "If your machine is down and you need it sooner, call us directly on",
+      nextStep: "Next step",
+      detailsTitle: "3. Your details",
+      detailsText: "So we know who's coming and what to expect.",
+      confirm: "Confirm booking",
+      booking: "Booking…",
+      taken: "Sorry, that time has just been taken. Please choose another.",
+      summary: {
+        title: "Your booking",
+        service: "Service",
+        when: "Date & time",
+        details: "Your details",
+        notChosen: "Not chosen yet",
+        notCompleted: "Not completed",
+        change: "Change",
+      },
+      help: {
+        title: "Need help choosing?",
+        text: "Not sure which you need? Our team can help.",
+      },
+      doneTitle: "You're booked in",
+      doneText: (when: string) =>
+        `We've put you in our diary for ${when}. If anything changes, call us on`,
+      bringTo: "Bring it to our workshop:",
+      bookAnother: "Make another booking",
+      addToCalendar: "Add to calendar",
+      googleCalendar: "Google Calendar",
+      emailed: (email: string) => `We've emailed a confirmation to ${email}.`,
+      calendarTitle: (service: string) => `CHS Hydraulics: ${service}`,
+      calendarDescription: (phone: string) =>
+        `Booked online with CHS Hydraulics. To change or cancel, call ${phone}.`,
+    },
+    // Confirmation email to the customer (server/api/booking), in their language.
+    email: {
+      subject: (service: string, when: string) =>
+        `Booking confirmed: ${service}, ${when}`,
+      greeting: (name: string) => `Hi ${name},`,
+      intro: "You're booked in with CHS Hydraulics. Here are the details:",
+      service: "Service",
+      when: "When",
+      where: "Where",
+      bringTitle: "What to bring",
+      bring: {
+        hose: "The old hose, with its fittings if you can, so we can match the length, pressure rating and ends.",
+        check:
+          "The machine, with any faults you've noticed written down. Give us a ring if it's too big to bring in.",
+        dropoff:
+          "The ram or component, and the make and model of the machine it came off.",
+        onsite:
+          "Nothing: we'll come to you. Please make sure we can get to the machine safely.",
+      },
+      change: "Need to change or cancel? Call us on",
+      orReply: "or reply to this email.",
+      calendarNote: "A calendar invite is attached.",
+      signoff: "Thanks,",
+      team: "The CHS Hydraulics team",
+    },
+  },
+
+  // Trade accounts (/accounts).
+  // CHECK WITH CHS: the benefits must match how CHS works (and what Fergus does). Fill in the
+  // [payment terms]; the build warns while it's in brackets.
+  accountsPage: {
+    seo: {
+      title: "Trade Accounts for Plant Hire & Farms | CHS Hydraulics",
+      description:
+        "Open a trade account with CHS Hydraulics in Cross Hands: hydraulic repairs for plant hire firms, contractors and farms across Llanelli and South Wales.",
+    },
+    crumb: "Trade accounts",
+    title: ["Trade", "accounts"] as [string, string],
+    intro:
+      "For plant hire firms, contractors and farms who rely on their machines: one place for every hose, ram and repair.",
+    whoKicker: "Who it's for",
+    whoTitle: "For businesses that run machines",
+    who: [
+      {
+        icon: "i-lucide-construction",
+        title: "Plant hire firms",
+        text: "Diggers, dumpers and telehandlers back out on hire, with the paperwork sorted.",
+      },
+      {
+        icon: "i-lucide-hard-hat",
+        title: "Contractors",
+        text: "Crews stood waiting cost money. We'll tell you straight what it needs and when it'll be ready.",
+      },
+      {
+        icon: "i-lucide-tractor",
+        title: "Farms",
+        text: "Tractors, loaders and implements kept working, especially through silage and harvest.",
+      },
+    ],
+    benefitsKicker: "What you get",
+    benefitsTitle: "Why open an account",
+    benefits: [
+      {
+        icon: "i-lucide-receipt-text",
+        title: "Pay on account",
+        text: "Pay on invoice instead of on the day: [payment terms, e.g. 30 days from invoice].",
+      },
+      {
+        icon: "i-lucide-clipboard-list",
+        title: "Your machines on record",
+        text: 'We keep a record of the hoses and repairs we do for your machines, so "the same as last time" is easy.',
+      },
+      {
+        icon: "i-lucide-message-circle",
+        title: "Kept posted",
+        text: "We'll tell you where each job is up to and when it'll be ready.",
+      },
+      {
+        icon: "i-lucide-badge-pound-sterling",
+        title: "Price agreed up front",
+        text: "We tell you what's wrong and what it'll cost before we start.",
+      },
+    ],
+    stepsTitle: "Opening an account",
+    steps: [
+      {
+        title: "Get in touch",
+        text: "Call or email with your business name and the machines you run.",
+      },
+      {
+        title: "We set you up",
+        text: "We'll take your details and agree your terms.",
+      },
+      {
+        title: "Send work our way",
+        text: "Drop it off or call, and give your account name.",
+      },
+    ],
+    ctaTitle: "Open an account",
+    ctaText: "Call or email us and we'll get you set up.",
+    emailButton: "Email us",
+    emailSubject: "Trade account enquiry",
+    loginPrompt: "Already have an account?",
+    loginLink: "Log in",
+  },
+
+  // Customer login (/login): a gateway to the Fergus customer portal. Only shown once
+  // NUXT_PUBLIC_FERGUS_PORTAL_URL is set; never indexed or in the sitemap.
+  loginPage: {
+    seo: {
+      title: "Customer Login | CHS Hydraulics",
+      description: "Log in to see your jobs and invoices with CHS Hydraulics.",
+    },
+    crumb: "Customer login",
+    title: ["Customer", "login"] as [string, string],
+    intro:
+      "Check where your jobs are up to and see your invoices in our customer portal.",
+    button: "Log in to your account",
+    note: "You'll be taken to our secure customer portal, provided by Fergus.",
+    noAccount: "Don't have an account yet?",
+    accountsLink: "Find out about trade accounts",
+    help: "Can't log in? Call us on",
   },
 
   about: {
@@ -722,6 +974,11 @@ export const en = {
   },
 
   contact: {
+    bookBox: {
+      kicker: "Planned work?",
+      title: "Book a time that suits you",
+      text: "Hoses, pre-season checks and drop-offs can be booked online, straight into our diary.",
+    },
     seo: {
       title: "Contact CHS Hydraulics | Cross Hands, Llanelli",
       description:
