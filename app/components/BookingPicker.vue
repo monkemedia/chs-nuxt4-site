@@ -298,8 +298,11 @@ const summary = computed(() => [
   },
 ])
 
-const card =
-  "rounded-box bg-white p-5 shadow-[0_10px_30px_rgba(15,22,26,0.08)] sm:p-8"
+const cardBase =
+  "rounded-box bg-white shadow-[0_10px_30px_rgba(15,22,26,0.08)] scroll-mt-[calc(var(--ui-header-height)+1.5rem)]"
+const card = `${cardBase} p-5 sm:p-8`
+// Collapsed (finished) steps are slim summary rows.
+const slim = `${cardBase} px-5 py-4 sm:px-8`
 </script>
 
 <template>
@@ -422,7 +425,10 @@ const card =
 
         <template v-else>
           <!-- 1. Service -->
-          <section :class="card" aria-labelledby="bk-service-title">
+          <section
+            :class="active === 1 || !service ? card : slim"
+            aria-labelledby="bk-service-title"
+          >
             <template v-if="active === 1 || !service">
               <h2
                 id="bk-service-title"
@@ -517,7 +523,7 @@ const card =
           <!-- 2. Date and time -->
           <section
             ref="dateSection"
-            :class="[card, 'scroll-mt-[calc(var(--ui-header-height)+1.5rem)]']"
+            :class="active === 2 || !slot ? card : slim"
             aria-labelledby="bk-date-title"
           >
             <template v-if="active === 2">
@@ -734,12 +740,11 @@ const card =
 
           <!-- 3. Details -->
           <section
-            v-if="showDetails && slot && service"
             ref="detailsSection"
-            :class="[card, 'scroll-mt-[calc(var(--ui-header-height)+1.5rem)]']"
+            :class="active === 3 || !(showDetails && slot) ? card : slim"
             aria-labelledby="bk-details-title"
           >
-            <template v-if="active === 3">
+            <template v-if="active === 3 && slot && service">
               <h2
                 id="bk-details-title"
                 class="heading-display text-[clamp(22px,2.6vw,28px)]"
@@ -879,7 +884,10 @@ const card =
                 </div>
               </UForm>
             </template>
-            <div v-else class="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <div
+              v-else-if="showDetails && slot"
+              class="flex flex-wrap items-center gap-x-4 gap-y-1"
+            >
               <h2 id="bk-details-title" class="heading-display text-lg">
                 {{ live.detailsTitle }}
               </h2>
@@ -905,6 +913,14 @@ const card =
                 {{ live.summary.change }}
               </UButton>
             </div>
+            <!-- Not reached yet: just the heading, so all three steps are visible from the start. -->
+            <h2
+              v-else
+              id="bk-details-title"
+              class="heading-display text-[clamp(22px,2.6vw,28px)] text-zinc-400"
+            >
+              {{ live.detailsTitle }}
+            </h2>
           </section>
         </template>
       </div>
