@@ -61,7 +61,7 @@ const leave = (to: string) => clearError({ redirect: to })
           <p class="kicker mb-4 text-chs-400">{{ copy.kicker }}</p>
           <h1
             id="error-title"
-            class="heading-display text-[clamp(48px,8vw,104px)] leading-[0.9] tracking-tight"
+            class="heading-display text-[clamp(48px,8vw,104px)] leading-none tracking-tight"
           >
             {{ copy.title[0] }}
             <em class="block text-primary not-italic">{{ copy.title[1] }}</em>

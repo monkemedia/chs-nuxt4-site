@@ -108,7 +108,7 @@ const enquiryTo = computed(() => localePath(enquiryPath))
       <h1
         id="job-title"
         :lang="job!.lang"
-        class="heading-display max-w-4xl text-[clamp(36px,5vw,64px)] leading-[0.95] tracking-tight"
+        class="heading-display max-w-4xl text-[clamp(36px,5vw,64px)] leading-none tracking-tight"
       >
         {{ job!.title }}
       </h1>

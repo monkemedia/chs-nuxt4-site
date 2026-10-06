@@ -103,7 +103,7 @@ const otherLocaleFlag = computed(() =>
         <div>
           <p class="kicker mb-4 text-chs-400">{{ copy.kicker }}</p>
           <h1
-            class="heading-display text-[clamp(44px,9vw,88px)] leading-[0.9] tracking-tight"
+            class="heading-display text-[clamp(44px,9vw,88px)] leading-none tracking-tight"
           >
             {{ copy.title[0] }}
             <em class="block text-primary not-italic">{{ copy.title[1] }}</em>

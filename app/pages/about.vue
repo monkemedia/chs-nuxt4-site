@@ -53,7 +53,7 @@ const crumbs = computed(() => [
       />
       <h1
         id="about-title"
-        class="heading-display text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
+        class="heading-display text-[clamp(46px,6vw,76px)] leading-none tracking-tight"
       >
         {{ page.title[0] }}
         <em class="text-primary not-italic">{{ page.title[1] }}</em>

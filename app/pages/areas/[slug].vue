@@ -84,7 +84,7 @@ const faqs = computed(() =>
       />
       <h1
         id="area-title"
-        class="heading-display max-w-4xl text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
+        class="heading-display max-w-4xl text-[clamp(46px,6vw,76px)] leading-none tracking-tight"
       >
         {{ area!.h1 }}
       </h1>

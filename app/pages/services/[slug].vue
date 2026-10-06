@@ -66,7 +66,7 @@ const bookService = bookingServiceForPage[service.value.slug]
       />
       <h1
         id="service-title"
-        class="heading-display max-w-4xl text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
+        class="heading-display max-w-4xl text-[clamp(46px,6vw,76px)] leading-none tracking-tight"
       >
         {{ service!.h1 }}
       </h1>

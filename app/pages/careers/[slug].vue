@@ -182,7 +182,7 @@ const cvAction = computed(() => ({
       </p>
       <h1
         id="vacancy-title"
-        class="heading-display max-w-4xl text-[clamp(36px,5vw,64px)] leading-[0.95] tracking-tight"
+        class="heading-display max-w-4xl text-[clamp(36px,5vw,64px)] leading-none tracking-tight"
         :lang="vacancy!.lang"
       >
         {{ vacancy!.title }}

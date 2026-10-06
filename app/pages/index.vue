@@ -51,7 +51,7 @@ const trustIcons = [
       <UContainer class="pt-12 pb-8 sm:pt-16 lg:pt-22 lg:pb-9">
         <h1
           id="hero-title"
-          class="heading-display text-[clamp(44px,7.2vw,96px)] leading-[0.92] tracking-tight"
+          class="heading-display text-[clamp(54px,7.2vw,96px)] leading-none tracking-tight"
         >
           <span
             class="kicker mb-4.5 block font-sans leading-normal tracking-[1.5px] sm:mb-6.5 sm:tracking-[3px]"

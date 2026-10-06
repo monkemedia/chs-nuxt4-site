@@ -86,13 +86,14 @@
 
 /* Display font: Bebas Neue (OFL, Google Fonts), self-hosted. It has one weight, declared across
    the range so the 900 headings (heading-display, font-black) use it as drawn, not a faux bold.
-   Its capitals are 0.70em tall against the usual ~0.8em, so size-adjust scales it up to keep
-   heading sizes as designed. Latin-ext covers the Welsh ŵ and ŷ. */
+   Its capitals are only 0.70em tall and it's narrow and light, so size-adjust scales it up 125%
+   (capitals about 0.88em) to give headings the presence they were designed with. Keep heading
+   line-heights at 1 or more, or two-line headings touch. Latin-ext covers the Welsh ŵ and ŷ. */
 @font-face {
   font-family: "Bebas Neue";
   font-weight: 100 900;
   font-display: swap;
-  size-adjust: 114%;
+  size-adjust: 125%;
   src: url("./../fonts/bebas-neue-latin.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
@@ -103,7 +104,7 @@
   font-family: "Bebas Neue";
   font-weight: 100 900;
   font-display: swap;
-  size-adjust: 114%;
+  size-adjust: 125%;
   src: url("./../fonts/bebas-neue-latin-ext.woff2") format("woff2");
   unicode-range:
     U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,

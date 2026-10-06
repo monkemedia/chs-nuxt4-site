@@ -42,7 +42,7 @@ const crumbs = computed(() => [
       </p>
       <h1
         id="book-title"
-        class="heading-display text-[clamp(40px,6vw,76px)] leading-[0.95] tracking-tight"
+        class="heading-display text-[clamp(46px,6vw,76px)] leading-none tracking-tight"
       >
         {{ page.live.title[0] }}
         <em class="text-primary not-italic">{{ page.live.title[1] }}</em>
