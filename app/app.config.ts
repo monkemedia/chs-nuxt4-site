@@ -23,6 +23,12 @@ export default defineAppConfig({
     // On-site / mobile work: the homepage "We come to you" band, the On-site Service page,
     // on-site claims and the Uptime Promise. Off uses app/content/<locale>/workshop.ts.
     onsite: true,
+    // "Track my repair" (/track, its footer link and the job number + link in the booking
+    // email). Also needs live booking (the Fergus API). Off: none of it exists.
+    trackRepair: false,
+    // On the tracker: the mechanic's pinned notes, shared photos and name. Only switch on once
+    // staff know the sharing rules (pin a note; name a photo "customer…"). Needs trackRepair.
+    repairUpdates: false,
   },
   // The offer. Copy in app/content/ uses {hours}, filled in by useContent(), and {years} of
   // experience, worked out from `business.foundingYear` (35 in 2026, going up each year).

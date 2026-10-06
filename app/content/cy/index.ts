@@ -54,6 +54,7 @@ export const cy: Content = {
     areas: "Ardaloedd",
     accounts: "Cyfrifon masnach",
     login: "Mewngofnodi cwsmeriaid",
+    track: "Dilyn fy atgyweiriad",
     company:
       "Mae CHS Hydraulics yn enw masnachu i {legalName}, cwmni wedi'i gofrestru yng Nghymru a Lloegr, rhif cwmni {companyNumber}. Swyddfa gofrestredig: {registeredOffice}.",
   },
@@ -629,6 +630,8 @@ export const cy: Content = {
       change: "Angen newid neu ganslo? Ffoniwch ni ar",
       orReply: "neu atebwch yr e-bost hwn.",
       calendarNote: "Mae gwahoddiad calendr wedi'i atodi.",
+      track: (jobNo: string, url: string) =>
+        `Rhif eich swydd yw ${jobNo}. Dilynwch ei chynnydd yn ${url}`,
       signoff: "Diolch,",
       team: "Tîm CHS Hydraulics",
     },
@@ -708,6 +711,72 @@ export const cy: Content = {
     emailSubject: "Ymholiad cyfrif masnach",
     loginPrompt: "Oes gennych chi gyfrif yn barod?",
     loginLink: "Mewngofnodi",
+  },
+
+  trackPage: {
+    seo: {
+      title: "Dilyn Fy Atgyweiriad | CHS Hydraulics, Cross Hands",
+      description:
+        "Gweld sut mae eich atgyweiriad hydrolig yn dod yn ei flaen gyda CHS Hydraulics yn Cross Hands, Llanelli: rhowch rif eich swydd i weld y cynnydd.",
+    },
+    crumb: "Dilyn fy atgyweiriad",
+    title: ["Dilyn fy", "atgyweiriad"],
+    intro:
+      "Gweld ble mae eich swydd arni. Mae rhif eich swydd ar eich e-bost archebu neu eich cerdyn swydd.",
+    formTitle: "Dod o hyd i'ch swydd",
+    fields: {
+      jobNo: "Rhif y swydd",
+      contact: "E-bost neu rif ffôn",
+    },
+    jobNoHelp:
+      "Rhif byr, fel 1234, ar eich e-bost archebu neu eich cerdyn swydd.",
+    contactHelp: "Yr un a roesoch i ni wrth archebu.",
+    submit: "Gweld y cynnydd",
+    errors: {
+      jobNo: "Rhowch rif eich swydd: rhifau yn unig, fel 1234",
+      jobNoPhone:
+        "Mae hwnna'n edrych fel rhif ffôn: rhowch ef yn y blwch isod. Mae rhif eich swydd yn rhif byr, fel 1234.",
+      contact: "Rhowch eich e-bost neu rif ffôn",
+    },
+    notFound:
+      "Doedd dim swydd gyda'r manylion hynny. Gwiriwch rif y swydd a defnyddiwch yr e-bost neu'r rhif ffôn a ddefnyddioch wrth archebu.",
+    tooMany: "Gormod o ymdrechion. Arhoswch ychydig funudau, neu ffoniwch ni.",
+    failed:
+      "Doedd dim modd gwirio ar hyn o bryd. Rhowch gynnig arall arni cyn bo hir, neu ffoniwch ni.",
+    jobLabel: "Swydd {jobNo}",
+    updated: "Diweddarwyd ddiwethaf {date}",
+    stages: {
+      booked: {
+        title: "Wedi'i archebu",
+        text: "Mae eich swydd yn ein dyddiadur.",
+      },
+      assessing: {
+        title: "Asesu",
+        text: "Rydym yn edrych ar beth sydd ei angen ac yn rhoi pris.",
+      },
+      working: {
+        title: "Yn y gweithdy",
+        text: "Rydym yn gweithio arni nawr.",
+      },
+      done: {
+        title: "Gwaith wedi'i gwblhau",
+        text: "Mae'r gwaith wedi'i wneud. Ffoniwch ni i drefnu ei chasglu.",
+      },
+    },
+    current: "Y cam presennol",
+    onHold:
+      "Wedi'i gohirio: rydym yn aros am rywbeth (rhannau neu eich caniatâd fel arfer). Byddwn mewn cysylltiad.",
+    quoteSent:
+      "Rydym wedi anfon pris atoch. Rhowch wybod i ni os hoffech i ni fwrw ymlaen.",
+    updatesTitle: "Newyddion o'r gweithdy",
+    photosTitle: "Lluniau",
+    photoAlt: "Llun o'r gweithdy, {date}",
+    openPhoto: "Agor llun o {date}",
+    previousPhoto: "Llun blaenorol",
+    nextPhoto: "Llun nesaf",
+    mechanic: "Eich mecanydd: {name}",
+    another: "Gwirio swydd arall",
+    help: "Cwestiynau am eich swydd? Ffoniwch ni ar",
   },
 
   loginPage: {

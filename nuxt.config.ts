@@ -62,6 +62,9 @@ export default defineNuxtConfig({
     // on a domain verified in Resend (NUXT_EMAIL_FROM).
     resendApiKey: "",
     emailFrom: "CHS Hydraulics <bookings@chshydraulics.co.uk>",
+    // Form service for the booking summary when Resend isn't set up (NUXT_BOOKING_FORM_ENDPOINT):
+    // its own form, so bookings and enquiries stay apart. Empty = the contact form's.
+    bookingFormEndpoint: "",
     public: {
       liveBooking,
       // Form service URL (e.g. https://formspree.io/f/xxxx), set via NUXT_PUBLIC_CONTACT_FORM_ENDPOINT at build time.
@@ -93,6 +96,8 @@ export default defineNuxtConfig({
       "/maintenance",
       "/login",
       ...(liveBooking ? [] : ["/book"]),
+      // Looks up one customer's job: nothing for search engines.
+      "/track",
     ],
   },
   site: {
@@ -163,7 +168,7 @@ export default defineNuxtConfig({
         ...(process.env.NUXT_PUBLIC_FERGUS_PORTAL_URL
           ? []
           : ["/login", "/cy/login"]),
-        ...(liveBooking ? [] : ["/book", "/cy/book"]),
+        ...(liveBooking ? [] : ["/book", "/cy/book", "/track", "/cy/track"]),
       ],
     },
   },

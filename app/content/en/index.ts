@@ -53,6 +53,7 @@ export const en = {
     areas: "Areas",
     accounts: "Trade accounts",
     login: "Customer login",
+    track: "Track my repair",
     // Company details a company's website must show (Companies Act 2006).
     company:
       "CHS Hydraulics is a trading name of {legalName}, registered in England and Wales, company number {companyNumber}. Registered office: {registeredOffice}.",
@@ -653,6 +654,8 @@ export const en = {
       change: "Need to change or cancel? Call us on",
       orReply: "or reply to this email.",
       calendarNote: "A calendar invite is attached.",
+      track: (jobNo: string, url: string) =>
+        `Your job number is ${jobNo}. Follow its progress at ${url}`,
       signoff: "Thanks,",
       team: "The CHS Hydraulics team",
     },
@@ -739,6 +742,71 @@ export const en = {
 
   // Customer login (/login): a gateway to the Fergus customer portal. Only shown once
   // NUXT_PUBLIC_FERGUS_PORTAL_URL is set; never indexed or in the sitemap.
+  trackPage: {
+    seo: {
+      title: "Track My Repair | CHS Hydraulics, Cross Hands",
+      description:
+        "Check how your hydraulic repair is getting on at CHS Hydraulics in Cross Hands, Llanelli: enter your job number to see its progress.",
+    },
+    crumb: "Track my repair",
+    title: ["Track my", "repair"] as [string, string],
+    intro:
+      "See where your job is up to. You'll find your job number on your booking email or job card.",
+    formTitle: "Find your job",
+    fields: {
+      jobNo: "Job number",
+      contact: "Email or phone number",
+    },
+    jobNoHelp: "A short number, like 1234, on your booking email or job card.",
+    contactHelp: "The one you gave us when you booked.",
+    submit: "Check progress",
+    errors: {
+      jobNo: "Enter your job number: numbers only, like 1234",
+      jobNoPhone:
+        "That looks like a phone number: put it in the box below. Your job number is a short number, like 1234.",
+      contact: "Enter your email or phone number",
+    },
+    notFound:
+      "We couldn't find a job with those details. Check the job number and use the email or phone number you booked with.",
+    tooMany: "Too many attempts. Please wait a few minutes, or give us a call.",
+    failed:
+      "We couldn't check right now. Please try again shortly, or call us.",
+    jobLabel: "Job {jobNo}",
+    updated: "Last updated {date}",
+    stages: {
+      booked: {
+        title: "Booked in",
+        text: "Your job is in our diary.",
+      },
+      assessing: {
+        title: "Assessing",
+        text: "We're looking at what's needed and pricing it up.",
+      },
+      working: {
+        title: "In the workshop",
+        text: "We're working on it now.",
+      },
+      done: {
+        title: "Work complete",
+        text: "The work is done. Call us to arrange collection.",
+      },
+    },
+    current: "Current stage",
+    onHold:
+      "On hold: we're waiting on something (usually parts or your go-ahead). We'll be in touch.",
+    quoteSent:
+      "We've sent you a quote. Let us know if you'd like us to go ahead.",
+    updatesTitle: "Updates from the workshop",
+    photosTitle: "Photos",
+    photoAlt: "Photo from the workshop, {date}",
+    openPhoto: "Open photo from {date}",
+    previousPhoto: "Previous photo",
+    nextPhoto: "Next photo",
+    mechanic: "Your mechanic: {name}",
+    another: "Check another job",
+    help: "Questions about your job? Call us on",
+  },
+
   loginPage: {
     seo: {
       title: "Customer Login | CHS Hydraulics",

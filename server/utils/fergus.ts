@@ -300,3 +300,243 @@ export async function fergusCreateBooking(booking: NewBooking) {
   check(event, "calendar event")
   return { jobId, jobNo, mock: false }
 }
+
+// "Track my repair": a job by its number, with what's needed to check the visitor is its
+// customer (the contact's email and phone numbers), its progress and what the workshop has
+// shared. Undefined if there's no such live job.
+//
+// Fergus notes and photos are internal by default, so only some reach the customer: notes the
+// mechanic pins, and photos whose file name starts with "customer" (Fergus files can't be
+// pinned). Both are read from the job and each of its phases.
+export const sharedPhotoPrefix = "customer"
+
+export interface RepairJob {
+  status: string
+  onHold: boolean
+  phases: string[]
+  updated: string
+  emails: string[]
+  phones: string[]
+  // `by`: the first name of the staff member who added it (Fergus user), when known.
+  notes: { text: string; at: string; by?: string }[]
+  photos: { id: string; at: string; by?: string }[]
+}
+
+interface FergusNote {
+  text?: string
+  createdAt: string
+  isPinned?: boolean
+  createdById?: number | null
+}
+interface FergusFile {
+  id: number
+  fileName?: string
+  mimeType?: string
+  createdAt: string
+  createdBy?: number | null
+}
+
+// Staff first names by Fergus user id, for "who did this" on the tracker. First names only:
+// customers don't need staff surnames. Refreshed hourly; a failure just leaves names off.
+let staff: { at: number; names: Map<number, string> } | undefined
+async function staffNames() {
+  if (staff && Date.now() - staff.at < 36e5) return staff.names
+  const response = await call<{ data: { id: number; firstName?: string }[] }>(
+    "/users",
+    { query: { pageSize: "100" } },
+  )
+  const names = new Map<number, string>()
+  if (response.status < 400)
+    for (const user of response._data?.data ?? [])
+      if (user.firstName?.trim()) names.set(user.id, user.firstName.trim())
+  staff = { at: Date.now(), names }
+  return names
+}
+
+// `updates` false (features.repairUpdates off) skips the notes, photos and staff names, and
+// their Fergus calls.
+export async function fergusRepairJob(
+  jobNo: string,
+  updates: boolean,
+): Promise<RepairJob | undefined> {
+  if (isMock()) {
+    const job = mockRepairJobs[jobNo]
+    return job && !updates ? { ...job, notes: [], photos: [] } : job
+  }
+  const found = await call<{
+    data: {
+      id: number
+      jobNo?: string | number
+      status: string
+      onHold?: boolean
+      archived?: boolean
+      lastModified?: string
+      createdAt: string
+      mainContact?: {
+        contactItems?: { contactType?: string; contactValue?: string }[]
+      }
+    }[]
+  }>("/jobs", {
+    query: { filterJobNo: jobNo, filterShowOnHold: "true", pageSize: "5" },
+  })
+  check(found, "job search")
+  const job = found._data?.data.find(
+    (j) => String(j.jobNo) === jobNo && !j.archived && j.status !== "Inactive",
+  )
+  if (!job) return undefined
+  const phases = await call<{ data: { id: number; status?: string }[] }>(
+    `/jobs/${job.id}/phases`,
+  )
+  check(phases, "job phases")
+  const phaseList = phases._data?.data ?? []
+
+  // The job and each phase can carry notes and photos. A failure here only loses the extras,
+  // never the status.
+  const entities = !updates
+    ? []
+    : [
+        { note: "JOB", file: "job", id: job.id },
+        ...phaseList.map((p) => ({
+          note: "JOB_PHASE",
+          file: "job_phase",
+          id: p.id,
+        })),
+      ]
+  const [notes, files, names] = await Promise.all([
+    Promise.all(
+      entities.map(async (e) => {
+        const r = await call<{ data: FergusNote[] }>("/notes", {
+          query: {
+            filterEntityName: e.note,
+            filterEntityId: String(e.id),
+            pageSize: "50",
+          },
+        })
+        return r.status < 400 ? (r._data?.data ?? []) : []
+      }),
+    ),
+    Promise.all(
+      entities.map(async (e) => {
+        const r = await call<{ data: FergusFile[] }>("/attachments", {
+          query: {
+            entityType: e.file,
+            entityId: String(e.id),
+            pageSize: "50",
+          },
+        })
+        return r.status < 400 ? (r._data?.data ?? []) : []
+      }),
+    ),
+    updates ? staffNames() : new Map<number, string>(),
+  ])
+  const by = (id?: number | null) => (id ? names.get(id) : undefined)
+
+  const items = job.mainContact?.contactItems ?? []
+  return {
+    status: job.status,
+    onHold: !!job.onHold,
+    phases: phaseList.map((p) => p.status ?? ""),
+    updated: job.lastModified || job.createdAt,
+    emails: items
+      .filter((i) => i.contactType === "email")
+      .map((i) => i.contactValue ?? ""),
+    phones: items
+      .filter((i) => i.contactType !== "email")
+      .map((i) => i.contactValue ?? ""),
+    notes: notes
+      .flat()
+      .filter((n) => n.isPinned && n.text?.trim())
+      .map((n) => ({
+        text: n.text!.trim(),
+        at: n.createdAt,
+        by: by(n.createdById),
+      })),
+    photos: files
+      .flat()
+      .filter(
+        (f) =>
+          f.mimeType?.startsWith("image/") &&
+          f.fileName?.toLowerCase().startsWith(sharedPhotoPrefix),
+      )
+      .map((f) => ({ id: String(f.id), at: f.createdAt, by: by(f.createdBy) })),
+  }
+}
+
+// Where a shared photo can be downloaded: Fergus answers with a redirect to a short-lived
+// signed file URL, which the site passes on (the API token never reaches the browser).
+export async function fergusPhotoUrl(id: string) {
+  if (isMock()) return mockPhotos[id]
+  const response = await $fetch.raw(`${base}/attachments/${id}/download`, {
+    headers: {
+      Authorization: `Bearer ${useRuntimeConfig().fergusApiToken}`,
+    },
+    redirect: "manual",
+    ignoreResponseError: true,
+  })
+  return response.headers.get("location") ?? undefined
+}
+
+// Pretend jobs for trying the tracker (NUXT_FERGUS_MOCK=true): job numbers 1001–1005, each at a
+// different stage, for test@example.com or 01269 000000. 1003–1005 have shared notes and photos.
+const ago = (hours: number) => new Date(Date.now() - hours * 36e5).toISOString()
+const mockPhotos: Record<string, string> = {
+  m1: "/images/rams.jpg",
+  m2: "/images/hoses.jpg",
+  m3: "/images/systems.jpg",
+}
+const mockJob = (
+  status: string,
+  phases: string[],
+  extras: Partial<RepairJob> = {},
+): RepairJob => ({
+  status,
+  onHold: false,
+  phases,
+  updated: ago(1),
+  emails: ["test@example.com"],
+  phones: ["01269 000000"],
+  notes: [],
+  photos: [],
+  ...extras,
+})
+const workshopNotes = [
+  {
+    text: "Ram stripped down: the seals are worn and the rod is scored.",
+    at: ago(26),
+    by: "Rhys",
+  },
+  { text: "New seal kit fitted and the rod polished.", at: ago(4), by: "Rhys" },
+]
+const mockRepairJobs: Record<string, RepairJob> = {
+  "1001": mockJob("Active", ["To Start"]),
+  "1002": mockJob("Quote Sent", []),
+  "1003": mockJob("Active", ["In Progress"], {
+    notes: workshopNotes,
+    photos: [{ id: "m1", at: ago(26), by: "Rhys" }],
+  }),
+  "1004": mockJob("Active", ["In Progress"], {
+    onHold: true,
+    notes: [
+      {
+        text: "Waiting on a replacement gland nut from the supplier, due Thursday.",
+        at: ago(3),
+        by: "Gareth",
+      },
+    ],
+  }),
+  "1005": mockJob("Active", ["Labour Complete"], {
+    notes: [
+      ...workshopNotes,
+      {
+        text: "Pressure tested to 250 bar: no leaks. Ready to collect.",
+        at: ago(1),
+        by: "Gareth",
+      },
+    ],
+    photos: [
+      { id: "m1", at: ago(26), by: "Rhys" },
+      { id: "m2", at: ago(4), by: "Rhys" },
+      { id: "m3", at: ago(1), by: "Gareth" },
+    ],
+  }),
+}

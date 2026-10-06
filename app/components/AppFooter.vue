@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { business } = useAppConfig()
+const { business, features } = useAppConfig()
 const content = useContent()
 const localePath = useLocalePath()
 const booking = useBookingLink()
@@ -48,6 +48,10 @@ const columns = computed(() => {
           : []),
         ...(booking.available
           ? [{ label: booking.label.value, to: booking.to() }]
+          : []),
+        // Needs the flag and the Fergus API, as live booking does (the page 404s without them).
+        ...(features.trackRepair && runtimeConfig.public.liveBooking
+          ? [{ label: footer.track, to: localePath("/track") }]
           : []),
         { label: footer.accounts, to: localePath("/accounts") },
         // Only once the Fergus customer portal is set up (the page 404s without it).

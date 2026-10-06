@@ -8,8 +8,8 @@ dayjs.locale(cy, undefined, true)
 dayjs.locale(enGb, undefined, true)
 
 // Makes a booking: POST /api/booking. Re-checks the slot against a fresh Fergus calendar, then
-// creates (or finds) the customer, a draft job and the calendar event in Fergus, and emails the
-// business a summary through the form service (as the contact form does).
+// creates (or finds) the customer, the job and the calendar event in Fergus, and emails the
+// customer a confirmation and the business a summary (Resend, else the booking form service).
 const body = z.object({
   service: z.enum(bookingServices),
   start: z.iso.datetime({ offset: true }),
@@ -93,7 +93,7 @@ export default defineEventHandler(async (event) => {
     ),
   )
 
-  const { business } = useAppConfig()
+  const { business, features } = useAppConfig()
   const address = addressLines(business.address).join(", ")
   const where = data.service === "onsite" ? data.location! : address
   const subjectWhen = `${when.format("ddd D MMM, HH:mm")}`
@@ -127,7 +127,12 @@ export default defineEventHandler(async (event) => {
     [mail.when, customerDate],
     [mail.where, where],
   ]
+  const { url: siteUrl } = getSiteConfig(event)
+  const trackUrl = `${siteUrl.replace(/\/$/, "")}${data.language === "cy" ? "/cy" : ""}/track?job=${result.jobNo}`
   const after = [
+    ...(features.trackRepair && result.jobNo
+      ? [mail.track(result.jobNo, trackUrl)]
+      : []),
     `${mail.bringTitle}: ${mail.bring[data.service]}`,
     `${mail.change} ${business.phoneDisplay} ${mail.orReply}`,
     mail.calendarNote,
@@ -173,7 +178,9 @@ export default defineEventHandler(async (event) => {
       }),
     }))
   const runtimeConfig = useRuntimeConfig()
-  const endpoint = runtimeConfig.public.contactFormEndpoint as string
+  const endpoint =
+    runtimeConfig.bookingFormEndpoint ||
+    (runtimeConfig.public.contactFormEndpoint as string)
   if (!sentToBusiness && endpoint) {
     const form = new FormData()
     form.append("enquiry", "Online booking")
