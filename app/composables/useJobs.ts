@@ -1,4 +1,4 @@
-import { onsiteServiceSlug, type LocaleCode } from "~/content"
+import { onsiteServiceSlug } from "~/content"
 import { jobs } from "~/data/jobs"
 
 // Recent jobs in the current language, newest first. With none, every jobs section, page

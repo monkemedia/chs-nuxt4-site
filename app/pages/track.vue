@@ -275,23 +275,23 @@ const updated = computed(() => (result.value ? when(result.value.updated) : ""))
           >
             <h3 class="heading-display text-2xl">{{ page.photosTitle }}</h3>
             <ul class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <li v-for="(photo, i) in result.photos" :key="photo.url">
+              <li v-for="(item, i) in result.photos" :key="item.url">
                 <button
                   type="button"
                   class="block w-full cursor-zoom-in overflow-hidden rounded-box bg-zinc-100 ring-primary focus-visible:ring-2 focus-visible:outline-none"
-                  :aria-label="page.openPhoto.replace('{date}', when(photo.at))"
+                  :aria-label="page.openPhoto.replace('{date}', when(item.at))"
                   @click="photoIndex = i"
                 >
                   <img
-                    :src="photo.url"
-                    :alt="photoAlt(photo)"
+                    :src="item.url"
+                    :alt="photoAlt(item)"
                     loading="lazy"
                     class="aspect-square w-full object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
                   />
                 </button>
                 <p class="mt-1.5 text-xs text-zinc-500">
-                  {{ when(photo.at)
-                  }}<template v-if="photo.by"> · {{ photo.by }}</template>
+                  {{ when(item.at)
+                  }}<template v-if="item.by"> · {{ item.by }}</template>
                 </p>
               </li>
             </ul>

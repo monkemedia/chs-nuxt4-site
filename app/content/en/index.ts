@@ -970,7 +970,7 @@ export const en = {
     seo: {
       title: "Sectors We Support | Hydraulic Repairs South Wales | CHS",
       description:
-        "Hydraulic repairs for plant and construction, agriculture, industrial and manufacturing, and commercial vehicles across Llanelli, Carmarthenshire and South Wales.",
+        "Hydraulic repairs for construction plant, farms, industry, manufacturing and commercial vehicles across Llanelli, Carmarthenshire and South Wales.",
     },
     crumb: "Sectors",
     title: ["Sectors we", "support"] as [string, string],
@@ -989,7 +989,7 @@ export const en = {
 
   why: {
     seo: {
-      title: "Why Choose CHS | Hydraulic Repairs Llanelli & Carmarthenshire",
+      title: "Why CHS | Hydraulic Repairs in Llanelli & Carmarthenshire",
       description:
         "{years} years' experience, on-site within {hours} hours, prices agreed up front: why farms and plant operators across Llanelli and Carmarthenshire choose CHS.",
     },

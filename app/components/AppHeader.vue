@@ -159,7 +159,6 @@ onBeforeUnmount(() => {
     v-model:open="menuOpen"
     :to="localePath('/')"
     :class="headerHidden && '-translate-y-full'"
-    @focusin="headerHidden = false"
     mode="slideover"
     toggle-side="right"
     :toggle="{
@@ -178,6 +177,7 @@ onBeforeUnmount(() => {
       header: 'border-b border-white/10',
       body: 'p-0',
     }"
+    @focusin="headerHidden = false"
   >
     <template #title>
       <!-- "CHS" mark only: the site says "hydraulics" all around it, and at header size the

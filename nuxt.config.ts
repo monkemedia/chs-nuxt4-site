@@ -9,7 +9,14 @@ const liveBooking =
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-01",
   devtools: { enabled: false },
-  modules: ["@nuxt/ui", "@nuxtjs/i18n", "@nuxt/image", "@nuxtjs/sitemap"],
+  modules: [
+    "@nuxt/ui",
+    "@nuxtjs/i18n",
+    "@nuxt/image",
+    "@nuxtjs/sitemap",
+    // Lint config that knows Nuxt's auto-imports (eslint.config.mjs). Dev only.
+    "@nuxt/eslint",
+  ],
   css: ["~/assets/css/main.css"],
   ui: {
     // Light-only design with system fonts: skip the color-mode and web-font modules.

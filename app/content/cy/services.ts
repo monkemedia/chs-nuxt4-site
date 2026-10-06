@@ -13,7 +13,7 @@ export const services: Service[] = [
     summary: "Gwneud a newid pibellau pwrpasol, tra byddwch yn aros.",
     metaTitle: "Atgyweirio Pibellau Hydrolig Llanelli a Sir Gâr | CHS",
     metaDescription:
-      "Pibellau hydrolig wedi'u gwneud tra byddwch yn aros yn ein gweithdy yn Cross Hands, neu wedi'u newid ar y safle gan ein huned symudol. Llanelli, Sir Gâr a De Cymru.",
+      "Pibellau hydrolig wedi'u gwneud tra byddwch yn aros yn ein gweithdy yn Cross Hands, neu wedi'u newid ar y safle. Llanelli, Sir Gâr a De Cymru.",
     h1: "Atgyweirio a newid pibellau hydrolig",
     lead: "Pibell wedi byrstio neu'n gollwng? Rydyn ni'n gwneud pibellau hydrolig newydd tra byddwch yn aros yn ein gweithdy yn Cross Hands, neu'n dod allan i'w gosod ar y safle.",
     intro: [
@@ -71,7 +71,7 @@ export const services: Service[] = [
       "Datgymalu, archwilio, atgyweirio ac ail-selio pob math o rams a silindrau hydrolig.",
     metaTitle: "Atgyweirio Rams a Silindrau Hydrolig Sir Gâr | CHS",
     metaDescription:
-      "Atgyweirio ac ail-selio rams a silindrau hydrolig yn ein gweithdy yn Cross Hands. Rams sy'n gollwng neu'n llithro wedi'u datgymalu, eu harchwilio a'u trwsio. Llanelli a De Cymru.",
+      "Atgyweirio ac ail-selio rams a silindrau hydrolig yn ein gweithdy yn Cross Hands. Rams sy'n gollwng neu'n llithro wedi'u trwsio. Llanelli a De Cymru.",
     h1: "Atgyweirio rams a silindrau hydrolig",
     lead: "Rams sy'n gollwng, yn llithro neu wedi'u difrodi, wedi'u datgymalu, eu harchwilio, eu hatgyweirio a'u hail-selio yn ein gweithdy yn Cross Hands.",
     intro: [
@@ -128,7 +128,7 @@ export const services: Service[] = [
     summary: "Canfod namau ac atgyweirio systemau hydrolig cyfan.",
     metaTitle: "Atgyweirio Systemau Hydrolig a Chanfod Namau | CHS Llanelli",
     metaDescription:
-      "Canfod namau hydrolig ac atgyweirio systemau ar gyfer peiriannau adeiladu, fferm a diwydiannol. Systemau hydrolig araf, gwan neu sy'n gorboethi wedi'u trwsio ar draws Sir Gâr.",
+      "Canfod namau ac atgyweirio systemau hydrolig peiriannau adeiladu, fferm a diwydiannol. Systemau araf, gwan neu sy'n gorboethi wedi'u trwsio ar draws Sir Gâr.",
     h1: "Atgyweirio systemau hydrolig a chanfod namau",
     lead: "System hydrolig araf, gwan, swnllyd neu sy'n gorboethi? Rydyn ni'n dod o hyd i'r achos ac yn ei atgyweirio, yn y gweithdy neu ar y safle.",
     intro: [

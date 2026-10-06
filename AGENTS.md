@@ -23,7 +23,10 @@ npm install          # postinstall runs `nuxt prepare` (generates .nuxt types)
 npm run dev          # dev server (slow, unbundled; never use it for Lighthouse)
 npm run generate     # production static build -> .output/public
 npm run preview      # serve the static build
-npx nuxt typecheck   # type check; must pass with no errors
+npm run typecheck    # type check (nuxt typecheck); must pass with no errors
+npm run lint         # ESLint (@nuxt/eslint + eslint-config-prettier); lint:fix to autofix
+npm test             # unit tests (Vitest, tests/*.test.ts); test:watch while working
+npm run check        # all of the above plus format:check: run before every commit
 npm run format       # Prettier (no semicolons); format:check to verify
 ```
 
@@ -236,6 +239,13 @@ public/
 
 `app/plugins/analytics.client.ts` provides `$track(event, props)`, which does nothing when Plausible is disabled. Current events: `Phone Call`, `Email Click` (automatic on `tel:` / `mailto:` clicks), `Enquiry Sent` (contact form success) and `Booking Made` (online booking). Each needs a matching goal in Plausible.
 
+## Tests
+
+- **Vitest** unit tests in `tests/` run plain functions in `shared/` and the content without starting Nuxt (`vitest.config.ts` maps `~` and `#shared`). Add a test with any change to booking slots, repair stages, calendar invites or hours.
+- `tests/content.test.ts` checks every SEO title (≤ 60) and description (≤ 160) in both languages with `{tokens}` filled in, that English and Welsh list the same slugs in the same order, and that every Welsh string keeps the English `{placeholders}`. A failure there is a content fix, not a test to loosen.
+- Dates: build zoned times from the UK date string (`dayjs.tz("2026-10-26 08:00", "Europe/London")`), never by adding days or minutes to a zoned dayjs, which keeps the old offset across the clock change (`tests/booking.test.ts` covers it).
+- **ESLint** (`eslint.config.mjs`): Nuxt's rules via the `@nuxt/eslint` module, with formatting rules off (Prettier owns those). `vue/require-default-prop` is off: optional TypeScript props are meant to be undefined.
+
 ## Gotchas already hit
 
 - **`Cannot find native binding`** on build/dev: npm bug with optional dependencies (npm/cli#4828), even on npm 11.6. It can happen after any `npm install <pkg>`. Fix: `rm -rf node_modules package-lock.json && npm install`. Don't add platform-specific binding packages to `package.json`.
@@ -259,6 +269,6 @@ public/
 
 ## Before finishing a change
 
-1. `npx nuxt typecheck` passes and `npm run format:check` is clean.
+1. `npm run check` passes: lint, typecheck, formatting and unit tests.
 2. `npm run generate` succeeds.
 3. For UI changes, check desktop (1440), tablet (820) and mobile (390) widths: no horizontal overflow, no console errors.

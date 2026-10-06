@@ -12,6 +12,12 @@
     "postinstall": "nuxt prepare",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "nuxt typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run lint && npm run typecheck && npm run format:check && npm test",
     "translations:export": "jiti scripts/translations.ts export",
     "translations:import": "jiti scripts/translations.ts import"
   },
@@ -32,9 +38,13 @@
   },
   "devDependencies": {
     "@iconify-json/circle-flags": "^1.2.11",
+    "@nuxt/eslint": "^1.17.0",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
     "exceljs": "^4.4.0",
     "prettier": "^3.9.9",
     "typescript": "^5.9.3",
+    "vitest": "^3.2.7",
     "vue-tsc": "^3.3.11"
   }
 }

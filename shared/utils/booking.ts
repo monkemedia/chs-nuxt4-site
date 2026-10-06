@@ -120,10 +120,13 @@ export function computeSlots(
   const rule = bookingRules.services[service]
   const earliest = now.add(bookingRules.minNoticeHours, "hour")
   const days: DaySlots[] = []
+  const today = now.tz(ukTime).format("YYYY-MM-DD")
 
   for (let d = 0; d <= bookingRules.daysAhead; d++) {
-    const day = now.tz(ukTime).startOf("day").add(d, "day")
-    const date = day.format("YYYY-MM-DD")
+    // Each day is built from its date in UK time. Adding days to a zoned dayjs keeps the old
+    // UTC offset, so after the clocks change every slot would be an hour out.
+    const date = dayjs.utc(today).add(d, "day").format("YYYY-MM-DD")
+    const day = dayjs.tz(date, ukTime)
     const open = hours.week[(day.day() + 6) % 7]
     if (!open || hours.closures.some((c) => date >= c.from && date <= c.to))
       continue
@@ -155,7 +158,12 @@ export function computeSlots(
     if (booked >= rule.maxPerDay) continue
 
     const slots: Slot[] = []
-    const at = (minutes: number) => day.add(minutes, "minute")
+    // A time of day, zoned for its own offset (for the same reason as `day`).
+    const at = (minutes: number) =>
+      dayjs.tz(
+        `${date} ${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`,
+        ukTime,
+      )
     if (rule.kind === "window") {
       for (const w of rule.windows) {
         const from = minutesOf(w.start)

@@ -225,8 +225,7 @@ export async function fergusCreateBooking(booking: NewBooking) {
     // 303: Fergus says the customer already exists and where.
     customerId =
       created._data?.data?.id ??
-      Number(created._data?.location?.split("/").pop()) ??
-      undefined
+      (Number(created._data?.location?.split("/").pop()) || undefined)
     if (created.status >= 400 || !customerId) check(created, "new customer")
   }
 
