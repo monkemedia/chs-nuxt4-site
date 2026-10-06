@@ -65,8 +65,17 @@ export default defineNuxtConfig({
     // Form service for the booking summary when Resend isn't set up (NUXT_BOOKING_FORM_ENDPOINT):
     // its own form, so bookings and enquiries stay apart. Empty = the contact form's.
     bookingFormEndpoint: "",
+    // Staff app (/staff): accounts as "email=hash" pairs (`npm run staff:password`) and the
+    // session cookie's encryption key (32+ random characters). Both secret.
+    staffAccounts: "",
+    sessionSecret: "",
     public: {
       liveBooking,
+      // Staff app sign-in shows the demo password hint: mock Fergus and no real accounts.
+      fergusMockHint:
+        !process.env.NUXT_FERGUS_API_TOKEN &&
+        process.env.NUXT_FERGUS_MOCK === "true" &&
+        !process.env.NUXT_STAFF_ACCOUNTS,
       // Form service URL (e.g. https://formspree.io/f/xxxx), set via NUXT_PUBLIC_CONTACT_FORM_ENDPOINT at build time.
       contactFormEndpoint: "",
       // Site domain as added in Plausible (e.g. www.chshydraulics.co.uk), set via NUXT_PUBLIC_PLAUSIBLE_DOMAIN at build time. Empty = no analytics.
@@ -98,6 +107,7 @@ export default defineNuxtConfig({
       ...(liveBooking ? [] : ["/book"]),
       // Looks up one customer's job: nothing for search engines.
       "/track",
+      "/staff/**",
     ],
   },
   site: {
@@ -111,6 +121,11 @@ export default defineNuxtConfig({
     domains: ["cdn.sanity.io"],
   },
   routeRules: {
+    // Staff app: signed-in pages rendered in the browser only, never prerendered or indexed.
+    "/staff/**": {
+      ssr: false,
+      headers: { "X-Robots-Tag": "noindex, nofollow" },
+    },
     "/": { prerender: true },
     "/services/**": { prerender: true },
     "/contact": { prerender: true },
@@ -169,6 +184,7 @@ export default defineNuxtConfig({
           ? []
           : ["/login", "/cy/login"]),
         ...(liveBooking ? [] : ["/book", "/cy/book", "/track", "/cy/track"]),
+        "/staff",
       ],
     },
   },

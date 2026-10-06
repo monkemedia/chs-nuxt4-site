@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "translations:export": "jiti scripts/translations.ts export",
-    "translations:import": "jiti scripts/translations.ts import"
+    "translations:import": "jiti scripts/translations.ts import",
+    "staff:password": "jiti scripts/staff-password.ts"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.136",

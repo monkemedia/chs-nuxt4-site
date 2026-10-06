@@ -19,21 +19,6 @@ const failures = new Map<string, { count: number; reset: number }>()
 const limit = 10
 const window = 10 * 60_000
 
-// Fergus answers cached for a minute per job number, so repeated checks (or someone hammering
-// the form) can't use up the company's Fergus allowance.
-const jobs = new Map<
-  string,
-  { at: number; job: Awaited<ReturnType<typeof fergusRepairJob>> }
->()
-async function cachedJob(jobNo: string, updates: boolean) {
-  const hit = jobs.get(jobNo)
-  if (hit && Date.now() - hit.at < 60_000) return hit.job
-  const job = await fergusRepairJob(jobNo, updates)
-  if (jobs.size > 1000) jobs.clear()
-  jobs.set(jobNo, { at: Date.now(), job })
-  return job
-}
-
 export default defineEventHandler(async (event) => {
   const { features } = useAppConfig()
   if (!features.trackRepair)
@@ -48,12 +33,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 429, statusMessage: "Too many attempts" })
 
   const { jobNo, contact } = await readValidatedBody(event, body.parse)
-  const job = await cachedJob(jobNo, features.repairUpdates)
+  const job = await cachedRepairJob(jobNo, features.repairUpdates)
   const matches =
     job &&
     (contact.includes("@")
-      ? job.emails.some((e) => e.toLowerCase() === contact.toLowerCase())
-      : job.phones.some((p) => samePhone(p, contact)))
+      ? job.contact.emails.some(
+          (e) => e.toLowerCase() === contact.toLowerCase(),
+        )
+      : job.contact.phones.some((p) => samePhone(p, contact)))
   if (!job || !matches) {
     if (!seen || seen.reset <= now)
       failures.set(ip, { count: 1, reset: now + window })
@@ -63,14 +50,21 @@ export default defineEventHandler(async (event) => {
 
   return {
     jobNo,
-    stage: repairStage(job.status, job.phases),
+    // Fergus has no API call to start a phase, so a shared update also means work has started.
+    stage: repairStage(
+      job.status,
+      job.phases.map((p) => p.status),
+      job.notes.length + job.photos.length > 0,
+    ),
     onHold: job.onHold,
     quoteSent: /Sent$/.test(job.status),
     updated: job.updated,
-    notes: job.notes.toSorted((x, y) => y.at.localeCompare(x.at)),
-    photos: job.photos
-      .toSorted((x, y) => y.at.localeCompare(x.at))
-      .map((p) => ({ url: signedPhotoUrl(p.id), at: p.at, by: p.by })),
+    notes: job.notes.map(({ text, at, by }) => ({ text, at, by })),
+    photos: job.photos.map((p) => ({
+      url: signedPhotoUrl(p.id),
+      at: p.at,
+      by: p.by,
+    })),
     mechanic: [...job.notes, ...job.photos]
       .filter((x) => x.by)
       .toSorted((x, y) => y.at.localeCompare(x.at))[0]?.by,

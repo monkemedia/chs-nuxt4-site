@@ -29,6 +29,9 @@ export default defineAppConfig({
     // On the tracker: the mechanic's pinned notes, shared photos and name. Only switch on once
     // staff know the sharing rules (pin a note; name a photo "customer…"). Needs trackRepair.
     repairUpdates: false,
+    // Staff app for mechanics (/staff): diary, job details, notes, photos, hold and complete.
+    // Also needs the Fergus API, NUXT_STAFF_ACCOUNTS and NUXT_SESSION_SECRET.
+    staffApp: false,
   },
   // The offer. Copy in app/content/ uses {hours}, filled in by useContent(), and {years} of
   // experience, worked out from `business.foundingYear` (35 in 2026, going up each year).

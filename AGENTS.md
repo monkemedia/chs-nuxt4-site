@@ -41,6 +41,8 @@ Build-time environment variables (both optional). Copy `.env.example` to `.env` 
 | `NUXT_FERGUS_MOCK`                  | `true`: live booking against a pretend calendar (testing)                       | Real Fergus (when a token is set)               |
 | `NUXT_RESEND_API_KEY`               | **Secret.** Resend: booking confirmation emails                                 | No customer email (summary via form service)    |
 | `NUXT_BOOKING_FORM_ENDPOINT`        | Form service for the booking summary when Resend isn't set up                   | The contact form's endpoint                     |
+| `NUXT_STAFF_ACCOUNTS`               | **Secret.** Staff app accounts (`email=hash`, from `npm run staff:password`)    | No one can sign in (mock: password `demo`)      |
+| `NUXT_SESSION_SECRET`               | **Secret.** Encrypts the staff app's session cookie (32+ characters)            | Staff app refuses to run (mock: a dev key)      |
 | `NUXT_EMAIL_FROM`                   | Sender for booking emails (domain verified in Resend)                           | `CHS Hydraulics <bookings@chshydraulics.co.uk>` |
 | `SANITY_STUDIO_PROJECT_ID`          | Sanity project for the admin area (jobs, reviews)                               | Builds with no jobs or reviews (warns)          |
 | `SANITY_STUDIO_DATASET`             | Sanity dataset                                                                  | `production`                                    |
@@ -231,6 +233,15 @@ public/
 - **`/accounts`:** trade accounts for plant hire, contractors and farms. The benefits are drafted and the payment terms are a [placeholder] (the build warns): check them with CHS.
 - **`/login`:** a gateway to the Fergus customer portal. Only built and linked when `NUXT_PUBLIC_FERGUS_PORTAL_URL` is set (`nuxt.config.ts` skips prerendering it otherwise, because the prerenderer visits every page file); always `noindex` and out of the sitemap.
 - **Forms** (`contact`, `book`) send through `useEnquirySubmit()` (endpoint, language field, `_subject`, honeypot, Plausible event, scroll to the result). Every `UFormField` uses **`eager-validation`**: without it, a corrected field's error only clears on blur, the form shrinks as the visitor clicks Send, and the click misses the button.
+
+### Staff app (mechanics)
+
+- `/staff`, behind `features.staffApp`, in a server build with Fergus connected (or the mock). An internal MVP for phones and iPads, installable to the home screen (`public/staff.webmanifest`), English only (`defineI18nRoute(false)`, copy in `app/content/staff.ts`), client-rendered and never indexed (`routeRules`, `X-Robots-Tag`, robots meta), outside the site layout (`layouts/staff.vue`) and the holding page.
+- **Sign-in:** each mechanic's email and password from `NUXT_STAFF_ACCOUNTS` (scrypt hashes from `npm run staff:password -- <email>`), matched to their Fergus user by email. h3 session cookie (`NUXT_SESSION_SECRET`), 30 days. 5 failed tries per visitor in 15 minutes. Every `/api/staff/*` route calls `requireStaff()` (`server/utils/staffAuth.ts`).
+- **Screens:** the mechanic's Fergus diary by day plus a job number search (`pages/staff/index.vue`); the job (`pages/staff/jobs/[id].vue`): contact (tap to call/email), site (directions), details, phases with **Mark work complete** (Fergus "ready for invoice"), hold/resume, photos (resized in the browser to 2000px JPEG, viewer modal) and notes, each with a **Share with customer** switch.
+- **Sharing:** a shared note is pinned in Fergus, a shared photo is named `customer-<name>-<time>.jpg`, which is what "Track my repair" shows. The API writes as the token's user, so notes end with "— <first name>" and photo names carry it (`signNote`, `photoAuthor` in `shared/utils/repair.ts`); the tracker reads the name from there.
+- **Fergus gaps:** there's no API call to _start_ a phase, so the tracker treats a job with a shared update as "In the workshop". Job titles come from the Fergus job's `description` field: check against real jobs.
+- Fergus code: `server/utils/fergus.ts` (calendar, booking, the `fergusCall` client) and `server/utils/fergusJobs.ts` (jobs, notes, photos, diary, actions, and the pretend workshop for mock mode: jobs 1001–1005, today's diary for whoever signs in, changes kept in memory until restart).
 
 ### Analytics
 
