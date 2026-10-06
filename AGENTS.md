@@ -139,7 +139,7 @@ public/
   - **Errors use Nuxt UI's `error` / Tailwind `red`**, never the brand scale. The brand is red too, so always pair error colour with an icon or message text rather than relying on colour alone.
   - `ink-700…950`: near-blacks. The header, hero and dark bands use `ink-950` (`#0D1012`) / `ink-900`.
   - `font-sans`: IBM Plex Sans (400–700, self-hosted from `app/assets/fonts/`), for body text.
-  - `font-display`: Big Shoulders Display (weight 900 only, self-hosted from `app/assets/fonts/`), for headings via `heading-display`.
+  - `font-display`: Bebas Neue (one weight, scaled up 114% with `size-adjust` so its short capitals match the designed sizes; self-hosted from `app/assets/fonts/`), for headings via `heading-display`.
 - **Corners:** boxes and cards (anything with a background panel, card shadow or top border: service cards, review cards, info panels, sidebar boxes, icon badges, framed photos) use **`rounded-box`** (6px, `--radius-box` in `main.css`). Full-width bands stay square. Add `overflow-hidden` when a card has an image edge to edge.
 - **`--ui-radius` is `0.1rem`**, so Nuxt UI buttons and inputs are almost square like the design. Nuxt UI defines Tailwind's `rounded-sm…3xl` as multiples of `--ui-radius`, so **those classes are tiny (≈1.6–2.4px)**. Use `rounded-box`, `rounded-full`, `rounded-none` or arbitrary values like `rounded-[0.5rem]`.
 - Colour mode and Nuxt UI's web fonts are disabled (`ui.colorMode: false`, `ui.fonts: false`): light-only design, the body and display fonts are self-hosted instead, declared with `@font-face` in `main.css`.
